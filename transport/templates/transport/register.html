@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ClickCampus | Student Registration</title>
+
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-container">
+
+        <a href="{% url 'transport:dashboard' %}" class="auth-brand">
+            <img
+                src="{% static 'transport/image/clickcampus-logo.png' %}"
+                alt="ClickCampus logo"
+                class="brand-logo"
+            >
+            <span>ClickCampus</span>
+        </a>
+
+        <section class="auth-card">
+
+            <p class="eyebrow">JOIN CLICKCAMPUS</p>
+
+            <h1>Create your account</h1>
+
+            <p class="muted">
+                Register to manage your campus transport.
+            </p>
+
+            <!-- Registration form -->
+            <form
+                id="register-form"
+                method="POST"
+                action="{% url 'transport:register' %}"
+            >
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input
+                        type="text"
+                        id="full-name"
+                        name="full_name"
+                        placeholder="Enter your full name"
+                        value="{{ request.POST.full_name|default:'' }}"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="student-email-register">Student Email</label>
+                    <input
+                        type="email"
+                        id="student-email-register"
+                        name="email"
+                        placeholder="Enter your email address"
+                        value="{{ request.POST.email|default:'' }}"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="registration-number">
+                        Student Registration Number
+                    </label>
+                    <input
+                        type="text"
+                        id="registration-number"
+                        name="registration_number"
+                        placeholder="Enter your registration number"
+                        value="{{ request.POST.registration_number|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input
+                        type="password"
+                        id="register-password"
+                        name="password"
+                        placeholder="Create a password (minimum 8 characters)"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirm-password"
+                        name="confirm_password"
+                        placeholder="Enter your password again"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <!-- Display registration validation errors -->
+                {% if form.errors %}
+                    <div class="form-message" role="alert">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button
+                    type="submit"
+                    class="primary-button full-width"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <!-- Display Django success and error messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="form-message" role="status">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+            <p class="auth-footer">
+                Already have an account?
+                <a href="{% url 'transport:login' %}">Sign in</a>
+            </p>
+
+        </section>
+
+        <p class="auth-bottom">
+            ClickCampus · Campus transport made easier
+        </p>
+
+    </main>
+
+    <!-- Client-side password confirmation -->
+    <script>
+        const registerForm = document.getElementById("register-form");
+        const passwordInput = document.getElementById("register-password");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+
+        registerForm.addEventListener("submit", function (event) {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                event.preventDefault();
+
+                confirmPasswordInput.setCustomValidity(
+                    "The passwords do not match."
+                );
+
+                confirmPasswordInput.reportValidity();
+            } else {
+                confirmPasswordInput.setCustomValidity("");
+            }
+        });
+
+        confirmPasswordInput.addEventListener("input", function () {
+            confirmPasswordInput.setCustomValidity("");
+        });
+    </script>
+
+</body>
+</html>

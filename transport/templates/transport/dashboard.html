@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ClickCampus | Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <img
+                src="{% static 'transport/image/clickcampus-logo.png' %}"
+                alt="ClickCampus logo"
+                class="brand-logo"
+            >
+            <span>ClickCampus</span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link active" href="{% url 'transport:dashboard' %}">
+                Dashboard
+            </a>
+
+            <a class="nav-link" href="#booking">Book Transport</a>
+            <a class="nav-link" href="#my-trips">My Trips</a>
+            <a class="nav-link" href="#promotions">Promotions</a>
+            <a class="nav-link" href="#management">Management</a>
+
+            <!-- AUTHENTICATION LINKS -->
+            {% if user.is_authenticated %}
+                <div class="nav-link">
+                    Signed in as
+                    <strong>
+                        {{ user.first_name|default:user.username }}
+                    </strong>
+                </div>
+
+                <form
+                    method="POST"
+                    action="{% url 'transport:logout' %}"
+                    class="logout-form"
+                >
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link logout-button">
+                        Log Out
+                    </button>
+                </form>
+            {% else %}
+                <a class="nav-link" href="{% url 'transport:login' %}">
+                    Login
+                </a>
+
+                <a class="nav-link" href="{% url 'transport:register' %}">
+                    Register
+                </a>
+            {% endif %}
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Campus transport, made easier.</p>
+            <span>ClickCampus Prototype</span>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">CAMPUS TRANSPORT SYSTEM</p>
+                <h1>Dashboard</h1>
+                <p class="muted">
+                    Manage your campus journeys in one place.
+                </p>
+            </div>
+
+            <div class="profile">
+                <span class="avatar">
+                    {% if user.is_authenticated %}
+                        {{ user.first_name|default:user.username|first|upper }}
+                    {% else %}
+                        S
+                    {% endif %}
+                </span>
+
+                <span>
+                    {% if user.is_authenticated %}
+                        {{ user.first_name|default:user.username }}
+                    {% else %}
+                        Guest
+                    {% endif %}
+                </span>
+            </div>
+        </header>
+
+        <!-- WELCOME SECTION -->
+        <section class="welcome">
+            <div>
+                <p class="eyebrow light">WELCOME TO CLICKCAMPUS</p>
+
+                {% if user.is_authenticated %}
+                    <h2>
+                        Welcome,
+                        {{ user.first_name|default:user.username }}!
+                    </h2>
+                {% else %}
+                    <h2>Your campus journey starts here.</h2>
+                {% endif %}
+
+                <p>
+                    Request transport, view your bus assignment and discover
+                    relevant promotions.
+                </p>
+
+                {% if user.is_authenticated %}
+                    <a class="primary-button" href="#booking">
+                        Book transport →
+                    </a>
+                {% else %}
+                    <a class="primary-button" href="{% url 'transport:login' %}">
+                        Sign in to book →
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="welcome-symbol">
+                <img
+                    src="{% static 'transport/image/clickcampus-logo.png' %}"
+                    alt="ClickCampus bus logo"
+                    class="welcome-logo"
+                >
+            </div>
+        </section>
+
+        <!-- DASHBOARD STATISTICS -->
+        <section class="stats-grid">
+            <article class="stat-card">
+                <p class="stat-label">Travel Requests</p>
+                <h3 id="request-count">{{ my_trips|length }}</h3>
+                <p class="stat-note">
+                    {% if user.is_authenticated %}
+                        Your submitted transport requests.
+                    {% else %}
+                        Sign in to access your transport requests.
+                    {% endif %}
+                </p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Available Buses</p>
+                <h3 id="assigned-bus-count">{{ available_bus_count }}</h3>
+                <p class="stat-note">Buses currently marked available</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Active Promotions</p>
+                <h3 id="active-promotion-count">0</h3>
+                <p class="stat-note">Demo promotions only</p>
+            </article>
+        </section>
+
+        <!-- BOOKING AND MY TRIPS -->
+        <section class="content-grid">
+
+            <!-- BOOKING FORM -->
+            <article class="panel" id="booking">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">PLAN YOUR JOURNEY</p>
+                        <h2>Request transport</h2>
+                    </div>
+
+                    <span class="section-icon">↗</span>
+                </div>
+
+                <p class="muted">
+                    Choose your pickup point, journey direction, travel date and
+                    preferred travel time to submit a transport request.
+                </p>
+
+                <form
+                    id="booking-form"
+                    method="POST"
+                    action="{% url 'transport:create_travel_request' %}"
+                >
+                    {% csrf_token %}
+
+                    <label for="pickup">Pickup point</label>
+
+                    <select id="pickup" name="pickup_point" required>
+                        <option value="">Choose a pickup point</option>
+
+                        {% for point in pickup_points %}
+                            <option value="{{ point.id }}">
+                                {{ point.name }} — {{ point.route.name }}
+                            </option>
+                        {% empty %}
+                            <option value="" disabled>
+                                No active pickup points available
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="travel-date">Travel date</label>
+
+                    <input
+                        type="date"
+                        id="travel-date"
+                        name="travel_date"
+                        required
+                    >
+
+                    <label for="direction">Journey direction</label>
+
+                    <select id="direction" name="direction" required>
+                        <option value="">Choose direction</option>
+                        <option value="to_school">To school</option>
+                        <option value="from_school">From school</option>
+                    </select>
+
+                    <label for="time-slot">Preferred travel time</label>
+
+                    <select id="time-slot" name="time_slot" required>
+                        <option value="">Choose a time slot</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
+
+                    {% if user.is_authenticated %}
+                        <button
+                            class="primary-button full-width"
+                            type="submit"
+                        >
+                            Submit travel request
+                        </button>
+                    {% else %}
+                        <a
+                            class="primary-button full-width"
+                            href="{% url 'transport:login' %}"
+                        >
+                            Sign in to book transport
+                        </a>
+                    {% endif %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="form-message" role="status">
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+                </form>
+
+            </article>
+
+            <!-- MY TRIPS -->
+            <article class="panel" id="my-trips">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">TRAVEL INFORMATION</p>
+                        <h2>My Trips</h2>
+                    </div>
+                </div>
+
+                <div id="trip-details" class="trip-list">
+
+                    {% for trip in my_trips %}
+                        <article class="trip-card">
+                            <div class="section-heading">
+                                <div>
+                                    <p class="eyebrow">TRANSPORT REQUEST</p>
+                                    <h3>{{ trip.route.name }}</h3>
+                                </div>
+
+                                <span class="promotion-tag status-badge status-{{ trip.status }}">
+                                {{ trip.get_status_display }}
+                                </span>
+                            </div>
+
+                            <p>
+                                <strong>Pickup point:</strong>
+                                {{ trip.pickup_point.name }}
+                            </p>
+
+                            <p>
+                                <strong>Date:</strong>
+                                {{ trip.travel_date|date:"D, d M Y" }}
+                            </p>
+
+                            <p>
+                                <strong>Direction:</strong>
+                                {{ trip.get_direction_display }}
+                            </p>
+
+                            <p>
+                                <strong>Time:</strong>
+                                {{ trip.get_time_slot_display }}
+                            </p>
+
+                            <p>
+                            <strong>Assigned bus:</strong>
+                                {% if trip.bus %}
+                                    {{ trip.bus.registration_number }}
+                                    {% else %}
+                                        Awaiting bus assignment
+                                    {% endif %}
+                            </p>
+
+                                {% if trip.status == "confirmed" and trip.bus %}
+                                    <p class="assignment-note">
+                                        Your transport booking is confirmed.
+                                    </p>
+                                {% elif trip.status == "cancelled" %}
+                                <p class="assignment-note">
+                                    This booking has been cancelled. Please contact the administrator
+                                    if you need assistance.
+                                </p>
+                            {% else %}
+                                <p class="assignment-note">
+                                    Your request is awaiting confirmation from the transport administrator.
+                                </p>
+                            {% endif %}
+
+                        </article>
+                    {% empty %}
+                        <div class="empty-state">
+                            <div class="empty-icon">🚌</div>
+
+                            <h3>No requests yet</h3>
+
+                            <p>
+                                {% if user.is_authenticated %}
+                                    Your submitted transport requests will appear here.
+                                {% else %}
+                                    Sign in to access your transport requests.
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- CAMPUS PROMOTIONS -->
+        <section class="panel lower-panel" id="promotions">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">STUDENT OFFERS</p>
+                    <h2>Campus promotions</h2>
+                </div>
+            </div>
+
+            <p class="muted">
+                View promotions from approved campus vendors that are
+                relevant to routes and travel times.
+            </p>
+
+            <div id="promotion-list" class="promotion-grid">
+                <article
+                    class="promotion-card"
+                    id="promotion-placeholder"
+                >
+                    <span class="promotion-tag">DEMO</span>
+
+                    <h3>No live promotions yet</h3>
+
+                    <p>
+                        Approved vendor promotions will appear here when
+                        the promotion module is connected.
+                    </p>
+                </article>
+            </div>
+
+            <p class="demo-notice">
+                Promotions are not yet connected to the database.
+            </p>
+
+            <!-- CREATE PROMOTION -->
+            <div class="promotion-form-panel">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">VENDOR WORKSPACE</p>
+                        <h2>Create a promotion</h2>
+                    </div>
+                </div>
+
+                <p class="muted">
+                    This is a demonstration form. Vendor permissions and
+                    database saving still need to be implemented.
+                </p>
+
+                <form id="promotion-form">
+                    <label for="promotion-title">Promotion title</label>
+
+                    <input
+                        type="text"
+                        id="promotion-title"
+                        name="title"
+                        maxlength="100"
+                        placeholder="Enter promotion title"
+                        required
+                    >
+
+                    <label for="business-name">Business name</label>
+
+                    <input
+                        type="text"
+                        id="business-name"
+                        name="business"
+                        maxlength="100"
+                        placeholder="Enter business name"
+                        required
+                    >
+
+                    <label for="promotion-description">
+                        Promotion description
+                    </label>
+
+                    <textarea
+                        id="promotion-description"
+                        name="description"
+                        rows="4"
+                        maxlength="500"
+                        placeholder="Describe the offer"
+                        required
+                    ></textarea>
+
+                    <label for="promotion-time">Target time window</label>
+
+                    <select
+                        id="promotion-time"
+                        name="time_window"
+                        required
+                    >
+                        <option value="">Choose a time window</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                        <option value="all day">All day</option>
+                    </select>
+
+                    <button
+                        class="primary-button full-width"
+                        type="submit"
+                    >
+                        Add demo promotion
+                    </button>
+
+                    <p
+                        id="promotion-message"
+                        class="form-message"
+                        aria-live="polite"
+                    ></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- MANAGEMENT OVERVIEW -->
+        <section class="panel lower-panel" id="management">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">OPERATIONS OVERVIEW</p>
+                    <h2>Management overview</h2>
+                </div>
+            </div>
+
+            <div class="management-grid">
+                <div>
+                    <span class="management-number">—</span>
+                    <p>Peak travel demand</p>
+                </div>
+
+                <div>
+                    <span class="management-number">—</span>
+                    <p>Route utilization</p>
+                </div>
+
+                <div>
+                    <span class="management-number">—</span>
+                    <p>Vehicle capacity utilization</p>
+                </div>
+            </div>
+
+            <p class="demo-notice">
+                Analytics will display real values after integration
+                with transport data.
+            </p>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            ClickCampus · Functional prototype
+        </footer>
+
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Set the earliest selectable travel date to today.
+        const dateInput = document.getElementById("travel-date");
+
+        function getLocalDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const day = String(now.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+
+        dateInput.min = getLocalDate();
+
+        // Demo promotions are stored only in the current page.
+        const promotionForm =
+            document.getElementById("promotion-form");
+
+        const promotionList =
+            document.getElementById("promotion-list");
+
+        const promotionMessage =
+            document.getElementById("promotion-message");
+
+        const promotionCount =
+            document.getElementById("active-promotion-count");
+
+        promotionForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!promotionForm.reportValidity()) {
+                return;
+            }
+
+            const title = document
+                .getElementById("promotion-title")
+                .value.trim();
+
+            const business = document
+                .getElementById("business-name")
+                .value.trim();
+
+            const description = document
+                .getElementById("promotion-description")
+                .value.trim();
+
+            const timeSelect =
+                document.getElementById("promotion-time");
+
+            const time =
+                timeSelect.options[timeSelect.selectedIndex].text;
+
+            if (!title || !business || !description) {
+                promotionMessage.textContent =
+                    "Please complete all fields.";
+
+                promotionMessage.className = "form-message";
+                return;
+            }
+
+            // Create the promotion card safely using textContent.
+            const card = document.createElement("article");
+            card.className = "promotion-card";
+
+            const tag = document.createElement("span");
+            tag.className = "promotion-tag";
+            tag.textContent = "DEMO OFFER";
+
+            const heading = document.createElement("h3");
+            heading.textContent = title;
+
+            const businessName = document.createElement("p");
+            businessName.className = "promotion-business";
+            businessName.textContent = business;
+
+            const details = document.createElement("p");
+            details.textContent = description;
+
+            const meta = document.createElement("div");
+            meta.className = "promotion-meta";
+
+            const timeInfo = document.createElement("span");
+            timeInfo.textContent = "Time: " + time;
+
+            meta.appendChild(timeInfo);
+            card.append(tag, heading, businessName, details, meta);
+
+            const placeholder =
+                document.getElementById("promotion-placeholder");
+
+            if (placeholder) {
+                placeholder.remove();
+            }
+
+            promotionList.prepend(card);
+
+            const totalPromotions =
+                promotionList.querySelectorAll(".promotion-card").length;
+
+            promotionCount.textContent = totalPromotions;
+
+            promotionMessage.textContent =
+                "Demo promotion added successfully. It has not been saved to the server.";
+
+            promotionMessage.className = "form-message success";
+
+            promotionForm.reset();
+        });
+    </script>
+</body>
+</html>
