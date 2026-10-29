@@ -1,0 +1,325 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickCampus | Add a Promotion</title>
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #25334a;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .page {
+            width: min(760px, calc(100% - 32px));
+            margin: 40px auto;
+        }
+
+        .top-link {
+            color: #2864e8;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .hero {
+            margin: 24px 0;
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            background: linear-gradient(120deg, #142b4a, #2864e8);
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 30px;
+        }
+
+        .hero p {
+            margin: 0;
+            line-height: 1.7;
+            color: #e1eaff;
+        }
+
+        .card {
+            padding: 28px;
+            background: white;
+            border: 1px solid #e5eaf2;
+            border-radius: 18px;
+        }
+
+        .card h2 { color: #142b4a; }
+
+        .intro {
+            color: #78859a;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dce3ed;
+            border-radius: 10px;
+            font: inherit;
+            background: white;
+        }
+
+        input:focus, textarea:focus {
+            outline: 2px solid #cbd8f7;
+            border-color: #2864e8;
+        }
+
+        input[type="file"] { padding: 10px; }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 16px;
+        }
+
+        .image-help, .note {
+            color: #78859a;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        #image-preview {
+            display: none;
+            width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            margin-top: 14px;
+            border-radius: 10px;
+            background: #f5f7fb;
+        }
+
+        .submit-button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px 20px;
+            border: 0;
+            border-radius: 10px;
+            background: #2864e8;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .submit-button:hover { background: #1e50c4; }
+
+        .note { margin-top: 14px; }
+
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            .hero, .card { padding: 21px; }
+        }
+    </style>
+</head>
+
+<body>
+<main class="page">
+
+    <a class="top-link" href="{% url 'transport:promotions' %}">
+        ← Back to promotions
+    </a>
+
+    <section class="hero">
+        <h1>Put your business in the spotlight</h1>
+        <p>
+            Share your offers with students and campus travellers
+            planning their journeys.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Promotion details</h2>
+        <p class="intro">
+            Enter your business information and upload a picture
+            that represents your offer.
+        </p>
+
+        <form id="promotion-form"
+              method="post"
+              enctype="multipart/form-data"
+              action="{% url 'transport:create_promotion' %}">
+            {% csrf_token %}
+
+            <label for="business-name">Business name</label>
+            <input
+                type="text"
+                id="business-name"
+                name="business_name"
+                placeholder="e.g. Campus Cafe"
+                maxlength="150"
+                required
+            >
+
+            <label for="promotion-title">Promotion title</label>
+            <input
+                type="text"
+                id="promotion-title"
+                name="title"
+                placeholder="e.g. Student lunch offer"
+                maxlength="150"
+                required
+            >
+
+            <label for="description">Description</label>
+            <textarea
+                id="description"
+                name="description"
+                placeholder="Describe your offer for students"
+                required
+            ></textarea>
+
+            <div class="grid">
+                <div>
+                    <label for="offer">Offer or discount</label>
+                    <input
+                        type="text"
+                        id="offer"
+                        name="offer"
+                        placeholder="e.g. 10% off"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="location">Business location</label>
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="e.g. Westlands"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="start-date">Start date</label>
+                    <input type="date" id="start-date" name="start_date" required>
+                </div>
+
+                <div>
+                    <label for="end-date">End date</label>
+                    <input type="date" id="end-date" name="end_date" required>
+                </div>
+            </div>
+
+            <label for="promotion-image">Business or offer picture</label>
+            <input
+                type="file"
+                id="promotion-image"
+                name="image"
+                accept="image/jpeg,image/png,image/webp"
+                required
+            >
+
+            <p class="image-help">
+                Select a JPG, PNG, or WebP image. You can preview it before submitting.
+            </p>
+
+            <img id="image-preview" alt="Preview of your selected picture">
+
+            <button class="submit-button" type="submit">
+                Submit promotion
+            </button>
+
+            <p class="note" id="promotion-message" aria-live="polite"></p>
+        </form>
+    </section>
+</main>
+
+<script>
+    const form = document.getElementById("promotion-form");
+    const imageInput = document.getElementById("promotion-image");
+    const imagePreview = document.getElementById("image-preview");
+    const startDate = document.getElementById("start-date");
+    const endDate = document.getElementById("end-date");
+
+    const today = new Date();
+    const localToday = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, "0"),
+        String(today.getDate()).padStart(2, "0")
+    ].join("-");
+
+    startDate.min = localToday;
+    endDate.min = localToday;
+
+    startDate.addEventListener("change", function () {
+        endDate.min = startDate.value || localToday;
+
+        if (endDate.value && endDate.value < startDate.value) {
+            endDate.value = "";
+        }
+    });
+
+    imageInput.addEventListener("change", function () {
+        const file = imageInput.files[0];
+
+        if (!file) {
+            imagePreview.removeAttribute("src");
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Please select a JPG, PNG, or WebP image.");
+            imageInput.value = "";
+            imagePreview.removeAttribute("src");
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert("Please select an image smaller than 5 MB.");
+            imageInput.value = "";
+            imagePreview.removeAttribute("src");
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.style.display = "block";
+    });
+
+    form.addEventListener("submit", function (event) {
+        if (endDate.value < startDate.value) {
+            event.preventDefault();
+            alert("The end date must be on or after the start date.");
+            return;
+        }
+
+        if (imageInput.files.length === 0) {
+            event.preventDefault();
+            alert("Please select a picture for your promotion.");
+        }
+    });
+</script>
+</body>
+</html>

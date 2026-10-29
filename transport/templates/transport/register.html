@@ -1,159 +1,656 @@
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ClickCampus | Student Registration</title>
-
+    <title>ClickCampus | Create Account</title>
     <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            color: #192541;
+            background: #f3f6fc;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+        }
+
+        .welcome {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 42px;
+            color: white;
+            background: linear-gradient(145deg, #172653, #294bc0 65%, #5278f4);
+        }
+
+        .welcome::before, .welcome::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgb(255 255 255 / 14%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .welcome::before {
+            width: 390px;
+            height: 390px;
+            right: -170px;
+            top: 20%;
+        }
+
+        .welcome::after {
+            width: 280px;
+            height: 280px;
+            right: -110px;
+            top: 27%;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: inherit;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand img {
+            width: 43px;
+            height: 43px;
+            object-fit: contain;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 45px 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 8px 12px;
+            border: 1px solid rgb(255 255 255 / 25%);
+            border-radius: 30px;
+            background: rgb(255 255 255 / 10%);
+            font-size: 12px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .welcome h1 {
+            margin: 23px 0 17px;
+            font-size: clamp(35px, 4vw, 54px);
+            line-height: 1.12;
+            letter-spacing: -1.8px;
+        }
+
+        .welcome-content > p {
+            color: #e0e7ff;
+            line-height: 1.8;
+            max-width: 390px;
+        }
+
+        .benefits {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .benefit {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            color: #f0f3ff;
+            font-size: 14px;
+        }
+
+        .check {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 27px;
+            height: 27px;
+            border-radius: 9px;
+            background: rgb(255 255 255 / 16%);
+        }
+
+        .welcome-footer {
+            position: relative;
+            z-index: 1;
+            color: #d6defa;
+            font-size: 12px;
+        }
+
+        .form-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 38px 24px;
+        }
+
+        .form-card {
+            width: 100%;
+            max-width: 470px;
+            animation: appear .45s ease both;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mobile-brand { display: none; }
+
+        .eyebrow {
+            color: #4162d6;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .form-card h2 {
+            margin: 9px 0;
+            font-size: 32px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #778198;
+            margin: 0 0 25px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .field { margin-bottom: 16px; }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #34405a;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 13px;
+            border: 1px solid #dce3ef;
+            border-radius: 10px;
+            background: #fff;
+            color: #192541;
+            font: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input:focus {
+            border-color: #4666df;
+            box-shadow: 0 0 0 4px rgb(70 102 223 / 10%);
+        }
+
+        .input-wrap { position: relative; }
+        .input-wrap input { padding-right: 65px; }
+
+        .toggle {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: #4962c4;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .two-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+        }
+
+        .strength {
+            display: flex;
+            gap: 5px;
+            margin: 9px 0 5px;
+        }
+
+        .strength span {
+            height: 4px;
+            flex: 1;
+            border-radius: 5px;
+            background: #e5e9f1;
+            transition: background .2s;
+        }
+
+        .hint {
+            color: #8992a5;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .photo-box {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px;
+            border: 1px dashed #c8d2e7;
+            border-radius: 12px;
+            background: #fafbff;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 50%;
+            background: #e6ebff;
+            color: #4962c4;
+            font-size: 23px;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-info { min-width: 0; }
+        .photo-info strong { display: block; font-size: 12px; }
+        .photo-info p {
+            margin: 5px 0 8px;
+            color: #8992a5;
+            font-size: 11px;
+        }
+
+        .photo-button {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 7px;
+            background: #e9edff;
+            color: #3658c8;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #profile-picture {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            width: 100%;
+            min-height: 49px;
+            margin-top: 7px;
+            border: 0;
+            border-radius: 10px;
+            background: linear-gradient(100deg, #3658d4, #5875ef);
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgb(54 88 212 / 20%);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgb(54 88 212 / 27%);
+        }
+
+        .primary-button:disabled {
+            opacity: .65;
+            cursor: wait;
+        }
+
+        .message {
+            min-height: 18px;
+            margin: 12px 0 0;
+            color: #c03948;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .server-errors {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #fff0f1;
+            color: #a52d3b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .server-success {
+            background: #e9f9f0;
+            color: #187448;
+        }
+
+        .bottom-link {
+            margin-top: 20px;
+            text-align: center;
+            color: #7a8498;
+            font-size: 12px;
+        }
+
+        .bottom-link a, .back-link {
+            color: #3658d4;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 850px) {
+            .page { grid-template-columns: 1fr; }
+            .welcome { display: none; }
+            .form-side { padding: 30px 20px; }
+            .mobile-brand {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 28px;
+                color: #192541;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .form-card h2 { font-size: 28px; }
+            .two-fields { grid-template-columns: 1fr; gap: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
 </head>
 
-<body class="auth-page">
-
-    <main class="auth-container">
-
-        <a href="{% url 'transport:dashboard' %}" class="auth-brand">
-            <img
-                src="{% static 'transport/image/clickcampus-logo.png' %}"
-                alt="ClickCampus logo"
-                class="brand-logo"
-            >
+<body>
+<div class="page">
+    <aside class="welcome">
+        <a class="brand" href="{% url 'transport:dashboard' %}">
+            <img src="{% static 'transport/image/clickcampus-logo.png' %}"
+                 alt="ClickCampus logo">
             <span>ClickCampus</span>
         </a>
 
-        <section class="auth-card">
-            <p class="eyebrow">JOIN CLICKCAMPUS</p>
+        <div class="welcome-content">
+            <span class="tag">YOUR CAMPUS. YOUR JOURNEY.</span>
+            <h1>Campus travel,<br>made simpler.</h1>
+            <p>Make getting around campus easier. Create your account to get started with your transport journey.</p>
 
-            <h1>Create your account</h1>
+            <div class="benefits">
+                <div class="benefit"><span class="check">✓</span> Book campus transport more easily</div>
+                <div class="benefit"><span class="check">✓</span> Keep track of your trips</div>
+                <div class="benefit"><span class="check">✓</span> Discover useful campus offers</div>
+            </div>
+        </div>
 
-            <p class="muted">
-                Register to manage your campus transport.
-            </p>
+        <div class="welcome-footer">ClickCampus · Campus transport made easier</div>
+    </aside>
 
-            <form id="register-form">
+    <main class="form-side">
+        <section class="form-card">
+            <a class="brand mobile-brand" href="{% url 'transport:dashboard' %}">
+                <img src="{% static 'transport/image/clickcampus-logo.png' %}"
+                     alt="ClickCampus logo">
+                <span>ClickCampus</span>
+            </a>
 
-                <label for="full-name">Full name</label>
+            <p class="eyebrow">JOIN THE COMMUNITY</p>
+            <h2>Create your account</h2>
+            <p class="subtitle">Enter your details below to get started.</p>
 
-                <input
-                    type="text"
-                    id="full-name"
-                    name="full_name"
-                    placeholder="Enter your full name"
-                    autocomplete="name"
-                    required
-                >
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="server-errors {% if 'success' in message.tags %}server-success{% endif %}"
+                         role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-                <label for="student-email-register">University email</label>
+            <form id="register-form"
+                  method="post"
+                  action="{% url 'transport:register' %}"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
 
-                <input
-                    type="email"
-                    id="student-email-register"
-                    name="email"
-                    placeholder="Enter your university email"
-                    autocomplete="email"
-                    required
-                >
+                <div class="field">
+                    <label for="full-name">Full name</label>
+                    <input type="text" id="full-name" name="full_name"
+                           value="{{ request.POST.full_name|default:'' }}"
+                           placeholder="e.g. Jane Wanjiku"
+                           autocomplete="name" maxlength="150" required>
+                </div>
 
-                <label for="registration-number">
-                    Student registration number
-                </label>
+                <div class="field">
+                    <label for="student-email-register">University email</label>
+                    <input type="email" id="student-email-register" name="email"
+                           value="{{ request.POST.email|default:'' }}"
+                           placeholder="you@university.ac.ke"
+                           autocomplete="email" required>
+                </div>
 
-                <input
-                    type="text"
-                    id="registration-number"
-                    name="registration_number"
-                    placeholder="Enter your student number"
-                    required
-                >
+                <div class="field">
+                    <label for="registration-number">Student registration number</label>
+                    <input type="text" id="registration-number"
+                           name="registration_number"
+                           value="{{ request.POST.registration_number|default:'' }}"
+                           placeholder="Enter your student number"
+                           maxlength="50" required>
+                </div>
 
-                <label for="register-password">Password</label>
+                <div class="field">
+                    <label for="profile-picture">Profile picture <span class="hint">(optional)</span></label>
+                    <div class="photo-box">
+                        <div class="avatar" id="avatar-preview"
+                             aria-label="Profile picture preview">👤</div>
+                        <div class="photo-info">
+                            <strong>Make your profile yours</strong>
+                            <p>JPG, PNG or WebP · Maximum 5 MB</p>
+                            <label class="photo-button" for="profile-picture">Choose picture</label>
+                            <input type="file" id="profile-picture" name="profile_picture"
+                                   accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                   aria-label="Choose a profile picture">
+                        </div>
+                    </div>
+                </div>
 
-                <input
-                    type="password"
-                    id="register-password"
-                    name="password"
-                    placeholder="Create a password"
-                    autocomplete="new-password"
-                    minlength="8"
-                    required
-                >
+                <div class="two-fields">
+                    <div class="field">
+                        <label for="register-password">Password</label>
+                        <div class="input-wrap">
+                            <input type="password" id="register-password" name="password"
+                                   placeholder="At least 8 characters"
+                                   autocomplete="new-password" minlength="8" required>
+                            <button class="toggle" type="button"
+                                    data-toggle="register-password">Show</button>
+                        </div>
+                        <div class="strength" aria-label="Password strength">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <div class="hint" id="strength-text">Use a strong password.</div>
+                    </div>
 
-                <label for="confirm-password">Confirm password</label>
+                    <div class="field">
+                        <label for="confirm-password">Confirm password</label>
+                        <div class="input-wrap">
+                            <input type="password" id="confirm-password"
+                                   name="confirm_password"
+                                   placeholder="Repeat password"
+                                   autocomplete="new-password" minlength="8" required>
+                            <button class="toggle" type="button"
+                                    data-toggle="confirm-password">Show</button>
+                        </div>
+                    </div>
+                </div>
 
-                <input
-                    type="password"
-                    id="confirm-password"
-                    name="confirm_password"
-                    placeholder="Enter your password again"
-                    autocomplete="new-password"
-                    minlength="8"
-                    required
-                >
+                <p id="register-message" class="message" role="status" aria-live="polite"></p>
 
-                <button
-                    type="submit"
-                    class="primary-button full-width"
-                >
-                    Create Account
+                <button type="submit" class="primary-button" id="register-button">
+                    Create my account&nbsp; →
                 </button>
-
-                <p
-                    id="register-message"
-                    class="form-message"
-                    aria-live="polite"
-                ></p>
-
             </form>
 
-            <p class="auth-footer">
+            <p class="bottom-link">
                 Already have an account?
-                <a href="{% url 'transport:login' %}">
-                    Sign in
-                </a>
+                <a href="{% url 'transport:login' %}">Sign in</a>
             </p>
-
-            <p class="demo-notice">
-                Demo only: account details are not saved.
-            </p>
+            <a class="back-link" href="{% url 'transport:dashboard' %}">← Back to home</a>
         </section>
-
-        <p class="auth-bottom">
-            ClickCampus · Campus transport made easier
-        </p>
-
     </main>
+</div>
 
-    <script>
-        const registerForm = document.getElementById("register-form");
-        const registerMessage = document.getElementById("register-message");
+<script>
+(() => {
+    const form = document.getElementById("register-form");
+    const password = document.getElementById("register-password");
+    const confirmPassword = document.getElementById("confirm-password");
+    const message = document.getElementById("register-message");
+    const bars = document.querySelectorAll(".strength span");
+    const strengthText = document.getElementById("strength-text");
+    const pictureInput = document.getElementById("profile-picture");
+    const avatar = document.getElementById("avatar-preview");
+    const submitButton = document.getElementById("register-button");
 
-        registerForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            const password =
-                document.getElementById("register-password").value;
-
-            const confirmPassword =
-                document.getElementById("confirm-password").value;
-
-            if (password !== confirmPassword) {
-                registerMessage.textContent =
-                    "The passwords do not match. Please try again.";
-
-                registerMessage.className = "form-message";
-                return;
-            }
-
-            registerMessage.textContent =
-                "The registration form works, but account creation still needs backend integration.";
-
-            registerMessage.className = "form-message";
+    document.querySelectorAll("[data-toggle]").forEach(button => {
+        button.addEventListener("click", () => {
+            const input = document.getElementById(button.dataset.toggle);
+            const show = input.type === "password";
+            input.type = show ? "text" : "password";
+            button.textContent = show ? "Hide" : "Show";
         });
-    </script>
+    });
 
+    password.addEventListener("input", () => {
+        const value = password.value;
+        let score = 0;
+
+        if (value.length >= 8) score++;
+        if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+        if (/\d/.test(value)) score++;
+        if (/[^A-Za-z0-9]/.test(value)) score++;
+
+        const labels = [
+            "Use a strong password.",
+            "Weak password",
+            "Fair password",
+            "Good password",
+            "Strong password"
+        ];
+
+        bars.forEach((bar, index) => {
+            bar.style.background = index < score
+                ? (score < 2 ? "#df5864"
+                    : score < 3 ? "#e9a23b" : "#2aaf7a")
+                : "#e5e9f1";
+        });
+
+        strengthText.textContent = labels[score];
+    });
+
+    pictureInput.addEventListener("change", () => {
+        const file = pictureInput.files[0];
+        message.textContent = "";
+
+        if (!file) {
+            avatar.textContent = "👤";
+            return;
+        }
+
+        const allowed = ["image/jpeg", "image/png", "image/webp"];
+
+        if (!allowed.includes(file.type) || file.size > 5 * 1024 * 1024) {
+            message.textContent =
+                "Choose a JPG, PNG or WebP image no larger than 5 MB.";
+            pictureInput.value = "";
+            avatar.textContent = "👤";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = event => {
+            const img = document.createElement("img");
+            img.src = event.target.result;
+            img.alt = "Selected profile picture";
+            avatar.replaceChildren(img);
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    confirmPassword.addEventListener("input", () => {
+        if (confirmPassword.value && password.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity("Passwords do not match.");
+        } else {
+            confirmPassword.setCustomValidity("");
+        }
+    });
+
+    password.addEventListener("input", () => {
+        confirmPassword.setCustomValidity(
+            confirmPassword.value && password.value !== confirmPassword.value
+                ? "Passwords do not match."
+                : ""
+        );
+    });
+
+    form.addEventListener("submit", event => {
+        message.textContent = "";
+
+        if (password.value !== confirmPassword.value) {
+            event.preventDefault();
+            message.textContent = "Your passwords do not match. Please try again.";
+            confirmPassword.focus();
+            return;
+        }
+
+        const file = pictureInput.files[0];
+
+        if (file && file.size > 5 * 1024 * 1024) {
+            event.preventDefault();
+            message.textContent = "Your picture must be no larger than 5 MB.";
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating your account...";
+    });
+})();
+</script>
 </body>
 </html>
-```

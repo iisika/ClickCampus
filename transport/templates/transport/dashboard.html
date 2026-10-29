@@ -1,18 +1,15 @@
 ```html
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>ClickCampus | Dashboard</title>
-
     <link rel="stylesheet" href="{% static 'transport/style.css' %}">
 </head>
 
 <body>
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="brand">
             <img
@@ -26,165 +23,128 @@
         <p class="menu-label">WORKSPACE</p>
 
         <nav>
-            <a class="nav-link active" href="{% url 'transport:dashboard' %}">
-                Dashboard
-            </a>
-
+            <a class="nav-link active" href="{% url 'transport:dashboard' %}">Dashboard</a>
             <a class="nav-link" href="#booking">Book Transport</a>
             <a class="nav-link" href="#my-trips">My Trips</a>
-            <a class="nav-link" href="#promotions">Promotions</a>
+            <a class="nav-link" href="{% url 'transport:promotions' %}">Promotions</a>
             <a class="nav-link" href="#management">Management</a>
-
-            <a class="nav-link" href="{% url 'transport:login' %}">
-                Login
-            </a>
-
-            <a class="nav-link" href="{% url 'transport:register' %}">
-                Register
-            </a>
         </nav>
 
         <div class="sidebar-bottom">
             <p>Campus transport, made easier.</p>
-            <span>ClickCampus Prototype</span>
+            <span>ClickCampus</span>
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
-
-        <!-- HEADER -->
         <header class="topbar">
             <div>
                 <p class="eyebrow">CAMPUS TRANSPORT SYSTEM</p>
                 <h1>Dashboard</h1>
-                <p class="muted">
-                    Manage your campus journeys in one place.
-                </p>
+                <p class="muted">Manage your campus journeys in one place.</p>
             </div>
 
-            <div class="profile">
-                <span class="avatar">S</span>
-                <span>Student</span>
+            <div class="topbar-right">
+                <div class="date-chip" id="current-date">
+                    Your travel overview
+                </div>
+
+                <div class="profile">
+                    <div class="profile-avatar">S</div>
+                    <div>
+                        <strong>Student</strong>
+                        <small>Campus passenger</small>
+                    </div>
+                </div>
+
+                <div class="auth-links">
+                    <a class="auth-link login-link" href="{% url 'transport:login' %}">Login</a>
+                    <a class="auth-link register-link" href="{% url 'transport:register' %}">Register</a>
+                </div>
             </div>
         </header>
 
-        <!-- WELCOME SECTION -->
         <section class="welcome">
-            <div>
+            <div class="welcome-content">
                 <p class="eyebrow light">WELCOME TO CLICKCAMPUS</p>
-
                 <h2>Your campus journey starts here.</h2>
-
                 <p>
-                    Request transport, view your bus assignment and discover
-                    relevant promotions.
+                    Request a pickup, check your bus assignment
+                    and discover relevant student offers.
                 </p>
-
-                <a class="primary-button" href="#booking">
-                    Book transport →
-                </a>
+                <a class="primary-button" href="#booking">Book transport &rarr;</a>
             </div>
 
             <div class="welcome-symbol">
                 <img
                     src="{% static 'transport/image/clickcampus-logo.png' %}"
-                    alt="ClickCampus bus logo"
+                    alt="ClickCampus logo"
                     class="welcome-logo"
                 >
             </div>
         </section>
 
-        <!-- DASHBOARD STATISTICS -->
         <section class="stats-grid">
             <article class="stat-card">
                 <p class="stat-label">Travel Requests</p>
                 <h3 id="request-count">0</h3>
-                <p class="stat-note">Demo requests in this session</p>
+                <p class="stat-note">Requests this session</p>
             </article>
 
             <article class="stat-card">
                 <p class="stat-label">Assigned Bus</p>
                 <h3 id="assigned-bus-count">0</h3>
-                <p class="stat-note">
-                    Bus assignments not connected yet
-                </p>
+                <p class="stat-note">Bus assignments</p>
             </article>
 
             <article class="stat-card">
                 <p class="stat-label">Active Promotions</p>
-                <h3 id="active-promotion-count">0</h3>
-                <p class="stat-note">Demo promotions only</p>
+                <h3 id="active-promotion-count">2</h3>
+                <p class="stat-note">Sample offers available</p>
             </article>
         </section>
 
-        <!-- BOOKING AND MY TRIPS -->
         <section class="content-grid">
-
-            <!-- BOOKING FORM -->
             <article class="panel" id="booking">
                 <div class="section-heading">
                     <div>
                         <p class="eyebrow">PLAN YOUR JOURNEY</p>
                         <h2>Request transport</h2>
                     </div>
-
-                    <span class="section-icon">↗</span>
+                    <span class="section-icon" aria-hidden="true">&rarr;</span>
                 </div>
 
-                <p class="muted">
-                    Choose a pickup point and travel time. Actual campus
-                    routes and pickup points must be configured before
-                    requests can be submitted.
-                </p>
-
                 <form id="booking-form">
-                    <label for="pickup">Pickup point</label>
-
+                    <label for="pickup">Choose your pickup point</label>
                     <select id="pickup" name="pickup_point" required>
-                        <option value="">
-                            Pickup points not configured
-                        </option>
+                        <option value="">Select pickup point</option>
+                        <option value="Nairobi CBD">Nairobi CBD (Town)</option>
+                        <option value="Eastleigh">Eastleigh</option>
+                        <option value="Mombasa Road">Mombasa Road</option>
+                        <option value="Lang'ata">Lang'ata</option>
+                        <option value="Westlands">Westlands</option>
+                        <option value="Karen">Karen</option>
                     </select>
 
                     <label for="travel-date">Travel date</label>
+                    <input type="date" id="travel-date" name="travel_date" required>
 
-                    <input
-                        type="date"
-                        id="travel-date"
-                        name="travel_date"
-                        required
-                    >
-
-                    <label for="time-slot">Preferred travel time</label>
-
+                    <label for="time-slot">Choose a pickup time</label>
                     <select id="time-slot" name="time_slot" required>
-                        <option value="">Choose a time slot</option>
-                        <option value="morning">Morning</option>
-                        <option value="afternoon">Afternoon</option>
-                        <option value="evening">Evening</option>
+                        <option value="">Select your preferred time</option>
+                        <option value="07:00-07:30">Morning (7:00–7:30 AM)</option>
+                        <option value="12:00-12:30">Afternoon (12:00–12:30 PM)</option>
+                        <option value="17:00-17:30">Evening (5:00–5:30 PM)</option>
                     </select>
 
-                    <button
-                        class="primary-button full-width"
-                        type="submit"
-                        disabled
-                    >
+                    <button class="primary-button full-width" type="submit">
                         Submit travel request
                     </button>
 
-                    <p
-                        id="booking-message"
-                        class="form-message"
-                        aria-live="polite"
-                    >
-                        Booking is waiting for pickup points and backend
-                        integration.
-                    </p>
+                    <p id="booking-message" class="form-message" aria-live="polite"></p>
                 </form>
             </article>
 
-            <!-- MY TRIPS -->
             <article class="panel" id="my-trips">
                 <div class="section-heading">
                     <div>
@@ -194,25 +154,17 @@
                 </div>
 
                 <div id="trip-details" class="empty-state">
-                    <div class="empty-icon">🚌</div>
-
+                    <div class="empty-icon" aria-hidden="true">🚌</div>
                     <h3>No requests yet</h3>
-
-                    <p>
-                        Your travel requests will appear here once booking
-                        is connected to the backend.
-                    </p>
+                    <p>Your travel requests will appear here after you submit them.</p>
                 </div>
 
                 <p class="demo-notice">
-                    Demo interface: travel requests are not yet saved
-                    to the database.
+                    Requests are currently stored in this browser session only.
                 </p>
             </article>
-
         </section>
 
-        <!-- CAMPUS PROMOTIONS -->
         <section class="panel lower-panel" id="promotions">
             <div class="section-heading">
                 <div>
@@ -221,112 +173,41 @@
                 </div>
             </div>
 
-            <p class="muted">
-                View promotions from approved campus vendors that are
-                relevant to routes and travel times.
-            </p>
+            <p class="muted">Discover offers from businesses serving students.</p>
 
             <div id="promotion-list" class="promotion-grid">
-                <article
-                    class="promotion-card"
-                    id="promotion-placeholder"
-                >
-                    <span class="promotion-tag">DEMO</span>
+                <article class="promotion-card">
+                    <span class="promotion-tag">SAMPLE OFFER</span>
+                    <h3>Lunch Special</h3>
+                    <p class="promotion-business">Example Campus Cafe</p>
+                    <p>Save on selected lunch meals.</p>
+                    <div class="promotion-meta">
+                        <span>Route: Nairobi CBD</span>
+                        <span>Time: Afternoon</span>
+                    </div>
+                </article>
 
-                    <h3>No live promotions yet</h3>
-
-                    <p>
-                        Approved vendor promotions will appear here when
-                        the promotion module is connected.
-                    </p>
+                <article class="promotion-card">
+                    <span class="promotion-tag">SAMPLE OFFER</span>
+                    <h3>Shopping Discount</h3>
+                    <p class="promotion-business">Example Campus Store</p>
+                    <p>Enjoy discounts on selected items.</p>
+                    <div class="promotion-meta">
+                        <span>Route: Westlands</span>
+                        <span>Time: Evening</span>
+                    </div>
                 </article>
             </div>
 
             <p class="demo-notice">
-                Promotions are not yet connected to the database.
+                These sample offers are for demonstration purposes.
             </p>
 
-            <!-- CREATE PROMOTION -->
-            <div class="promotion-form-panel">
-                <div class="section-heading">
-                    <div>
-                        <p class="eyebrow">VENDOR WORKSPACE</p>
-                        <h2>Create a promotion</h2>
-                    </div>
-                </div>
-
-                <p class="muted">
-                    This is a demonstration form. Vendor permissions and
-                    database saving still need to be implemented.
-                </p>
-
-                <form id="promotion-form">
-                    <label for="promotion-title">Promotion title</label>
-
-                    <input
-                        type="text"
-                        id="promotion-title"
-                        name="title"
-                        maxlength="100"
-                        placeholder="Enter promotion title"
-                        required
-                    >
-
-                    <label for="business-name">Business name</label>
-
-                    <input
-                        type="text"
-                        id="business-name"
-                        name="business"
-                        maxlength="100"
-                        placeholder="Enter business name"
-                        required
-                    >
-
-                    <label for="promotion-description">
-                        Promotion description
-                    </label>
-
-                    <textarea
-                        id="promotion-description"
-                        name="description"
-                        rows="4"
-                        maxlength="500"
-                        placeholder="Describe the offer"
-                        required
-                    ></textarea>
-
-                    <label for="promotion-time">Target time window</label>
-
-                    <select
-                        id="promotion-time"
-                        name="time_window"
-                        required
-                    >
-                        <option value="">Choose a time window</option>
-                        <option value="morning">Morning</option>
-                        <option value="afternoon">Afternoon</option>
-                        <option value="evening">Evening</option>
-                        <option value="all day">All day</option>
-                    </select>
-
-                    <button
-                        class="primary-button full-width"
-                        type="submit"
-                    >
-                        Add demo promotion
-                    </button>
-
-                    <p
-                        id="promotion-message"
-                        class="form-message"
-                        aria-live="polite"
-                    ></p>
-                </form>
-            </div>
+            <a class="primary-button" href="{% url 'transport:promotions' %}">
+                View promotions &rarr;
+            </a>
         </section>
 
-        <!-- MANAGEMENT OVERVIEW -->
         <section class="panel lower-panel" id="management">
             <div class="section-heading">
                 <div>
@@ -340,153 +221,147 @@
                     <span class="management-number">—</span>
                     <p>Peak travel demand</p>
                 </div>
-
                 <div>
                     <span class="management-number">—</span>
                     <p>Route utilization</p>
                 </div>
-
                 <div>
                     <span class="management-number">—</span>
-                    <p>Vehicle capacity utilization</p>
+                    <p>Vehicle load factors</p>
                 </div>
             </div>
 
             <p class="demo-notice">
-                Analytics will display real values after integration
-                with transport data.
+                Analytics will be available when connected to transport data.
             </p>
         </section>
 
-        <!-- FOOTER -->
         <footer>
-            ClickCampus · Functional prototype
+            &copy; ClickCampus
         </footer>
-
     </main>
 
-    <!-- JAVASCRIPT -->
     <script>
-        // Set the earliest selectable travel date to today.
+        const form = document.getElementById("booking-form");
+        const message = document.getElementById("booking-message");
+        const tripDetails = document.getElementById("trip-details");
+        const requestCount = document.getElementById("request-count");
         const dateInput = document.getElementById("travel-date");
+        const pickupInput = document.getElementById("pickup");
+        const timeInput = document.getElementById("time-slot");
+        const currentDate = document.getElementById("current-date");
+
+        const demoTrips = [];
+
+        const timeLabels = {
+            "07:00-07:30": "Morning (7:00–7:30 AM)",
+            "12:00-12:30": "Afternoon (12:00–12:30 PM)",
+            "17:00-17:30": "Evening (5:00–5:30 PM)"
+        };
+
+        function updateCurrentDate() {
+            currentDate.textContent = new Date().toLocaleDateString("en-KE", {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            });
+        }
 
         function getLocalDate() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, "0");
-            const day = String(now.getDate()).padStart(2, "0");
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, "0");
+            const day = String(today.getDate()).padStart(2, "0");
 
             return `${year}-${month}-${day}`;
         }
 
+        function renderTrips() {
+            tripDetails.replaceChildren();
+            requestCount.textContent = demoTrips.length;
+
+            if (demoTrips.length === 0) {
+                tripDetails.className = "empty-state";
+
+                const icon = document.createElement("div");
+                icon.className = "empty-icon";
+                icon.textContent = "🚌";
+
+                const heading = document.createElement("h3");
+                heading.textContent = "No requests yet";
+
+                const description = document.createElement("p");
+                description.textContent =
+                    "Your travel requests will appear here after you submit them.";
+
+                tripDetails.append(icon, heading, description);
+                return;
+            }
+
+            tripDetails.className = "trip-list";
+
+            demoTrips.forEach(function (trip, index) {
+                const card = document.createElement("article");
+                card.className = "trip-card";
+
+                const heading = document.createElement("h3");
+                heading.textContent = "Travel request " + (index + 1);
+
+                const pickup = document.createElement("p");
+                pickup.textContent = "Pickup point: " + trip.pickup;
+
+                const date = document.createElement("p");
+                date.textContent = "Travel date: " + trip.travelDate;
+
+                const time = document.createElement("p");
+                time.textContent = "Pickup time: " + trip.timeSlot;
+
+                const bus = document.createElement("p");
+                bus.textContent = "Assigned bus: " + trip.bus;
+
+                const status = document.createElement("span");
+                status.className = "status-pill";
+                status.textContent = "Status: " + trip.status;
+
+                card.append(heading, pickup, date, time, bus, status);
+                tripDetails.appendChild(card);
+            });
+        }
+
+        updateCurrentDate();
         dateInput.min = getLocalDate();
 
-        // Booking remains disabled until pickup points and backend
-        // booking functionality are connected.
-
-        // Demo promotions are stored only in the current page.
-        const promotionForm =
-            document.getElementById("promotion-form");
-
-        const promotionList =
-            document.getElementById("promotion-list");
-
-        const promotionMessage =
-            document.getElementById("promotion-message");
-
-        const promotionCount =
-            document.getElementById("active-promotion-count");
-
-        promotionForm.addEventListener("submit", function (event) {
+        form.addEventListener("submit", function (event) {
             event.preventDefault();
 
-            if (!promotionForm.reportValidity()) {
+            if (!form.reportValidity()) {
                 return;
             }
 
-            const title = document
-                .getElementById("promotion-title")
-                .value.trim();
-
-            const business = document
-                .getElementById("business-name")
-                .value.trim();
-
-            const description = document
-                .getElementById("promotion-description")
-                .value.trim();
-
-            const timeSelect =
-                document.getElementById("promotion-time");
-
-            const time =
-                timeSelect.options[timeSelect.selectedIndex].text;
-
-            if (!title || !business || !description) {
-                promotionMessage.textContent =
-                    "Please complete all fields.";
-
-                promotionMessage.className = "form-message";
+            if (dateInput.value < getLocalDate()) {
+                message.textContent = "Please choose today or a future date.";
+                message.className = "form-message error";
                 return;
             }
 
-            // Create the promotion card safely using textContent.
-            const card = document.createElement("article");
-            card.className = "promotion-card";
+            const trip = {
+                pickup: pickupInput.value,
+                travelDate: dateInput.value,
+                timeSlot: timeLabels[timeInput.value],
+                status: "Pending",
+                bus: "Not assigned"
+            };
 
-            const tag = document.createElement("span");
-            tag.className = "promotion-tag";
-            tag.textContent = "DEMO OFFER";
+            demoTrips.unshift(trip);
+            renderTrips();
 
-            const heading = document.createElement("h3");
-            heading.textContent = title;
+            message.textContent =
+                "Your request has been added to My Trips. It has not been saved to the server.";
+            message.className = "form-message success";
 
-            const businessName = document.createElement("p");
-            businessName.className = "promotion-business";
-            businessName.textContent = business;
-
-            const details = document.createElement("p");
-            details.textContent = description;
-
-            const meta = document.createElement("div");
-            meta.className = "promotion-meta";
-
-            const timeInfo = document.createElement("span");
-            timeInfo.textContent = "Time: " + time;
-
-            meta.appendChild(timeInfo);
-
-            card.append(
-                tag,
-                heading,
-                businessName,
-                details,
-                meta
-            );
-
-            const placeholder =
-                document.getElementById("promotion-placeholder");
-
-            if (placeholder) {
-                placeholder.remove();
-            }
-
-            promotionList.prepend(card);
-
-            const totalPromotions =
-                promotionList.querySelectorAll(
-                    ".promotion-card"
-                ).length;
-
-            promotionCount.textContent = totalPromotions;
-
-            promotionMessage.textContent =
-                "Demo promotion added successfully. It has not been saved to the server.";
-
-            promotionMessage.className =
-                "form-message success";
-
-            promotionForm.reset();
+            form.reset();
+            dateInput.min = getLocalDate();
         });
     </script>
 </body>
