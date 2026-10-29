@@ -25,22 +25,22 @@
 
         <p class="menu-label">WORKSPACE</p>
 
-        <nav>
+        
+        <nav class="sidebar-nav">
             <a class="nav-link active" href="{% url 'transport:dashboard' %}">
-                Dashboard
+                Home
             </a>
 
             <a class="nav-link" href="#booking">Book Transport</a>
             <a class="nav-link" href="#my-trips">My Trips</a>
             <a class="nav-link" href="#promotions">Promotions</a>
+        </nav>
 
-            <!-- AUTHENTICATION LINKS -->
+        <div class="sidebar-account">
             {% if user.is_authenticated %}
-                <div class="nav-link">
-                    Signed in as
-                    <strong>
-                        {{ user.first_name|default:user.username }}
-                    </strong>
+                <div class="account-info">
+                    <span class="account-label">SIGNED IN AS</span>
+                    <strong>{{ user.first_name|default:user.username }}</strong>
                 </div>
 
                 <form
@@ -49,7 +49,7 @@
                     class="logout-form"
                 >
                     {% csrf_token %}
-                    <button type="submit" class="nav-link logout-button">
+                    <button type="submit" class="logout-button">
                         Log Out
                     </button>
                 </form>
@@ -62,11 +62,12 @@
                     Register
                 </a>
             {% endif %}
-        </nav>
+        </div>
+
 
         <div class="sidebar-bottom">
             <p>Campus transport, made easier.</p>
-            <span>ClickCampus Prototype</span>
+            <span>©ClickCampus 2026</span>
         </div>
     </aside>
 
@@ -77,7 +78,7 @@
         <header class="topbar">
             <div>
                 <p class="eyebrow">CAMPUS TRANSPORT SYSTEM</p>
-                <h1>Dashboard</h1>
+                <h1>Home</h1>
                 <p class="muted">
                     Manage your campus journeys in one place.
                 </p>
@@ -163,8 +164,8 @@
 
             <article class="stat-card">
                 <p class="stat-label">Active Promotions</p>
-                <h3 id="active-promotion-count">0</h3>
-                <p class="stat-note">Demo promotions only</p>
+                <h3 id="active-promotion-count">{{ student_promotions|length }}</h3>
+                <p class="stat-note">Approved offers currently available</p>
             </article>
         </section>
 
@@ -405,122 +406,75 @@
         </section>
 
         <!-- CAMPUS PROMOTIONS -->
+        
         <section class="panel lower-panel" id="promotions">
             <div class="section-heading">
                 <div>
                     <p class="eyebrow">STUDENT OFFERS</p>
                     <h2>Campus promotions</h2>
                 </div>
+
+                <a class="primary-button"
+                href="{% url 'transport:promotions' %}">
+                    View all promotions →
+                </a>
             </div>
 
             <p class="muted">
-                View promotions from approved campus vendors that are
-                relevant to routes and travel times.
+                Discover offers from campus businesses. Only approved promotions
+                that are currently valid are displayed.
             </p>
 
-            <div id="promotion-list" class="promotion-grid">
-                <article
-                    class="promotion-card"
-                    id="promotion-placeholder"
-                >
-                    <span class="promotion-tag">DEMO</span>
+            <div class="promotion-grid">
+                {% for promotion in student_promotions %}
+                    <article class="promotion-card">
+                        {% if promotion.image %}
+                            <img
+                                src="{{ promotion.image.url }}"
+                                alt="{{ promotion.title }}"
+                                style="width: 100%; height: 180px; object-fit: cover; border-radius: 10px;"
+                            >
+                        {% endif %}
 
-                    <h3>No live promotions yet</h3>
+                        <span class="promotion-tag">
+                            {{ promotion.offer }}
+                        </span>
 
-                    <p>
-                        Approved vendor promotions will appear here when
-                        the promotion module is connected.
-                    </p>
-                </article>
-            </div>
+                        <h3>{{ promotion.title }}</h3>
 
-            <p class="demo-notice">
-                Promotions are not yet connected to the database.
-            </p>
+                        <p class="promotion-business">
+                            {{ promotion.business_name }}
+                        </p>
 
-            <!-- CREATE PROMOTION -->
-            <div class="promotion-form-panel">
-                <div class="section-heading">
-                    <div>
-                        <p class="eyebrow">VENDOR WORKSPACE</p>
-                        <h2>Create a promotion</h2>
-                    </div>
-                </div>
+                        <p>{{ promotion.description }}</p>
 
-                <p class="muted">
-                    This is a demonstration form. Vendor permissions and
-                    database saving still need to be implemented.
-                </p>
+                        <div class="promotion-meta">
+                            <span>📍 {{ promotion.location }}</span>
+                        </div>
 
-                <form id="promotion-form">
-                    <label for="promotion-title">Promotion title</label>
+                        <p class="note">
+                            Valid until {{ promotion.end_date|date:"d M Y" }}
+                        </p>
+                    </article>
+                {% empty %}
+                    <article class="promotion-card">
+                        <span class="promotion-tag">COMING SOON</span>
 
-                    <input
-                        type="text"
-                        id="promotion-title"
-                        name="title"
-                        maxlength="100"
-                        placeholder="Enter promotion title"
-                        required
-                    >
+                        <h3>No active promotions yet</h3>
 
-                    <label for="business-name">Business name</label>
-
-                    <input
-                        type="text"
-                        id="business-name"
-                        name="business"
-                        maxlength="100"
-                        placeholder="Enter business name"
-                        required
-                    >
-
-                    <label for="promotion-description">
-                        Promotion description
-                    </label>
-
-                    <textarea
-                        id="promotion-description"
-                        name="description"
-                        rows="4"
-                        maxlength="500"
-                        placeholder="Describe the offer"
-                        required
-                    ></textarea>
-
-                    <label for="promotion-time">Target time window</label>
-
-                    <select
-                        id="promotion-time"
-                        name="time_window"
-                        required
-                    >
-                        <option value="">Choose a time window</option>
-                        <option value="morning">Morning</option>
-                        <option value="afternoon">Afternoon</option>
-                        <option value="evening">Evening</option>
-                        <option value="all day">All day</option>
-                    </select>
-
-                    <button
-                        class="primary-button full-width"
-                        type="submit"
-                    >
-                        Add demo promotion
-                    </button>
-
-                    <p
-                        id="promotion-message"
-                        class="form-message"
-                        aria-live="polite"
-                    ></p>
-                </form>
+                        <p>
+                            Approved campus offers will appear here once they
+                            are published by the administrator.
+                        </p>
+                    </article>
+                {% endfor %}
             </div>
         </section>
 
+
         <!-- FOOTER -->
         <footer>
-            ClickCampus · Functional prototype
+            ClickCampus · 2026
         </footer>
 
     </main>
@@ -540,101 +494,6 @@
         }
 
         dateInput.min = getLocalDate();
-
-        // Demo promotions are stored only in the current page.
-        const promotionForm =
-            document.getElementById("promotion-form");
-
-        const promotionList =
-            document.getElementById("promotion-list");
-
-        const promotionMessage =
-            document.getElementById("promotion-message");
-
-        const promotionCount =
-            document.getElementById("active-promotion-count");
-
-        promotionForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            if (!promotionForm.reportValidity()) {
-                return;
-            }
-
-            const title = document
-                .getElementById("promotion-title")
-                .value.trim();
-
-            const business = document
-                .getElementById("business-name")
-                .value.trim();
-
-            const description = document
-                .getElementById("promotion-description")
-                .value.trim();
-
-            const timeSelect =
-                document.getElementById("promotion-time");
-
-            const time =
-                timeSelect.options[timeSelect.selectedIndex].text;
-
-            if (!title || !business || !description) {
-                promotionMessage.textContent =
-                    "Please complete all fields.";
-
-                promotionMessage.className = "form-message";
-                return;
-            }
-
-            // Create the promotion card safely using textContent.
-            const card = document.createElement("article");
-            card.className = "promotion-card";
-
-            const tag = document.createElement("span");
-            tag.className = "promotion-tag";
-            tag.textContent = "DEMO OFFER";
-
-            const heading = document.createElement("h3");
-            heading.textContent = title;
-
-            const businessName = document.createElement("p");
-            businessName.className = "promotion-business";
-            businessName.textContent = business;
-
-            const details = document.createElement("p");
-            details.textContent = description;
-
-            const meta = document.createElement("div");
-            meta.className = "promotion-meta";
-
-            const timeInfo = document.createElement("span");
-            timeInfo.textContent = "Time: " + time;
-
-            meta.appendChild(timeInfo);
-            card.append(tag, heading, businessName, details, meta);
-
-            const placeholder =
-                document.getElementById("promotion-placeholder");
-
-            if (placeholder) {
-                placeholder.remove();
-            }
-
-            promotionList.prepend(card);
-
-            const totalPromotions =
-                promotionList.querySelectorAll(".promotion-card").length;
-
-            promotionCount.textContent = totalPromotions;
-
-            promotionMessage.textContent =
-                "Demo promotion added successfully. It has not been saved to the server.";
-
-            promotionMessage.className = "form-message success";
-
-            promotionForm.reset();
-        });
 
         
         const directionSelect = document.getElementById("direction");

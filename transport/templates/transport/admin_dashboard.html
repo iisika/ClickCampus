@@ -10,57 +10,82 @@
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="brand">
-            <img src="{% static 'transport/image/clickcampus-logo.png' %}"
-                 alt="ClickCampus logo" class="brand-logo">
-            <span>ClickCampus</span>
+    
+<aside class="sidebar">
+    <div class="brand">
+        <img src="{% static 'transport/image/clickcampus-logo.png' %}"
+             alt="ClickCampus logo"
+             class="brand-logo">
+        <span>ClickCampus</span>
+    </div>
+
+    <p class="menu-label">ADMIN WORKSPACE</p>
+
+    <!-- Main navigation -->
+    <nav class="sidebar-nav">
+        <a class="nav-link active"
+           href="{% url 'transport:admin_dashboard' %}">
+            Home
+        </a>
+
+        <a class="nav-link"
+           href="{% url 'transport:demand_report' %}">
+            Demand Report
+        </a>
+
+        <a class="nav-link" href="/admin/transport/travelrequest/">
+            Manage Bookings
+        </a>
+
+        <a class="nav-link" href="/admin/transport/bus/">
+            Manage Vehicles
+        </a>
+
+        <a class="nav-link" href="/admin/transport/route/">
+            Manage Routes
+        </a>
+
+        <a class="nav-link" href="/admin/transport/pickuppoint/">
+            Pickup Points
+        </a>
+
+        <a class="nav-link" href="{% url 'transport:admin_promotions' %}">
+            Manage Promotions
+            {% if pending_promotions %}
+                ({{ pending_promotions }})
+            {% endif %}
+        </a>
+
+        <a class="nav-link"
+           href="{% url 'transport:dashboard' %}">
+            Student Portal
+        </a>
+    </nav>
+
+    <!-- Administrator account and logout at the bottom -->
+    <div class="sidebar-account">
+        <div class="account-info">
+            <span class="account-label">SIGNED IN AS</span>
+            <strong>{{ request.user.get_username }}</strong>
         </div>
 
-        <p class="menu-label">ADMIN WORKSPACE</p>
+        <form method="post"
+              action="{% url 'transport:logout' %}"
+              class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">
+                Log Out
+            </button>
+        </form>
+    </div>
 
-        <nav>
-            <a class="nav-link active" href="{% url 'transport:admin_dashboard' %}">
-                Dashboard
-            </a>
-            <a class="nav-link" href="{% url 'transport:demand_report' %}">
-                Demand Report
-            </a>
-            <a class="nav-link" href="/admin/transport/travelrequest/">
-                Manage Bookings
-            </a>
-            <a class="nav-link" href="/admin/transport/bus/">
-                Manage Vehicles
-            </a>
-            <a class="nav-link" href="/admin/transport/route/">
-                Manage Routes
-            </a>
-            <a class="nav-link" href="/admin/transport/pickuppoint/">
-                Pickup Points
-            </a>
-            <a class="nav-link" href="{% url 'transport:dashboard' %}">
-                Student Portal
-            </a>
+    <!-- Existing footer -->
+    <div class="sidebar-bottom">
+        <p>Campus transport, made easier.</p>
+        <span>©ClickCampus 2026</span>
+    </div>
+</aside>
 
-            <div class="nav-link admin-user">
-                Administrator<br>
-                <strong>{{ request.user.get_username }}</strong>
-            </div>
-
-            <form method="post" action="{% url 'transport:logout' %}"
-                  class="logout-form">
-                {% csrf_token %}
-                <button type="submit" class="nav-link logout-button">
-                    Log Out
-                </button>
-            </form>
-        </nav>
-
-        <div class="sidebar-bottom">
-            <p>Campus transport, made easier.</p>
-            <span>ClickCampus Prototype</span>
-        </div>
-    </aside>
 
     <main class="main-content">
 
@@ -208,20 +233,48 @@
             </div>
         </section>
 
+        
         <section class="panel lower-panel admin-info-panel">
             <div class="section-heading">
                 <div>
-                    <p class="eyebrow">COMING LATER</p>
+                    <p class="eyebrow">BUSINESS PARTNERS</p>
                     <h2>Campus Promotions</h2>
                 </div>
             </div>
+
             <p class="muted">
-                Business accounts, promotion submissions and approval workflows
-                will be connected after the existing promotions module is reviewed.
+                Review business offers before publishing them to students.
+                Pending promotions require administrator approval.
             </p>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <p class="stat-label">Pending Review</p>
+                    <h3>{{ pending_promotions }}</h3>
+                    <p class="stat-note">Awaiting your decision</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="stat-label">Approved Promotions</p>
+                    <h3>{{ approved_promotions }}</h3>
+                    <p class="stat-note">Approved promotion records</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="stat-label">Total Submissions</p>
+                    <h3>{{ total_promotions }}</h3>
+                    <p class="stat-note">All promotion records</p>
+                </article>
+            </div>
+
+            <a class="primary-button"
+            href="{% url 'transport:admin_promotions' %}">
+                Review Promotions →
+            </a>
         </section>
 
-        <footer>ClickCampus · Transport Management Prototype</footer>
+
+        <footer>ClickCampus · Transport Management </footer>
     </main>
 </body>
 </html>

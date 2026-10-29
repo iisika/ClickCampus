@@ -1,0 +1,379 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickCampus | Promotions</title>
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+
+    <style>
+        :root {
+            --navy: #142b4a;
+            --blue: #2864e8;
+            --background: #f5f7fb;
+            --text: #25334a;
+            --muted: #78859a;
+            --border: #e5eaf2;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        a { text-decoration: none; }
+
+        .page {
+            max-width: 1150px;
+            margin: auto;
+            padding: 28px 24px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            color: var(--navy);
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .brand span { color: var(--blue); }
+
+        .top-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .outline-button {
+            color: var(--blue);
+            border: 1px solid #cbd8f7;
+            background: white;
+        }
+
+        .blue-button {
+            color: white;
+            background: var(--blue);
+            border: 1px solid var(--blue);
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 38px;
+            border-radius: 22px;
+            color: white;
+            background: linear-gradient(115deg, #142b4a, #2864e8);
+            margin-bottom: 35px;
+        }
+
+        .hero::after {
+            content: "✦";
+            position: absolute;
+            right: 45px;
+            top: 5px;
+            font-size: 150px;
+            color: rgb(255 255 255 / 10%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 650px;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #cbdcff;
+        }
+
+        .hero h1 {
+            margin: 12px 0;
+            font-size: clamp(28px, 4vw, 40px);
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            max-width: 540px;
+            color: #e1eaff;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+            margin: 30px 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .section-heading h2 {
+            color: var(--navy);
+            margin: 0 0 7px;
+            font-size: 23px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .offer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .offer-card {
+            overflow: hidden;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgb(20 43 74 / 9%);
+        }
+
+        .offer-banner {
+            min-height: 135px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 42px;
+        }
+
+        .offer-banner span {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .food { background: #fff1df; }
+        .shopping { background: #e7efff; }
+        .coffee { background: #e8f7ee; }
+
+        .offer-content { padding: 20px; }
+
+        .offer-tag {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 7px;
+            color: #2864e8;
+            background: #edf3ff;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .offer-content h3 {
+            margin: 13px 0 8px;
+            color: var(--navy);
+            font-size: 18px;
+        }
+
+        .offer-content p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            min-height: 44px;
+        }
+
+        .offer-location {
+            padding-top: 13px;
+            margin-top: 14px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .business-banner {
+            margin-top: 38px;
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 22px;
+            flex-wrap: wrap;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+
+        .business-banner h2 {
+            margin: 0 0 8px;
+            color: var(--navy);
+            font-size: 21px;
+        }
+
+        .business-banner p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 560px;
+        }
+
+        .footer {
+            padding: 28px 0 0;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 850px) {
+            .offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 560px) {
+            .page { padding: 20px 15px 35px; }
+            .hero { padding: 27px 21px; }
+            .offer-grid { grid-template-columns: 1fr; }
+            .business-banner { padding: 22px; }
+            .business-banner .link-button { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+<main class="page">
+
+    <header class="topbar">
+        <a href="{% url 'transport:dashboard' %}" class="brand">
+            Click<span>Campus</span>
+        </a>
+
+        <nav class="top-links" aria-label="Account navigation">
+            <a class="link-button outline-button"
+               href="{% url 'transport:dashboard' %}">
+                ← Dashboard
+            </a>
+            <a class="link-button outline-button"
+               href="{% url 'transport:login' %}">
+                Login
+            </a>
+            <a class="link-button blue-button"
+               href="{% url 'transport:register' %}">
+                Register
+            </a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="eyebrow">DISCOVER SOMETHING GOOD</div>
+            <h1>Good journeys. Great offers. ✨</h1>
+            <p>
+                Discover places and special offers around your destination.
+                Your next campus journey could lead to something exciting.
+            </p>
+            <a class="link-button outline-button"
+               href="{% url 'transport:create_promotion' %}">
+                Promote My Business →
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-heading">
+            <div>
+                <h2>Offers you might love</h2>
+                <p>Explore promotions from businesses around you.</p>
+            </div>
+        </div>
+
+        <div class="offer-grid">
+            {% for promotion in promotions %}
+                <article class="offer-card">
+                    <img
+                        src="{{ promotion.image.url }}"
+                        alt="{{ promotion.title }}"
+                        style="width: 100%; height: 180px; object-fit: cover;"
+                    >
+
+                    <div class="offer-content">
+                        <span class="offer-tag">{{ promotion.offer }}</span>
+
+                        <h3>{{ promotion.title }}</h3>
+
+                        <p>{{ promotion.description }}</p>
+
+                        <div class="offer-location">
+                            📍 {{ promotion.location }}
+                        </div>
+
+                        <p class="note">
+                            Offered by {{ promotion.business_name }}
+                        </p>
+
+                        <p class="note">
+                            Valid until {{ promotion.end_date|date:"d M Y" }}
+                        </p>
+                    </div>
+                </article>
+            {% empty %}
+                <p class="intro">
+                    No active promotions are available right now.
+                    Please check back soon!
+                </p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="business-banner">
+        <div>
+            <h2>Own a business? Reach campus travellers.</h2>
+            <p>
+                Add your business promotion to ClickCampus and help students
+                discover your offers while planning their journeys.
+            </p>
+        </div>
+
+        <a class="link-button blue-button"
+           href="{% url 'transport:create_promotion' %}">
+            + Add a Promotion
+        </a>
+    </section>
+
+    <footer class="footer">
+        ClickCampus · Campus travel made easier.
+    </footer>
+
+</main>
+</body>
+</html>

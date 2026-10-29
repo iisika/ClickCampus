@@ -12,6 +12,7 @@ from collections import defaultdict
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.dateparse import parse_date
 from django.views.decorators.http import require_POST
+from promotions.models import Promotion
 
 from .models import (
     Route,
@@ -48,6 +49,11 @@ def dashboard(request):
             if request.user.is_authenticated
             else []
         ),
+        "student_promotions": Promotion.objects.filter(
+            status=Promotion.Status.APPROVED,
+            start_date__lte=timezone.localdate(),
+            end_date__gte=timezone.localdate(),
+        ).order_by("-created_at"),
     }
 
     return render(request, "transport/dashboard.html", context)
@@ -240,6 +246,15 @@ def admin_dashboard(request):
         "available_buses": Bus.objects.filter(
             status=Bus.Status.AVAILABLE
         ).count(),
+        "pending_promotions": Promotion.objects.filter(
+            status=Promotion.Status.PENDING
+        ).count(),
+
+        "approved_promotions": Promotion.objects.filter(
+            status=Promotion.Status.APPROVED
+        ).count(),
+
+        "total_promotions": Promotion.objects.count(),
     }
 
     return render(

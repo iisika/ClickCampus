@@ -1547,3 +1547,147 @@ button.nav-link:hover {
         padding: 17px;
     }
 }
+    
+
+/* ========================================
+   SIDEBAR ACCOUNT AND LOGOUT POSITIONING
+   ======================================== */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Main navigation */
+.sidebar .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 0 auto;
+}
+
+/* Account details and logout at the bottom */
+.sidebar .sidebar-account {
+    margin-top: auto;
+    padding-top: 18px;
+    padding-bottom: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Signed-in account details */
+.sidebar .account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 12px;
+    color: #aeb8cc;
+    overflow-wrap: anywhere;
+}
+
+.sidebar .account-label {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+}
+
+.sidebar .account-info strong {
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+/* Logout form and button */
+.sidebar .sidebar-account .logout-form {
+    margin: 0;
+}
+
+.sidebar .sidebar-account .logout-button {
+    width: 100%;
+    text-align: left;
+    font-size: 12px;
+    padding: 10px 12px;
+    color: #aeb8cc;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.sidebar .sidebar-account .logout-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+
+/* ========================================
+   ADMIN PROMOTION REVIEW BUTTONS
+======================================== */
+
+.admin-action-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.admin-action-grid form {
+    margin: 0;
+}
+
+.admin-action-grid .promotion-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff !important;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+/* Approve */
+.admin-action-grid .approve-button {
+    background-color: #198754 !important;
+}
+
+.admin-action-grid .approve-button:hover {
+    background-color: #146c43 !important;
+    box-shadow: 0 4px 10px rgba(25, 135, 84, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Reject */
+.admin-action-grid .reject-button {
+    background-color: #dc3545 !important;
+}
+
+.admin-action-grid .reject-button:hover {
+    background-color: #b02a37 !important;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Keyboard accessibility */
+.admin-action-grid .promotion-action-button:focus-visible {
+    outline: 3px solid #3658d4;
+    outline-offset: 3px;
+}
