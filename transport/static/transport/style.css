@@ -421,20 +421,41 @@ button {
    FORM MESSAGES
    ======================================== */
 
+
 .form-message {
-    min-height: 0;
-    margin: 10px 0 0;
-    font-size: 12px;
-    overflow-wrap: anywhere;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 16px 18px;
+    margin: 16px 0;
+    border: 1px solid #fecaca;
+    border-left: 5px solid #dc2626;
+    border-radius: 10px;
+    background-color: #fef2f2;
+    color: #991b1b;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    box-shadow: 0 2px 6px rgba(185, 28, 28, 0.08);
 }
 
 .form-message:empty {
     display: none;
 }
 
-.form-message.success {
-    color: var(--success);
+.form-message strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #b91c1c;
+    font-size: 15px;
 }
+
+.form-message p {
+    margin: 0;
+    color: #7f1d1d;
+    font-weight: 500;
+}
+
 
 /* ========================================
    EMPTY STATE
@@ -972,4 +993,557 @@ footer {
     margin-top: 10px;
     font-size: 0.9rem;
     color: #555;
+}
+
+
+/* General message layout */
+div.form-message {
+    border-radius: 10px !important;
+    padding: 16px 18px !important;
+    box-sizing: border-box;
+}
+
+/* Error messages stay red */
+div.form-message.error {
+    background-color: #fef2f2 !important;
+    border: 2px solid #dc2626 !important;
+    border-left: 5px solid #b91c1c !important;
+    color: #991b1b !important;
+}
+
+/* Success messages become green */
+
+div.form-message.success,
+div.form-message.success p,
+div.form-message.success strong,
+div.form-message.success span {
+    background-color: #f0fdf4 !important;
+    color: #166534 !important;
+}
+
+div.form-message.success {
+    border: 2px solid #16a34a !important;
+    border-left: 5px solid #15803d !important;
+}
+
+
+/* General message styling */
+.form-message {
+    padding: 14px 16px;
+    margin: 16px 0;
+    border: 1px solid;
+    border-left: 5px solid;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Error messages: RED */
+.form-message.error {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border-color: #dc2626;
+}
+
+/* Success messages: GREEN */
+.form-message.success {
+    background-color: #f0fdf4;
+    color: #166534;
+    border-color: #16a34a;
+}
+
+/* Keep message text readable */
+.form-message p {
+    margin: 6px 0 0;
+}
+
+/* Booking deadline notice */
+.booking-deadline-notice {
+    background-color: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+    border-left: 5px solid #2563eb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+}
+
+.booking-deadline-notice strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.booking-deadline-notice p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   ClickCampus Demand Report
+   ======================================== */
+
+.demand-report-page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
+    color: #172033;
+}
+
+.demand-report-page header {
+    margin-bottom: 28px;
+}
+
+.demand-report-page header h1 {
+    color: #142d4e;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 8px;
+    letter-spacing: -0.8px;
+}
+
+.demand-report-page header p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.demand-report-page a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.demand-report-page a:hover {
+    text-decoration: underline;
+}
+
+.demand-summary {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 26px;
+    margin: 24px 0;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.05);
+}
+
+.demand-section-heading {
+    margin-bottom: 22px;
+}
+
+.demand-eyebrow {
+    color: #2563eb;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+}
+
+.demand-section-heading h2 {
+    color: #142d4e;
+    margin: 8px 0;
+    font-size: 1.5rem;
+}
+
+.demand-section-heading p {
+    color: #64748b;
+    margin: 0;
+}
+
+.demand-filter {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.demand-date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.demand-date-field label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+.demand-date-field input {
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #172033;
+    font: inherit;
+}
+
+.demand-filter button {
+    min-height: 44px;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.demand-filter button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.demand-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.demand-stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 4px solid #3b82f6;
+    border-radius: 12px;
+}
+
+.demand-stat-label {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.demand-stat-card strong {
+    color: #142d4e;
+    font-size: 2rem;
+    line-height: 1.2;
+}
+
+.demand-stat-card .demand-date-value {
+    font-size: 1.55rem;
+}
+
+.demand-stat-caption {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.demand-report-page section > h2 {
+    color: #142d4e;
+    margin: 30px 0 18px;
+}
+
+.demand-report-page .table-responsive {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.04);
+}
+
+.demand-report-page table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+}
+
+.demand-report-page table thead {
+    background: #142d4e;
+    color: #ffffff;
+}
+
+.demand-report-page table th {
+    padding: 16px;
+    text-align: left;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.demand-report-page table td {
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    line-height: 1.6;
+    vertical-align: top;
+}
+
+.demand-report-page table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.demand-report-page table tbody tr:hover {
+    background: #eff6ff;
+}
+
+.demand-report-page table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.planning-warning {
+    margin-top: 26px;
+    padding: 20px 22px;
+    border: 1px solid #bfdbfe;
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #1e3a8a;
+    line-height: 1.7;
+}
+
+.planning-warning strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.planning-warning p {
+    margin: 0;
+}
+
+@media (max-width: 700px) {
+    .demand-report-page {
+        padding: 20px 14px 32px;
+    }
+
+    .demand-summary {
+        padding: 18px;
+    }
+
+    .demand-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .demand-filter {
+        align-items: stretch;
+    }
+
+    .demand-filter button {
+        width: 100%;
+    }
+}
+
+
+/* ClickCampus booking status notifications */
+.booking-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    border-radius: 10px;
+    border-left: 5px solid;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.booking-notice strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 15px;
+}
+
+.booking-notice p {
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Confirmed: green */
+.booking-notice.confirmed {
+    background: #e8f7ee;
+    color: #17663a;
+    border-color: #22a05a;
+}
+
+/* Pending: amber */
+.booking-notice.pending {
+    background: #fff5d9;
+    color: #805b00;
+    border-color: #e5a000;
+}
+
+/* Cancelled: red */
+.booking-notice.cancelled {
+    background: #fdecec;
+    color: #a32121;
+    border-color: #dc4545;
+}
+
+
+/* ========================================
+   CLICKCAMPUS ADMIN DASHBOARD
+   ======================================== */
+
+.admin-user {
+    overflow-wrap: anywhere;
+    cursor: default;
+}
+
+.admin-user strong {
+    display: inline-block;
+    margin-top: 4px;
+    color: #ffffff;
+}
+
+.logout-form {
+    margin: 0;
+}
+
+button.nav-link {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    font-size: inherit;
+}
+
+button.nav-link:hover {
+    background: #2b3855;
+    color: #ffffff;
+}
+
+.admin-welcome {
+    gap: 28px;
+    background: linear-gradient(120deg, #3658d4, #263f9e);
+}
+
+.admin-welcome-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-hero-image {
+    flex: 0 0 38%;
+    height: 180px;
+    overflow: hidden;
+    border: 3px solid rgb(255 255 255 / 25%);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 10%);
+    box-shadow: 0 8px 24px rgb(10 25 70 / 20%);
+}
+
+.admin-hero-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-stats-grid .stat-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-stats-grid .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgb(29 38 56 / 7%);
+}
+
+.admin-action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.admin-action-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fbfcff;
+    transition: transform 0.2s ease, border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.admin-action-card:hover {
+    transform: translateY(-3px);
+    border-color: #c6d2ff;
+    box-shadow: 0 8px 22px rgb(29 38 56 / 6%);
+}
+
+.admin-action-icon {
+    display: grid;
+    width: 43px;
+    height: 43px;
+    place-items: center;
+    margin-bottom: 12px;
+    border-radius: 11px;
+    background: #e8edff;
+    color: var(--primary);
+    font-size: 22px;
+}
+
+.admin-action-card h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+}
+
+.admin-action-card p {
+    flex: 1;
+    margin: 0 0 17px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.admin-action-link {
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.admin-info-panel {
+    border-left: 4px solid var(--primary);
+}
+
+@media (max-width: 1100px) {
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-hero-image {
+        flex-basis: 34%;
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-welcome {
+        align-items: stretch;
+    }
+
+    .admin-hero-image {
+        display: none;
+    }
+
+    .admin-stats-grid,
+    .admin-action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-action-card {
+        padding: 17px;
+    }
 }

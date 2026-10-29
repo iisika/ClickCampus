@@ -96,6 +96,9 @@ class Bus(models.Model):
     )
 
     class Meta:
+        verbose_name = "Vehicle"
+        verbose_name_plural = "Vehicles"
+
         constraints = [
             models.CheckConstraint(
                 condition=Q(capacity__gt=0),

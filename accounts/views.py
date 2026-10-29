@@ -8,6 +8,8 @@ from .forms import RegistrationForm
 
 def register_page(request):
     if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect("transport:admin_dashboard")
         return redirect("transport:dashboard")
 
     if request.method == "POST":
@@ -58,6 +60,10 @@ def login_page(request):
 
         if user is not None:
             login(request, user)
+
+            if user.is_staff:
+                return redirect("transport:admin_dashboard")
+
             return redirect("transport:dashboard")
 
         messages.error(request, "Invalid email/username or password.")

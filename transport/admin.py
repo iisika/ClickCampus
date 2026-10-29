@@ -47,12 +47,6 @@ class TravelRequestAdminForm(forms.ModelForm):
         if not bus:
             return cleaned_data
 
-        if route and bus.route_id != route.id:
-            self.add_error(
-                "bus",
-                "This bus does not serve the selected route.",
-            )
-
         if bus.status == Bus.Status.MAINTENANCE:
             self.add_error(
                 "bus",
@@ -77,10 +71,12 @@ class TravelRequestAdminForm(forms.ModelForm):
             if self.instance.pk:
                 bookings = bookings.exclude(pk=self.instance.pk)
 
-            if bookings.count() >= bus.capacity:
+            usable_capacity = bus.capacity
+
+            if bookings.count() >= usable_capacity:
                 self.add_error(
                     "bus",
-                    "This bus has reached capacity for this departure.",
+                    "This bus has reached its usable capacity for this departure ",
                 )
 
         return cleaned_data

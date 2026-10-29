@@ -33,7 +33,6 @@
             <a class="nav-link" href="#booking">Book Transport</a>
             <a class="nav-link" href="#my-trips">My Trips</a>
             <a class="nav-link" href="#promotions">Promotions</a>
-            <a class="nav-link" href="#management">Management</a>
 
             <!-- AUTHENTICATION LINKS -->
             {% if user.is_authenticated %}
@@ -188,6 +187,15 @@
                     preferred travel time to submit a transport request.
                 </p>
 
+                <div class="booking-deadline-notice" role="note">
+                    <strong>📅 Booking deadline</strong>
+                    <p>
+                        Submit your transport request by 10:00 PM on the night
+                        before your travel date. Requests submitted after the
+                        deadline will not be accepted for that day's travel.
+                    </p>
+                </div>
+
                 <form
                     id="booking-form"
                     method="POST"
@@ -252,9 +260,18 @@
 
                     {% if messages %}
                         {% for message in messages %}
-                            <p class="form-message" role="status">
-                                {{ message }}
-                            </p>
+                            <div
+                                    class="form-message {{ message.tags }}"
+                                    role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}"
+                                >
+                                {% if message.tags == "error" %}
+                                    <strong>⚠ Please check your request</strong>
+                                {% elif message.tags == "success" %}
+                                    <strong>✓ Success</strong>
+                                {% endif %}
+
+                                <p>{{ message }}</p>
+                            </div>
                         {% endfor %}
                     {% endif %}
                 </form>
@@ -273,6 +290,7 @@
                 <div id="trip-details" class="trip-list">
 
                     
+                
                 {% for trip in my_trips %}
                     <article class="trip-card">
                         <div class="section-heading">
@@ -323,19 +341,44 @@
                         </p>
 
                         {% if trip.status == "confirmed" and trip.bus %}
-                            <p class="assignment-note">
-                                Your transport booking is confirmed.
-                            </p>
+                            <div class="booking-notice confirmed">
+                                <span>✓</span>
+                                <div>
+                                    <strong>Booking Confirmed!</strong>
+                                    <p>Your transport booking is confirmed. Your assigned vehicle is {{ trip.bus.registration_number }}.</p>
+                                </div>
+                            </div>
+
                         {% elif trip.status == "cancelled" %}
-                            <p class="assignment-note">
-                                This booking has been cancelled. Please contact the
-                                administrator if you need assistance.
-                            </p>
+                            <div class="booking-notice cancelled">
+                                <span>✕</span>
+                                <div>
+                                    <strong>Booking Cancelled</strong>
+                                    <p>This transport booking has been cancelled. Contact the administrator if you need assistance.</p>
+                                </div>
+                            </div>
+
                         {% else %}
-                            <p class="assignment-note">
-                                Your request is awaiting confirmation from the
-                                transport administrator.
-                            </p>
+                            <div class="booking-notice pending">
+                                <span>◷</span>
+                                <div>
+                                    <strong>Awaiting Confirmation</strong>
+                                    <p>Your request has been received and is waiting for the transport administrator to confirm it.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if trip.status != "cancelled" %}
+                            <form
+                                method="post"
+                                action="{% url 'transport:cancel_travel_request' trip.pk %}"
+                                onsubmit="return confirm('Are you sure you want to cancel this transport booking?');"
+                            >
+                                {% csrf_token %}
+                                <button type="submit" class="cancel-button">
+                                    Cancel Booking
+                                </button>
+                            </form>
                         {% endif %}
                     </article>
                 {% empty %}
@@ -473,38 +516,6 @@
                     ></p>
                 </form>
             </div>
-        </section>
-
-        <!-- MANAGEMENT OVERVIEW -->
-        <section class="panel lower-panel" id="management">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">OPERATIONS OVERVIEW</p>
-                    <h2>Management overview</h2>
-                </div>
-            </div>
-
-            <div class="management-grid">
-                <div>
-                    <span class="management-number">—</span>
-                    <p>Peak travel demand</p>
-                </div>
-
-                <div>
-                    <span class="management-number">—</span>
-                    <p>Route utilization</p>
-                </div>
-
-                <div>
-                    <span class="management-number">—</span>
-                    <p>Vehicle capacity utilization</p>
-                </div>
-            </div>
-
-            <p class="demo-notice">
-                Analytics will display real values after integration
-                with transport data.
-            </p>
         </section>
 
         <!-- FOOTER -->

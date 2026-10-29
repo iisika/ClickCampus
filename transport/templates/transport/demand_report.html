@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Demand Report | ClickCampus</title>
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+</head>
+<body>
+    <main class="container demand-report-page">
+        <header>
+            <h1>ClickCampus Bus Demand Report</h1>
+            <p>Planning estimates for school transport operations.</p>
+            <a href="{% url 'transport:dashboard' %}">← Back to Dashboard</a>
+        </header>
+
+            <section class="demand-summary">
+                <div class="demand-section-heading">
+                    <div>
+                        <span class="demand-eyebrow">OPERATIONS OVERVIEW</span>
+                        <h2>Report Overview</h2>
+                        <p>Review student demand and vehicle availability.</p>
+                    </div>
+                </div>
+
+                <form method="get" class="demand-filter">
+                    <div class="demand-date-field">
+                        <label for="travel_date">Travel date</label>
+                        <input
+                            type="date"
+                            id="travel_date"
+                            name="travel_date"
+                            value="{{ selected_date|date:'Y-m-d' }}"
+                            required
+                        >
+                    </div>
+                    <button type="submit">Generate Report →</button>
+                </form>
+
+                <div class="demand-stat-grid">
+                    <article class="demand-stat-card">
+                        <span class="demand-stat-label">Active Requests</span>
+                        <strong>{{ total_requests }}</strong>
+                        <span class="demand-stat-caption">For the selected date</span>
+                    </article>
+
+                    <article class="demand-stat-card">
+                        <span class="demand-stat-label">Available Vehicles</span>
+                        <strong>{{ available_bus_count }}</strong>
+                        <span class="demand-stat-caption">Currently marked available</span>
+                    </article>
+
+                    <article class="demand-stat-card">
+                        <span class="demand-stat-label">Travel Date</span>
+                        <strong class="demand-date-value">
+                            {{ selected_date|date:"d M Y" }}
+                        </strong>
+                        <span class="demand-stat-caption">
+                            {{ selected_date|date:"l" }}
+                        </span>
+                    </article>
+                </div>
+            </section>
+
+            
+            <section class="panel lower-panel" id="management">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">OPERATIONS OVERVIEW</p>
+                        <h2>Management overview</h2>
+                    </div>
+                </div>
+
+                <div class="management-grid">
+                    <div>
+                        <span class="management-number">{{ total_requests }}</span>
+                        <p>Active transport requests</p>
+                    </div>
+
+                    <div>
+                        <span class="management-number">{{ report_rows|length }}</span>
+                        <p>Departure groups with demand</p>
+                    </div>
+
+                    <div>
+                        <span class="management-number">{{ available_bus_count }}</span>
+                        <p>Available vehicles</p>
+                    </div>
+                </div>
+
+                <p class="demo-notice">
+                    Figures reflect the selected travel date and current vehicle availability.
+                    Bus allocation remains subject to administrative review.
+                </p>
+            </section>
+
+        <section>
+            <h2>Demand by Departure</h2>
+
+            {% if report_rows %}
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Direction</th>
+                                <th>Departure Time</th>
+                                <th>Actual Students</th>
+                                <th>Planning Demand</th>
+                                <th>Demand by Route</th>
+                                <th>Estimated Buses</th>
+                                <th>Recommended Vehicles</th>
+                                <th>Planning Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in report_rows %}
+                                <tr>
+                                    <td>{{ row.direction_label }}</td>
+                                    <td>
+                                        {% if row.departure_time %}
+                                            {{ row.departure_time|time:"g:i A" }}
+                                        {% else %}
+                                            Not specified
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ row.total_students }}</td>
+                                    <td>{{ row.planning_demand }}</td>
+                                    <td>
+                                        {% for route, count in row.route_counts.items %}
+                                            {{ route }}: {{ count }}{% if not forloop.last %}<br>{% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ row.buses_needed }}</td>
+                                    <td>
+                                        {% if row.recommended_vehicles %}
+                                            {% for vehicle in row.recommended_vehicles %}
+                                                {{ vehicle }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            Not assigned
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ row.capacity_note }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No active transport requests were found for this date.</p>
+            {% endif %}
+        </section>
+
+        <aside class="planning-warning" role="note">
+            <strong>Planning estimate only</strong>
+            <p>
+                These figures do not account for overlapping journeys,
+                route travel duration, or final bus assignments.
+                An administrator must review the schedule before dispatch.
+            </p>
+        </aside>
+    </main>
+</body>
+</html>

@@ -1,0 +1,227 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClickCampus | Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="{% static 'transport/image/clickcampus-logo.png' %}"
+                 alt="ClickCampus logo" class="brand-logo">
+            <span>ClickCampus</span>
+        </div>
+
+        <p class="menu-label">ADMIN WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link active" href="{% url 'transport:admin_dashboard' %}">
+                Dashboard
+            </a>
+            <a class="nav-link" href="{% url 'transport:demand_report' %}">
+                Demand Report
+            </a>
+            <a class="nav-link" href="/admin/transport/travelrequest/">
+                Manage Bookings
+            </a>
+            <a class="nav-link" href="/admin/transport/bus/">
+                Manage Vehicles
+            </a>
+            <a class="nav-link" href="/admin/transport/route/">
+                Manage Routes
+            </a>
+            <a class="nav-link" href="/admin/transport/pickuppoint/">
+                Pickup Points
+            </a>
+            <a class="nav-link" href="{% url 'transport:dashboard' %}">
+                Student Portal
+            </a>
+
+            <div class="nav-link admin-user">
+                Administrator<br>
+                <strong>{{ request.user.get_username }}</strong>
+            </div>
+
+            <form method="post" action="{% url 'transport:logout' %}"
+                  class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="nav-link logout-button">
+                    Log Out
+                </button>
+            </form>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Campus transport, made easier.</p>
+            <span>ClickCampus Prototype</span>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">CAMPUS TRANSPORT SYSTEM</p>
+                <h1>Admin Dashboard</h1>
+                <p class="muted">Your overview of campus transport operations.</p>
+            </div>
+
+            <div class="profile">
+                <span class="avatar">
+                    {{ request.user.get_username|first|upper }}
+                </span>
+                <span>{{ request.user.get_username }}</span>
+            </div>
+        </header>
+
+        <section class="welcome admin-welcome">
+            <div class="admin-welcome-text">
+                <p class="eyebrow light">CLICKCAMPUS MANAGEMENT</p>
+                <h2>Welcome back, {{ request.user.get_username }}!</h2>
+                <p>
+                    Manage student transport requests, coordinate vehicles,
+                    monitor demand and keep campus journeys organised.
+                </p>
+                <a class="primary-button"
+                   href="{% url 'transport:demand_report' %}">
+                    View Demand Report →
+                </a>
+            </div>
+
+            <div class="admin-hero-image">
+                <img
+                    src="{% static 'transport/image/admin-bus-banner.jpg.jpg' %}"
+                    alt="School bus on the road">
+            </div>
+        </section>
+
+        <section class="stats-grid admin-stats-grid">
+            <article class="stat-card">
+                <p class="stat-label">Pending Requests</p>
+                <h3>{{ pending_requests }}</h3>
+                <p class="stat-note">Awaiting administrator review</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Confirmed Bookings</p>
+                <h3>{{ confirmed_requests }}</h3>
+                <p class="stat-note">Requests marked confirmed</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Cancelled Bookings</p>
+                <h3>{{ cancelled_requests }}</h3>
+                <p class="stat-note">Requests marked cancelled</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Total Vehicles</p>
+                <h3>{{ total_buses }}</h3>
+                <p class="stat-note">Registered transport vehicles</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Available Vehicles</p>
+                <h3>{{ available_buses }}</h3>
+                <p class="stat-note">Currently marked available</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Routes</p>
+                <h3>{{ total_routes }}</h3>
+                <p class="stat-note">Configured transport routes</p>
+            </article>
+
+            <article class="stat-card">
+                <p class="stat-label">Pickup Points</p>
+                <h3>{{ total_pickup_points }}</h3>
+                <p class="stat-note">Configured pickup locations</p>
+            </article>
+        </section>
+
+        <section class="panel admin-management-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SYSTEM OPERATIONS</p>
+                    <h2>Transport Management</h2>
+                </div>
+                <span class="section-icon">↗</span>
+            </div>
+
+            <p class="muted">
+                Select a workspace below to manage a part of the transport system.
+            </p>
+
+            <div class="admin-action-grid">
+                <a class="admin-action-card"
+                   href="/admin/transport/travelrequest/">
+                    <span class="admin-action-icon">▤</span>
+                    <h3>Bookings</h3>
+                    <p>Review requests, update booking statuses and assign buses.</p>
+                    <span class="admin-action-link">Manage bookings →</span>
+                </a>
+
+                <a class="admin-action-card"
+                   href="/admin/transport/bus/">
+                    <span class="admin-action-icon">▰</span>
+                    <h3>Vehicles</h3>
+                    <p>Review registered vehicles and their availability.</p>
+                    <span class="admin-action-link">Manage vehicles →</span>
+                </a>
+
+                <a class="admin-action-card"
+                   href="/admin/transport/route/">
+                    <span class="admin-action-icon">⌖</span>
+                    <h3>Routes</h3>
+                    <p>View and maintain the transport routes.</p>
+                    <span class="admin-action-link">Manage routes →</span>
+                </a>
+
+                <a class="admin-action-card"
+                   href="/admin/transport/pickuppoint/">
+                    <span class="admin-action-icon">⌖</span>
+                    <h3>Pickup Points</h3>
+                    <p>Maintain the locations students can select.</p>
+                    <span class="admin-action-link">Manage pickup points →</span>
+                </a>
+
+                <a class="admin-action-card"
+                   href="{% url 'transport:demand_report' %}">
+                    <span class="admin-action-icon">▥</span>
+                    <h3>Demand Report</h3>
+                    <p>Review travel demand and vehicle planning estimates.</p>
+                    <span class="admin-action-link">Open report →</span>
+                </a>
+
+                <a class="admin-action-card"
+                   href="{% url 'transport:dashboard' %}">
+                    <span class="admin-action-icon">⌂</span>
+                    <h3>Student Portal</h3>
+                    <p>Open the student-facing transport dashboard.</p>
+                    <span class="admin-action-link">View student portal →</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="panel lower-panel admin-info-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">COMING LATER</p>
+                    <h2>Campus Promotions</h2>
+                </div>
+            </div>
+            <p class="muted">
+                Business accounts, promotion submissions and approval workflows
+                will be connected after the existing promotions module is reviewed.
+            </p>
+        </section>
+
+        <footer>ClickCampus · Transport Management Prototype</footer>
+    </main>
+</body>
+</html>
