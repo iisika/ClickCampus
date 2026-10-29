@@ -109,7 +109,7 @@
                         
                     {% if promotion.status == "pending" %}
                         <form method="post"
-                            action="{% url 'transport:approve_promotion' promotion.pk %}"
+                            action="{% url 'transport:approve_promotion' promotion.pk %}">
                             {% csrf_token %}
                             <button type="submit" class="promotion-action-button approve-button">
                                 Approve
