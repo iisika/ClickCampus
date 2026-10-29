@@ -1,7 +1,5 @@
-from django.shortcuts import render
-from .models import Route, PickupPoint, Bus
 
-from datetime import date
+from datetime import date, time
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,8 +7,14 @@ from django.db import IntegrityError, transaction
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import Route, PickupPoint, Bus, TravelRequest
-
+from .models import (
+    Route,
+    PickupPoint,
+    Bus,
+    TravelRequest,
+    TO_SCHOOL_TIMES,
+    FROM_SCHOOL_TIMES,
+)
 
 
 def dashboard(request):
@@ -21,7 +25,7 @@ def dashboard(request):
     ).select_related("route")
 
     available_bus_count = Bus.objects.filter(
-        status="available"
+        status=Bus.Status.AVAILABLE
     ).count()
 
     context = {
@@ -50,9 +54,9 @@ def create_travel_request(request):
     pickup_point_id = request.POST.get("pickup_point", "").strip()
     travel_date_text = request.POST.get("travel_date", "").strip()
     direction = request.POST.get("direction", "").strip()
-    time_slot = request.POST.get("time_slot", "").strip()
+    departure_time_text = request.POST.get("departure_time", "").strip()
 
-    # Validate the pickup point.
+    # Validate the pickup point and its route.
     try:
         pickup_point = PickupPoint.objects.select_related("route").get(
             pk=pickup_point_id,
@@ -73,41 +77,56 @@ def create_travel_request(request):
         messages.error(request, "Travel date cannot be in the past.")
         return redirect("transport:dashboard")
 
-    # Validate direction and time slot against the model choices.
+    # Validate the journey direction.
     valid_directions = {
-        choice[0] for choice in TravelRequest._meta
-        .get_field("direction").choices
-    }
-    valid_time_slots = {
-        choice[0] for choice in TravelRequest._meta
-        .get_field("time_slot").choices
+        choice[0]
+        for choice in TravelRequest._meta.get_field("direction").choices
     }
 
     if direction not in valid_directions:
         messages.error(request, "Please choose a valid journey direction.")
         return redirect("transport:dashboard")
 
-    if time_slot not in valid_time_slots:
-        messages.error(request, "Please choose a valid travel time.")
+    # Select the allowed timetable for the chosen direction.
+    if direction == TravelRequest.Direction.TO_SCHOOL:
+        allowed_times = TO_SCHOOL_TIMES
+    else:
+        allowed_times = FROM_SCHOOL_TIMES
+
+    # Parse and validate the exact departure time.
+    try:
+        departure_time = time.fromisoformat(departure_time_text)
+    except (ValueError, TypeError):
+        messages.error(request, "Please choose a valid departure time.")
         return redirect("transport:dashboard")
 
-    # Avoid duplicate requests for the same student, date,
-    # direction, and time slot.
+    if departure_time not in allowed_times:
+        messages.error(
+            request,
+            "That departure time is not available for the selected "
+            "journey direction.",
+        )
+        return redirect("transport:dashboard")
+
+    # Prevent duplicate requests for the same student, date,
+    # direction, and exact departure time.
     duplicate_exists = TravelRequest.objects.filter(
         student=request.user,
         travel_date=travel_date,
         direction=direction,
-        time_slot=time_slot,
+        departure_time=departure_time,
     ).exists()
 
     if duplicate_exists:
         messages.error(
             request,
             "You already have a request for that date, direction, "
-            "and time slot."
+            "and departure time.",
         )
         return redirect("transport:dashboard")
 
+    # Save the request while retaining the legacy time_slot field
+    # for compatibility with existing database records.
     try:
         with transaction.atomic():
             TravelRequest.objects.create(
@@ -116,17 +135,22 @@ def create_travel_request(request):
                 pickup_point=pickup_point,
                 travel_date=travel_date,
                 direction=direction,
-                time_slot=time_slot,
+                departure_time=departure_time,
+                time_slot="",
             )
     except IntegrityError:
         messages.error(
             request,
             "This request could not be saved because a matching "
-            "request already exists."
+            "request already exists.",
         )
         return redirect("transport:dashboard")
 
-    messages.success(request, "Your transport request was submitted successfully.")
+    messages.success(
+        request,
+        "Your transport request was submitted successfully.",
+    )
+
     return redirect(
         reverse("transport:dashboard") + "#my-trips"
     )

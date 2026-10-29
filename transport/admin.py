@@ -1,13 +1,22 @@
 
 from django import forms
 from django.contrib import admin
-from .models import Bus, BusLocation, PickupPoint, Route, TravelRequest
+
+from .models import (
+    Bus,
+    BusLocation,
+    PickupPoint,
+    Route,
+    TravelRequest,
+    TO_SCHOOL_TIMES,
+    FROM_SCHOOL_TIMES,
+)
 
 
 class TravelRequestAdminForm(forms.ModelForm):
     class Meta:
         model = TravelRequest
-        fields = "__all__"
+        exclude = ("time_slot",)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -16,38 +25,52 @@ class TravelRequestAdminForm(forms.ModelForm):
         route = cleaned_data.get("route")
         travel_date = cleaned_data.get("travel_date")
         direction = cleaned_data.get("direction")
-        time_slot = cleaned_data.get("time_slot")
+        departure_time = cleaned_data.get("departure_time")
         status = cleaned_data.get("status")
+
+        # Validate that the departure time matches the journey direction.
+        if direction and departure_time:
+            if direction == TravelRequest.Direction.TO_SCHOOL:
+                allowed_times = TO_SCHOOL_TIMES
+            elif direction == TravelRequest.Direction.FROM_SCHOOL:
+                allowed_times = FROM_SCHOOL_TIMES
+            else:
+                allowed_times = ()
+
+            if departure_time not in allowed_times:
+                self.add_error(
+                    "departure_time",
+                    "This departure time is not valid for the selected "
+                    "journey direction.",
+                )
 
         if not bus:
             return cleaned_data
 
-        # A bus must serve the booking's route.
         if route and bus.route_id != route.id:
             self.add_error(
                 "bus",
                 "This bus does not serve the selected route.",
             )
 
-        # A bus under maintenance cannot be assigned.
         if bus.status == Bus.Status.MAINTENANCE:
             self.add_error(
                 "bus",
                 "This bus is under maintenance and cannot be assigned.",
             )
 
-        # Confirmed bookings must not exceed bus capacity.
+        # Count confirmed bookings for this exact departure.
         if (
             status == TravelRequest.Status.CONFIRMED
             and travel_date
             and direction
-            and time_slot
+            and departure_time
         ):
             bookings = TravelRequest.objects.filter(
                 bus=bus,
                 travel_date=travel_date,
                 direction=direction,
-                time_slot=time_slot,
+                departure_time=departure_time,
                 status=TravelRequest.Status.CONFIRMED,
             )
 
@@ -57,8 +80,7 @@ class TravelRequestAdminForm(forms.ModelForm):
             if bookings.count() >= bus.capacity:
                 self.add_error(
                     "bus",
-                    "This bus has reached capacity for this "
-                    "date, direction and time slot.",
+                    "This bus has reached capacity for this departure.",
                 )
 
         return cleaned_data
@@ -66,9 +88,7 @@ class TravelRequestAdminForm(forms.ModelForm):
 
 @admin.register(Route)
 class RouteAdmin(admin.ModelAdmin):
-    list_display = (
-        "name", "start_location", "end_location", "is_active"
-    )
+    list_display = ("name", "start_location", "end_location", "is_active")
     search_fields = ("name", "start_location", "end_location")
     list_filter = ("is_active",)
 
@@ -82,9 +102,7 @@ class PickupPointAdmin(admin.ModelAdmin):
 
 @admin.register(Bus)
 class BusAdmin(admin.ModelAdmin):
-    list_display = (
-        "registration_number", "route", "capacity", "status"
-    )
+    list_display = ("registration_number", "route", "capacity", "status")
     list_filter = ("status", "route")
     search_fields = ("registration_number",)
 
@@ -99,13 +117,19 @@ class TravelRequestAdmin(admin.ModelAdmin):
         "pickup_point",
         "travel_date",
         "direction",
-        "time_slot",
+        "departure_time",
         "bus",
         "status",
     )
+
     list_filter = (
-        "travel_date", "route", "direction", "time_slot", "status"
+        "travel_date",
+        "route",
+        "direction",
+        "departure_time",
+        "status",
     )
+
     search_fields = (
         "student__username",
         "student__email",
@@ -113,6 +137,7 @@ class TravelRequestAdmin(admin.ModelAdmin):
         "student__last_name",
         "bus__registration_number",
     )
+
     list_select_related = ("student", "route", "pickup_point", "bus")
     autocomplete_fields = ("student", "bus")
     list_per_page = 25

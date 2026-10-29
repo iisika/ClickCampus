@@ -228,13 +228,10 @@
                         <option value="from_school">From school</option>
                     </select>
 
-                    <label for="time-slot">Preferred travel time</label>
+                    <label for="departure-time">Preferred travel time</label>
 
-                    <select id="time-slot" name="time_slot" required>
-                        <option value="">Choose a time slot</option>
-                        <option value="morning">Morning</option>
-                        <option value="afternoon">Afternoon</option>
-                        <option value="evening">Evening</option>
+                    <select id="departure-time" name="departure_time" required>
+                        <option value="">Select journey direction first</option>
                     </select>
 
                     {% if user.is_authenticated %}
@@ -275,79 +272,88 @@
 
                 <div id="trip-details" class="trip-list">
 
-                    {% for trip in my_trips %}
-                        <article class="trip-card">
-                            <div class="section-heading">
-                                <div>
-                                    <p class="eyebrow">TRANSPORT REQUEST</p>
-                                    <h3>{{ trip.route.name }}</h3>
-                                </div>
-
-                                <span class="promotion-tag status-badge status-{{ trip.status }}">
-                                {{ trip.get_status_display }}
-                                </span>
+                    
+                {% for trip in my_trips %}
+                    <article class="trip-card">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">TRANSPORT REQUEST</p>
+                                <h3>{{ trip.route.name }}</h3>
                             </div>
 
-                            <p>
-                                <strong>Pickup point:</strong>
-                                {{ trip.pickup_point.name }}
-                            </p>
-
-                            <p>
-                                <strong>Date:</strong>
-                                {{ trip.travel_date|date:"D, d M Y" }}
-                            </p>
-
-                            <p>
-                                <strong>Direction:</strong>
-                                {{ trip.get_direction_display }}
-                            </p>
-
-                            <p>
-                                <strong>Time:</strong>
-                                {{ trip.get_time_slot_display }}
-                            </p>
-
-                            <p>
-                            <strong>Assigned bus:</strong>
-                                {% if trip.bus %}
-                                    {{ trip.bus.registration_number }}
-                                    {% else %}
-                                        Awaiting bus assignment
-                                    {% endif %}
-                            </p>
-
-                                {% if trip.status == "confirmed" and trip.bus %}
-                                    <p class="assignment-note">
-                                        Your transport booking is confirmed.
-                                    </p>
-                                {% elif trip.status == "cancelled" %}
-                                <p class="assignment-note">
-                                    This booking has been cancelled. Please contact the administrator
-                                    if you need assistance.
-                                </p>
-                            {% else %}
-                                <p class="assignment-note">
-                                    Your request is awaiting confirmation from the transport administrator.
-                                </p>
-                            {% endif %}
-
-                        </article>
-                    {% empty %}
-                        <div class="empty-state">
-                            <div class="empty-icon">🚌</div>
-
-                            <h3>No requests yet</h3>
-
-                            <p>
-                                {% if user.is_authenticated %}
-                                    Your submitted transport requests will appear here.
-                                {% else %}
-                                    Sign in to access your transport requests.
-                                {% endif %}
-                            </p>
+                            <span class="promotion-tag status-badge status-{{ trip.status }}">
+                                {{ trip.get_status_display }}
+                            </span>
                         </div>
-                    {% endfor %}
+
+                        <p>
+                            <strong>Pickup point:</strong>
+                            {{ trip.pickup_point.name }}
+                        </p>
+
+                        <p>
+                            <strong>Date:</strong>
+                            {{ trip.travel_date|date:"D, d M Y" }}
+                        </p>
+
+                        <p>
+                            <strong>Direction:</strong>
+                            {{ trip.get_direction_display }}
+                        </p>
+
+                        <p>
+                            <strong>Departure time:</strong>
+                            {% if trip.departure_time %}
+                                {{ trip.departure_time|time:"g:i A" }}
+                            {% else %}
+                                <span class="assignment-note">
+                                    Exact departure time not recorded.
+                                    Please contact the transport administrator.
+                                </span>
+                            {% endif %}
+                        </p>
+
+                        <p>
+                            <strong>Assigned bus:</strong>
+                            {% if trip.bus %}
+                                {{ trip.bus.registration_number }}
+                            {% else %}
+                                Awaiting bus assignment
+                            {% endif %}
+                        </p>
+
+                        {% if trip.status == "confirmed" and trip.bus %}
+                            <p class="assignment-note">
+                                Your transport booking is confirmed.
+                            </p>
+                        {% elif trip.status == "cancelled" %}
+                            <p class="assignment-note">
+                                This booking has been cancelled. Please contact the
+                                administrator if you need assistance.
+                            </p>
+                        {% else %}
+                            <p class="assignment-note">
+                                Your request is awaiting confirmation from the
+                                transport administrator.
+                            </p>
+                        {% endif %}
+                    </article>
+                {% empty %}
+                    <div class="empty-state">
+                        <div class="empty-icon">🚌</div>
+
+                        <h3>No requests yet</h3>
+
+                        <p>
+                            {% if user.is_authenticated %}
+                                Your submitted transport requests will appear here.
+                            {% else %}
+                                Sign in to access your transport requests.
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endfor %}
+
 
                 </div>
 
@@ -618,6 +624,54 @@
 
             promotionForm.reset();
         });
+
+        
+        const directionSelect = document.getElementById("direction");
+        const departureSelect = document.getElementById("departure-time");
+
+        const departureSchedules = {
+            to_school: [
+                { value: "06:00", label: "6:00 AM" },
+                { value: "07:00", label: "7:00 AM" },
+                { value: "09:30", label: "9:30 AM" },
+                { value: "11:50", label: "11:50 AM" },
+                { value: "13:50", label: "1:50 PM" }
+            ],
+            from_school: [
+                { value: "11:00", label: "11:00 AM" },
+                { value: "13:00", label: "1:00 PM" },
+                { value: "15:30", label: "3:30 PM" },
+                { value: "17:30", label: "5:30 PM" },
+                { value: "19:20", label: "7:20 PM" },
+                { value: "21:20", label: "9:20 PM" }
+            ]
+        };
+
+        function updateDepartureTimes() {
+            const direction = directionSelect.value;
+            const times = departureSchedules[direction] || [];
+
+            departureSelect.replaceChildren();
+
+            const placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = times.length
+                ? "Select departure time"
+                : "Select journey direction first";
+
+            departureSelect.appendChild(placeholder);
+
+            times.forEach((item) => {
+                const option = document.createElement("option");
+                option.value = item.value;
+                option.textContent = item.label;
+                departureSelect.appendChild(option);
+            });
+        }
+
+        directionSelect.addEventListener("change", updateDepartureTimes);
+        updateDepartureTimes();
+
     </script>
 </body>
 </html>

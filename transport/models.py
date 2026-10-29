@@ -1,7 +1,43 @@
+from datetime import time
 
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+
+
+# Student pickups: designated pickup points -> school
+TO_SCHOOL_DEPARTURE_TIMES = (
+    (time(6, 0), "6:00 AM"),
+    (time(7, 0), "7:00 AM"),
+    (time(9, 30), "9:30 AM"),
+    (time(11, 50), "11:50 AM"),
+    (time(13, 50), "1:50 PM"),
+)
+
+# Student drop-offs: school -> designated destinations
+FROM_SCHOOL_DEPARTURE_TIMES = (
+    (time(11, 0), "11:00 AM"),
+    (time(13, 0), "1:00 PM"),
+    (time(15, 30), "3:30 PM"),
+    (time(17, 30), "5:30 PM"),
+    (time(19, 20), "7:20 PM"),
+    (time(21, 20), "9:20 PM"),
+)
+
+# All allowed departure times, used by the database field.
+ALL_DEPARTURE_TIME_CHOICES = (
+    TO_SCHOOL_DEPARTURE_TIMES + FROM_SCHOOL_DEPARTURE_TIMES
+)
+
+TO_SCHOOL_TIMES = tuple(
+    departure_time for departure_time, label
+    in TO_SCHOOL_DEPARTURE_TIMES
+)
+
+FROM_SCHOOL_TIMES = tuple(
+    departure_time for departure_time, label
+    in FROM_SCHOOL_DEPARTURE_TIMES
+)
 
 
 class Route(models.Model):
@@ -86,6 +122,16 @@ class TravelRequest(models.Model):
         CONFIRMED = "confirmed", "Confirmed"
         CANCELLED = "cancelled", "Cancelled"
 
+    departure_time = models.TimeField(
+    choices=ALL_DEPARTURE_TIME_CHOICES,
+    null=True,
+    blank=True,
+    help_text=(
+        "Exact scheduled departure time. "
+        "Blank for older requests awaiting review."
+        ),
+    )
+
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -116,7 +162,10 @@ class TravelRequest(models.Model):
     time_slot = models.CharField(
         max_length=20,
         choices=TimeSlot.choices,
+        blank=True,
+        default="",
     )
+       
     status = models.CharField(
         max_length=20,
         choices=Status.choices,
@@ -125,16 +174,16 @@ class TravelRequest(models.Model):
     requested_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["travel_date", "time_slot"]
+        ordering = ["travel_date", "departure_time"]
         constraints = [
             models.UniqueConstraint(
                 fields=[
                     "student",
                     "travel_date",
                     "direction",
-                    "time_slot",
+                    "departure_time",
                 ],
-                name="unique_student_travel_slot",
+                name="unique_student_departure_time",
             )
         ]
 
