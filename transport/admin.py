@@ -59,11 +59,12 @@ class TravelRequestAdminForm(forms.ModelForm):
         # same route departure may legitimately use the same vehicle.
         if (
             status == TravelRequest.Status.CONFIRMED
+            and route
             and travel_date
             and direction
             and departure_time
         ):
-            duration = (
+            duration = 
                 timedelta(minutes=90)
                 if direction == TravelRequest.Direction.TO_SCHOOL
                 else timedelta(minutes=150)
