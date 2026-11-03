@@ -1,5 +1,5 @@
 {% load static %}
-<aside class="sidebar">
+<nav id="nav-sidebar" aria-label="ClickCampus administration navigation">\n<aside class="sidebar">
     <div class="brand">
         <img src="{% static 'transport/image/clickcampus-logo.png' %}" alt="ClickCampus logo" class="brand-logo">
         <span>ClickCampus</span>
@@ -21,4 +21,4 @@
         <form method="post" action="{% url 'transport:logout' %}" class="logout-form">{% csrf_token %}<button type="submit" class="logout-button">Log Out</button></form>
     </div>
     <div class="sidebar-bottom"><p>Campus transport, made easier.</p><span>©ClickCampus 2026</span></div>
-</aside>
+</aside>\n</nav>
