@@ -648,8 +648,16 @@ def manage_bookings(request):
                 ))
         return redirect("transport:manage_bookings")
 
+    from .admin import TravelRequestAdminForm
+    editing_booking = get_object_or_404(
+        TravelRequest, pk=request.GET.get("edit")
+    ) if request.GET.get("edit") else None
+    booking_form = TravelRequestAdminForm(instance=editing_booking) if editing_booking else None
+
     context = {
         "page_title": "Manage Bookings",
+        "booking_form": booking_form,
+        "editing_booking": editing_booking,
         "page_eyebrow": "STUDENT TRANSPORT",
         "page_description": "Review student requests, update booking status and assign vehicles.",
         "bookings": bookings[:250],
