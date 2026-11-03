@@ -48,3 +48,15 @@
 .management-messages p.error{background:#fff0f0;color:#a52b2b}
 @media(max-width:1000px){.management-columns{grid-template-columns:1fr}.management-record-list{max-height:none}}
 @media(max-width:650px){.management-page .management-hero{padding:22px;}.management-hero-icon{display:none}.management-kpis{grid-template-columns:1fr}.management-filters{grid-template-columns:1fr}.management-page .main-content{padding-left:14px;padding-right:14px}}
+
+
+/* Consistent city-led visual treatment for fleet and route workspaces */
+.management-page .management-hero{position:relative;isolation:isolate;background:linear-gradient(90deg,rgba(10,19,36,.96) 0%,rgba(10,19,36,.86) 58%,rgba(10,19,36,.58) 100%),url('/static/transport/image/pexels-joy-kahashi-1725918396-27965508.jpg') center 48%/cover no-repeat;box-shadow:0 15px 38px #101b311c}
+.management-page .management-hero:after{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 82% 45%,rgba(255,212,59,.15),transparent 32%)}
+.management-page .management-hero-icon{position:relative;z-index:1;display:grid;place-items:center;width:104px;height:104px;border:1px solid #ffffff35;border-radius:25px;background:#ffffff12;color:#ffd43b;backdrop-filter:blur(4px)}
+.management-page .management-kpis article,.management-page .management-form-panel,.management-page .management-list-panel{box-shadow:0 7px 22px #17243a08}
+.management-page .management-record{transition:transform .2s,border-color .2s,box-shadow .2s}
+.management-page .management-record:hover{transform:translateY(-2px);border-color:#e6c54e;box-shadow:0 9px 22px #17243a0b}
+.management-page .management-filters button{background:#101b31;transition:background .2s,transform .2s}
+.management-page .management-filters button:hover{background:#263956;transform:translateY(-1px)}
+@media(max-width:760px){.management-page .management-hero{background-position:65% center}}
