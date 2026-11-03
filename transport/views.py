@@ -1,4 +1,5 @@
 
+import json
 from datetime import date, time
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -235,38 +236,68 @@ def register_page(request):
 
 @staff_member_required
 def admin_dashboard(request):
+    pending_requests = TravelRequest.objects.filter(
+        status=TravelRequest.Status.PENDING
+    ).count()
+    confirmed_requests = TravelRequest.objects.filter(
+        status=TravelRequest.Status.CONFIRMED
+    ).count()
+    cancelled_requests = TravelRequest.objects.filter(
+        status=TravelRequest.Status.CANCELLED
+    ).count()
+    available_buses = Bus.objects.filter(
+        status=Bus.Status.AVAILABLE
+    ).count()
+    in_service_buses = Bus.objects.filter(
+        status=Bus.Status.IN_SERVICE
+    ).count()
+    maintenance_buses = Bus.objects.filter(
+        status=Bus.Status.MAINTENANCE
+    ).count()
+
     context = {
-        "pending_requests": TravelRequest.objects.filter(
-            status=TravelRequest.Status.PENDING
-        ).count(),
-        "confirmed_requests": TravelRequest.objects.filter(
-            status=TravelRequest.Status.CONFIRMED
-        ).count(),
-        "cancelled_requests": TravelRequest.objects.filter(
-            status=TravelRequest.Status.CANCELLED
-        ).count(),
+        "pending_requests": pending_requests,
+        "confirmed_requests": confirmed_requests,
+        "cancelled_requests": cancelled_requests,
+        "total_requests": TravelRequest.objects.count(),
         "total_routes": Route.objects.count(),
+        "active_routes": Route.objects.filter(is_active=True).count(),
         "total_pickup_points": PickupPoint.objects.count(),
         "total_buses": Bus.objects.count(),
-        "available_buses": Bus.objects.filter(
-            status=Bus.Status.AVAILABLE
-        ).count(),
+        "available_buses": available_buses,
+        "in_service_buses": in_service_buses,
+        "maintenance_buses": maintenance_buses,
         "pending_promotions": Promotion.objects.filter(
             status=Promotion.Status.PENDING
         ).count(),
-
         "approved_promotions": Promotion.objects.filter(
             status=Promotion.Status.APPROVED
         ).count(),
-
         "total_promotions": Promotion.objects.count(),
+        "recent_requests": (
+            TravelRequest.objects
+            .select_related("student", "route", "bus")
+            .order_by("-requested_at")[:6]
+        ),
+        "booking_chart_data": json.dumps({
+            "labels": ["Pending", "Confirmed", "Cancelled"],
+            "values": [
+                pending_requests,
+                confirmed_requests,
+                cancelled_requests,
+            ],
+        }),
+        "fleet_chart_data": json.dumps({
+            "labels": ["Available", "In service", "Maintenance"],
+            "values": [
+                available_buses,
+                in_service_buses,
+                maintenance_buses,
+            ],
+        }),
     }
 
-    return render(
-        request,
-        "transport/admin_dashboard.html",
-        context,
-    )
+    return render(request, "transport/admin_dashboard.html", context)
 
 
 
