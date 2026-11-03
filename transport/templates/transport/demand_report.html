@@ -9,28 +9,7 @@
     <link rel="stylesheet" href="{% static 'transport/admin.css' %}">
 </head>
 <body class="admin-dashboard-page demand-page">
-<aside class="sidebar">
-    <div class="brand">
-        <img src="{% static 'transport/image/clickcampus-logo.png' %}" alt="ClickCampus logo" class="brand-logo">
-        <span>ClickCampus</span>
-    </div>
-    <p class="menu-label">ADMIN WORKSPACE</p>
-    <nav class="sidebar-nav">
-        <a class="nav-link" href="{% url 'transport:admin_dashboard' %}">Home</a>
-        <a class="nav-link active" href="{% url 'transport:demand_report' %}">Demand Report</a>
-        <a class="nav-link" href="/admin/transport/travelrequest/">Manage Bookings</a>
-        <a class="nav-link" href="/admin/transport/bus/">Manage Vehicles</a>
-        <a class="nav-link" href="/admin/transport/route/">Manage Routes</a>
-        <a class="nav-link" href="/admin/transport/pickuppoint/">Pickup Points</a>
-        <a class="nav-link" href="{% url 'transport:admin_promotions' %}">Manage Promotions</a>
-        <a class="nav-link" href="{% url 'transport:dashboard' %}">Student Portal</a>
-    </nav>
-    <div class="sidebar-account">
-        <div class="account-info"><span class="account-label">SIGNED IN AS</span><strong>{{ request.user.get_username }}</strong></div>
-        <form method="post" action="{% url 'transport:logout' %}" class="logout-form">{% csrf_token %}<button type="submit" class="logout-button">Log Out</button></form>
-    </div>
-    <div class="sidebar-bottom"><p>Campus transport, made easier.</p><span>©ClickCampus 2026</span></div>
-</aside>
+{% include "transport/admin_sidebar.html" %}
 <main class="main-content">
     <header class="topbar">
         <div>
