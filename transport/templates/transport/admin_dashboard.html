@@ -129,7 +129,7 @@
         <section class="panel recent-requests-panel">
             <div class="section-heading">
                 <div><p class="eyebrow">LATEST ACTIVITY</p><h2>Recent transport requests</h2></div>
-                <a class="admin-view-all" href="/admin/transport/travelrequest/">View all requests →</a>
+                <a class="admin-view-all" href="{% url 'transport:manage_bookings' %}">View all requests →</a>
             </div>
             {% if recent_requests %}
             <div class="admin-table-wrap">
@@ -176,7 +176,7 @@
                 </a>
 
                 <a class="admin-action-card"
-                   href="/admin/transport/bus/">
+                   href="{% url 'transport:manage_vehicles' %}">
                     <span class="admin-action-icon">▰</span>
                     <h3>Vehicles</h3>
                     <p>Review registered vehicles and their availability.</p>
@@ -184,7 +184,7 @@
                 </a>
 
                 <a class="admin-action-card"
-                   href="/admin/transport/route/">
+                   href="{% url 'transport:manage_routes' %}">
                     <span class="admin-action-icon">⌖</span>
                     <h3>Routes</h3>
                     <p>View and maintain the transport routes.</p>
@@ -192,7 +192,7 @@
                 </a>
 
                 <a class="admin-action-card"
-                   href="/admin/transport/pickuppoint/">
+                   href="{% url 'transport:manage_pickup_points' %}">
                     <span class="admin-action-icon">⌖</span>
                     <h3>Pickup Points</h3>
                     <p>Maintain the locations students can select.</p>
