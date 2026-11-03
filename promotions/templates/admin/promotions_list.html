@@ -11,40 +11,7 @@
     <link rel="stylesheet" href="{% static 'transport/promotions.css' %}">
 </head>
 <body class="admin-dashboard-page promotion-admin-page">
-    <aside class="sidebar">
-        <div class="brand">
-            <img src="{% static 'transport/image/clickcampus-logo.png' %}"
-                 alt="ClickCampus logo" class="brand-logo">
-            <span>ClickCampus</span>
-        </div>
-
-        <p class="menu-label">ADMIN WORKSPACE</p>
-
-        <nav>
-            <a class="nav-link" href="{% url 'transport:admin_dashboard' %}">
-                Home
-            </a>
-            <a class="nav-link active"
-               href="{% url 'transport:admin_promotions' %}">
-                Manage Promotions
-            </a>
-            <a class="nav-link" href="{% url 'transport:demand_report' %}">
-                Demand Report
-            </a>
-            <a class="nav-link" href="/admin/promotions/promotion/">
-                Django Promotion Records
-            </a>
-            <a class="nav-link" href="{% url 'transport:dashboard' %}">
-                Student Portal
-            </a>
-
-        </nav>
-
-        <div class="sidebar-bottom">
-            <p>Campus transport, made easier.</p>
-            <span>©ClickCampus 2026</span>
-        </div>
-    </aside>
+    {% include "transport/admin_sidebar.html" %}
 
     <main class="main-content">
         <header class="topbar">
