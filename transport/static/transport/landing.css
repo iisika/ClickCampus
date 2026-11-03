@@ -11,3 +11,26 @@
 @media(max-width:900px){.hero{grid-template-columns:1fr;gap:25px;padding-top:75px}.hero-copy{max-width:680px}.hero-visual{height:360px;max-width:650px;width:100%;margin:auto}.hero-bus{height:245px}.intro-section,.feature-section,.portal-section{padding-top:80px;padding-bottom:85px}.feature-section{gap:45px}.intro-heading{align-items:start;flex-direction:column;gap:18px}.intro-heading>p{max-width:560px}}
 @media(max-width:650px){.site-header{height:70px;padding:0 19px}.site-logo{width:37px;height:37px}.site-brand{font-size:18px}.menu-toggle{display:block}.site-nav{display:none;position:absolute;top:70px;left:0;right:0;padding:17px 20px 22px;background:#fff;border-top:1px solid var(--line);box-shadow:0 14px 20px #101b3112;flex-direction:column;align-items:stretch;gap:18px}.site-nav.is-open{display:flex}.site-nav .nav-login{text-align:center}.hero{padding:65px 22px 75px;min-height:0}.hero h1{font-size:48px;letter-spacing:-2.8px}.hero-description{font-size:13px}.hero-visual{height:280px;margin-top:5px}.hero-bus{height:190px}.road-orbit{width:290px;height:190px}.orbit-two{width:340px;height:220px}.traffic-light{right:6%;top:0;transform:scale(.8)}.floating-chip{font-size:10px;padding:8px 10px}.chip-one{bottom:12%}.chip-two{top:17%}.route-label{font-size:7px}.hero-bottom{left:22px;right:22px;font-size:7px}.intro-section,.feature-section,.portal-section{padding:72px 22px}.intro-heading h2,.portal-heading h2{font-size:39px}.steps-grid{grid-template-columns:1fr}.step-card{min-height:0;padding:23px}.step-icon{margin:20px 0 13px}.feature-section{grid-template-columns:1fr;gap:43px}.map-art{height:240px}.feature-copy h2{font-size:38px}.portal-heading{align-items:start;flex-direction:column;gap:15px}.portal-grid{grid-template-columns:1fr}.portal-card{padding:23px}.closing-cta{padding:75px 20px 80px}.closing-cta h2{font-size:39px}.site-footer{flex-direction:column;align-items:flex-start;padding:25px 22px;gap:10px}.site-footer p{margin-left:45px}.site-footer>span{margin-left:45px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Nairobi city photography — editorial image strip on the public landing page */
+.city-section{padding:92px clamp(22px,10vw,155px) 105px;background:#101b31;color:#fff;overflow:hidden}
+.city-heading{display:flex;align-items:end;justify-content:space-between;gap:42px;margin-bottom:34px}
+.city-heading .section-kicker{color:#ffd43b}
+.city-heading h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(35px,4vw,52px);line-height:1.08;letter-spacing:-2px;margin:15px 0 0}
+.city-heading h2 span{color:#ffd43b}
+.city-heading>p{max-width:390px;margin:0 0 4px;color:#b9c4d5;font-size:13px;line-height:1.85}
+.city-gallery{display:grid;grid-template-columns:.92fr 1.25fr .92fr;align-items:stretch;gap:15px}
+.city-photo{position:relative;isolation:isolate;min-width:0;height:300px;margin:0;overflow:hidden;border:1px solid #ffffff20;border-radius:13px;background:#263650}
+.city-photo-aerial{height:345px;margin-top:-22px}
+.city-photo:after{content:'';position:absolute;z-index:0;inset:35% 0 0;background:linear-gradient(transparent,rgba(7,14,27,.88));pointer-events:none}
+.city-photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.2,.7,.2,1),filter .4s}
+.city-photo-sepia img{filter:saturate(.78)}
+.city-photo:hover img{transform:scale(1.055)}
+.city-photo figcaption{position:absolute;z-index:1;left:19px;right:19px;bottom:18px;display:flex;flex-direction:column;gap:8px}
+.city-photo figcaption span{font-size:8px;font-weight:800;letter-spacing:1.7px;color:#f9d95e}
+.city-photo figcaption a{width:max-content;color:#fff;font-size:12px;font-weight:700;text-decoration:underline;text-decoration-color:#ffd43b;text-underline-offset:4px}
+.city-photo figcaption a:hover{color:#ffd43b}
+@media(max-width:850px){.city-heading{align-items:flex-start;flex-direction:column;gap:16px}.city-gallery{grid-template-columns:1fr 1fr}.city-photo-aerial{height:300px;margin-top:0}.city-photo-tower{grid-column:1/-1;height:230px}}
+@media(max-width:560px){.city-section{padding:68px 20px 75px}.city-gallery{grid-template-columns:1fr;gap:12px}.city-photo,.city-photo-aerial,.city-photo-tower{height:245px;grid-column:auto}.city-heading h2{font-size:37px}}
+@media(prefers-reduced-motion:reduce){.city-photo img{transition:none}}
