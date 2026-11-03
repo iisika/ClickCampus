@@ -34,6 +34,8 @@ def register_page(request):
 
 def login_page(request):
     if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect("transport:admin_dashboard")
         return redirect("transport:dashboard")
 
     if request.method == "POST":
