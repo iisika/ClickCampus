@@ -310,10 +310,50 @@ def demand_report(request):
         .order_by("-capacity", "registration_number")
     )
 
-    # Record the earliest time each vehicle can be reused.
+    # Start with the full fleet so already-confirmed assignments are
+    # respected even when a bus is currently marked "in service".
+    fleet = list(Bus.objects.filter(capacity__gt=0))
     next_available_at = {
-        bus.pk: datetime.min for bus in available_buses
+        bus.pk: datetime.min for bus in fleet
     }
+
+    # Keep track of vehicles already assigned to each route departure.
+    # A vehicle's capacity is counted once per departure, not once per student.
+    assigned_by_group = defaultdict(dict)
+    confirmed_assignments = (
+        TravelRequest.objects
+        .filter(
+            travel_date=selected_date,
+            status=TravelRequest.Status.CONFIRMED,
+            bus__isnull=False,
+            departure_time__isnull=False,
+        )
+        .select_related("bus")
+    )
+
+    for assigned_booking in confirmed_assignments:
+        assigned_bus = assigned_booking.bus
+        if assigned_booking.direction == TravelRequest.Direction.TO_SCHOOL:
+            assigned_duration = timedelta(minutes=90)
+        else:
+            assigned_duration = timedelta(minutes=150)
+
+        assigned_departure = datetime.combine(
+            selected_date,
+            assigned_booking.departure_time,
+        )
+        assigned_return = assigned_departure + assigned_duration
+        next_available_at[assigned_bus.pk] = max(
+            next_available_at.get(assigned_bus.pk, datetime.min),
+            assigned_return,
+        )
+
+        assignment_key = (
+            assigned_booking.route_id,
+            assigned_booking.direction,
+            assigned_booking.departure_time,
+        )
+        assigned_by_group[assignment_key][assigned_bus.pk] = assigned_bus
 
     report_rows = []
 
@@ -330,9 +370,22 @@ def demand_report(request):
         total_students = len(bookings)
         planning_demand = total_students + 5
 
-        buses_needed = 0
-        remaining_students = planning_demand
-        recommended_vehicles = []
+        group_key = (route_id, direction, departure_time)
+        preassigned_buses = list(
+            assigned_by_group.get(group_key, {}).values()
+        )
+        preassigned_capacity = sum(
+            bus.capacity for bus in preassigned_buses
+        )
+
+        buses_needed = len(preassigned_buses)
+        remaining_students = max(
+            planning_demand - preassigned_capacity,
+            0,
+        )
+        recommended_vehicles = [
+            bus.registration_number for bus in preassigned_buses
+        ]
         capacity_shortfall = False
 
         if departure_time is None:
@@ -352,10 +405,14 @@ def demand_report(request):
                 journey_duration = timedelta(minutes=150)
 
             # Only vehicles available at this departure can be used.
+            already_assigned_ids = {
+                bus.pk for bus in preassigned_buses
+            }
             eligible_buses = sorted(
                 (
                     bus for bus in available_buses
-                    if next_available_at[bus.pk] <= departure_at
+                    if bus.pk not in already_assigned_ids
+                    and next_available_at[bus.pk] <= departure_at
                 ),
                 key=lambda bus: (
                     -(bus.capacity - 5),
@@ -404,7 +461,6 @@ def demand_report(request):
             ).get(direction, direction),
             "departure_time": departure_time,
             "total_students": total_students,
-            "route_counts": dict(route_counts),
             "buses_needed": buses_needed,
             "recommended_vehicles": recommended_vehicles,
             "capacity_shortfall": capacity_shortfall,
