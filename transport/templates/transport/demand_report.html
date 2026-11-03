@@ -103,6 +103,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Route</th>
                                 <th>Direction</th>
                                 <th>Departure Time</th>
                                 <th>Actual Students</th>
@@ -116,6 +117,7 @@
                         <tbody>
                             {% for row in report_rows %}
                                 <tr>
+                                    <td>{{ row.route_name }}</td>
                                     <td>{{ row.direction_label }}</td>
                                     <td>
                                         {% if row.departure_time %}
@@ -126,11 +128,6 @@
                                     </td>
                                     <td>{{ row.total_students }}</td>
                                     <td>{{ row.planning_demand }}</td>
-                                    <td>
-                                        {% for route, count in row.route_counts.items %}
-                                            {{ route }}: {{ count }}{% if not forloop.last %}<br>{% endif %}
-                                        {% endfor %}
-                                    </td>
                                     <td>{{ row.buses_needed }}</td>
                                     <td>
                                         {% if row.recommended_vehicles %}
