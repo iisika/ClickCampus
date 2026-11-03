@@ -600,3 +600,124 @@ def demand_report(request):
         "transport/demand_report.html",
         context,
     )
+
+
+# ---------------------------------------------------------------------------
+# ClickCampus dashboard management workspaces
+# These staff-only views provide the everyday interface; Django admin remains
+# available as a secondary/backup management tool.
+# ---------------------------------------------------------------------------
+
+@staff_member_required
+def manage_bookings(request):
+    bookings = TravelRequest.objects.select_related(
+        "student", "route", "pickup_point", "bus"
+    ).order_by("-travel_date", "-departure_time", "-requested_at")
+
+    status_filter = request.GET.get("status", "").strip()
+    search_query = request.GET.get("q", "").strip()
+    if status_filter in dict(TravelRequest.Status.choices):
+        bookings = bookings.filter(status=status_filter)
+    if search_query:
+        from django.db.models import Q
+        bookings = bookings.filter(
+            Q(student__username__icontains=search_query)
+            | Q(student__email__icontains=search_query)
+            | Q(route__name__icontains=search_query)
+            | Q(bus__registration_number__icontains=search_query)
+        )
+
+    if request.method == "POST":
+        booking = get_object_or_404(TravelRequest, pk=request.POST.get("booking_id"))
+        action = request.POST.get("action")
+        if action == "cancel":
+            booking.status = TravelRequest.Status.CANCELLED
+            booking.save(update_fields=["status"])
+            messages.success(request, "Booking cancelled.")
+        elif action == "save":
+            # Reuse the established admin form so direction, capacity,
+            # maintenance and overlapping-assignment checks stay consistent.
+            from .admin import TravelRequestAdminForm
+            form = TravelRequestAdminForm(request.POST, instance=booking)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Booking details updated.")
+            else:
+                messages.error(request, "Booking could not be updated: " + "; ".join(
+                    str(error) for error in form.errors.values()
+                ))
+        return redirect("transport:manage_bookings")
+
+    context = {
+        "page_title": "Manage Bookings",
+        "page_eyebrow": "STUDENT TRANSPORT",
+        "page_description": "Review student requests, update booking status and assign vehicles.",
+        "bookings": bookings[:250],
+        "status_choices": TravelRequest.Status.choices,
+        "selected_status": status_filter,
+        "search_query": search_query,
+        "total_count": bookings.count(),
+        "pending_count": TravelRequest.objects.filter(status=TravelRequest.Status.PENDING).count(),
+        "confirmed_count": TravelRequest.objects.filter(status=TravelRequest.Status.CONFIRMED).count(),
+    }
+    return render(request, "transport/management.html", context)
+
+
+@staff_member_required
+def manage_vehicles(request):
+    from .management_forms import BusManagementForm
+    instance = get_object_or_404(Bus, pk=request.GET.get("edit")) if request.GET.get("edit") else None
+    form = BusManagementForm(request.POST or None, instance=instance)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Vehicle saved successfully.")
+        return redirect("transport:manage_vehicles")
+    return render(request, "transport/management.html", {
+        "page_title": "Manage Vehicles",
+        "page_eyebrow": "FLEET MANAGEMENT",
+        "page_description": "Register vehicles and maintain their capacity, route and operational status.",
+        "form": form,
+        "items": Bus.objects.select_related("route").order_by("registration_number"),
+        "item_type": "vehicles",
+        "editing": instance,
+    })
+
+
+@staff_member_required
+def manage_routes(request):
+    from .management_forms import RouteManagementForm
+    instance = get_object_or_404(Route, pk=request.GET.get("edit")) if request.GET.get("edit") else None
+    form = RouteManagementForm(request.POST or None, instance=instance)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Route saved successfully.")
+        return redirect("transport:manage_routes")
+    return render(request, "transport/management.html", {
+        "page_title": "Manage Routes",
+        "page_eyebrow": "ROUTE NETWORK",
+        "page_description": "Create and maintain the routes available to students.",
+        "form": form,
+        "items": Route.objects.order_by("name"),
+        "item_type": "routes",
+        "editing": instance,
+    })
+
+
+@staff_member_required
+def manage_pickup_points(request):
+    from .management_forms import PickupPointManagementForm
+    instance = get_object_or_404(PickupPoint, pk=request.GET.get("edit")) if request.GET.get("edit") else None
+    form = PickupPointManagementForm(request.POST or None, instance=instance)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Pickup point saved successfully.")
+        return redirect("transport:manage_pickup_points")
+    return render(request, "transport/management.html", {
+        "page_title": "Pickup Points",
+        "page_eyebrow": "PICKUP NETWORK",
+        "page_description": "Organise pickup locations and their order along each route.",
+        "form": form,
+        "items": PickupPoint.objects.select_related("route").order_by("route__name", "sequence", "name"),
+        "item_type": "pickup_points",
+        "editing": instance,
+    })
