@@ -7,7 +7,8 @@ from promotions import views as promotion_views
 app_name = "transport"
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
+    path("", views.landing_page, name="landing"),
+    path("student/", views.dashboard, name="dashboard"),
 
     path(
         "demand-report/",
