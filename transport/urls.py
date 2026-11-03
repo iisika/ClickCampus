@@ -38,6 +38,12 @@ urlpatterns = [
         name="admin_dashboard",
     ),
 
+    # Staff management workspaces (Django admin remains the backup tool).
+    path("admin-dashboard/bookings/", views.manage_bookings, name="manage_bookings"),
+    path("admin-dashboard/vehicles/", views.manage_vehicles, name="manage_vehicles"),
+    path("admin-dashboard/routes/", views.manage_routes, name="manage_routes"),
+    path("admin-dashboard/pickup-points/", views.manage_pickup_points, name="manage_pickup_points"),
+
     # Promotions
     path(
         "promotions/",
