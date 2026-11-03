@@ -108,7 +108,6 @@
                                 <th>Departure Time</th>
                                 <th>Actual Students</th>
                                 <th>Planning Demand</th>
-                                <th>Demand by Route</th>
                                 <th>Estimated Buses</th>
                                 <th>Recommended Vehicles</th>
                                 <th>Planning Notes</th>
@@ -138,7 +137,12 @@
                                             Not assigned
                                         {% endif %}
                                     </td>
-                                    <td>{{ row.capacity_note }}</td>
+                                    <td>
+                                        {% if row.has_assignment_conflict %}
+                                            <strong role="alert">Scheduling conflict</strong><br>
+                                        {% endif %}
+                                        {{ row.capacity_note }}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
