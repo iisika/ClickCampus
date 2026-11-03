@@ -350,14 +350,17 @@ def demand_report(request):
             assigned_booking.direction,
             assigned_booking.departure_time,
         )
-        assigned_by_group[assignment_key][assigned_bus.pk] = assigned_bus
-        confirmed_by_bus[assigned_bus.pk].append({
-            "start": assigned_departure,
-            "end": assigned_return,
-            "group_key": assignment_key,
-            "route_name": assigned_booking.route.name,
-            "departure_time": assigned_booking.departure_time,
-        })
+        # Multiple students may legitimately share one bus on the same
+        # route departure. Record that vehicle assignment only once.
+        if assigned_bus.pk not in assigned_by_group[assignment_key]:
+            assigned_by_group[assignment_key][assigned_bus.pk] = assigned_bus
+            confirmed_by_bus[assigned_bus.pk].append({
+                "start": assigned_departure,
+                "end": assigned_return,
+                "group_key": assignment_key,
+                "route_name": assigned_booking.route.name,
+                "departure_time": assigned_booking.departure_time,
+            })
 
     # Flag both sides of any overlapping confirmed assignments.
     conflicting_groups = defaultdict(set)
