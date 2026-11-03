@@ -71,3 +71,9 @@
 @media(max-width:1100px){.student-dashboard .sidebar{width:215px}.student-dashboard .main-content{margin-left:215px;padding:27px 23px}.student-dashboard .content-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.student-dashboard .sidebar{width:100%;padding:15px}.student-dashboard .sidebar nav{margin-top:14px}.student-dashboard .sidebar .nav-link{font-size:11px}.student-dashboard .main-content{margin-left:0;padding:22px 14px 35px}.student-dashboard .topbar h1{font-size:25px}.student-dashboard .welcome{padding:25px 21px;min-height:210px;background-position:62% center}.student-dashboard .welcome h2{font-size:25px}.student-dashboard .welcome p:not(.eyebrow){font-size:12px}.student-dashboard .stats-grid{grid-template-columns:1fr;gap:10px}.student-dashboard .stat-card{padding:15px 17px}.student-dashboard .stat-card h3{font-size:25px}.student-dashboard .panel{padding:18px}.student-dashboard .section-heading{align-items:flex-start}.student-dashboard .section-heading h2{font-size:19px}.student-dashboard .promotion-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.student-dashboard *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* Staff-only shortcut back to the management workspace */
+.student-dashboard .student-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap}
+.student-dashboard .admin-return-link{display:inline-flex;align-items:center;gap:7px;padding:10px 13px;border:1px solid #e5d58f;border-radius:8px;background:#fff9e4;color:#725700;font-size:11px;font-weight:800;transition:background .2s,transform .2s}
+.student-dashboard .admin-return-link:hover{background:#fff0b5;transform:translateY(-1px)}
+@media(max-width:760px){.student-dashboard .student-header-actions{align-items:flex-end;flex-direction:column;gap:9px}.student-dashboard .admin-return-link{font-size:10px;padding:8px 10px}}
