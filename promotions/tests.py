@@ -1,9 +1,10 @@
 from datetime import timedelta
 from io import BytesIO
+from tempfile import TemporaryDirectory
 
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 from PIL import Image
@@ -23,6 +24,12 @@ def make_test_png():
 
 class PromotionWorkflowTests(TestCase):
     def setUp(self):
+        self.media_directory = TemporaryDirectory()
+        self.addCleanup(self.media_directory.cleanup)
+        self.enterContext(
+            override_settings(MEDIA_ROOT=self.media_directory.name)
+        )
+
         self.student = User.objects.create_user(
             username="student@example.com",
             email="student@example.com",
