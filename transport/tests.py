@@ -233,3 +233,16 @@ class TransportWorkflowTests(TestCase):
         response = self.client.get(reverse("transport:demand_report"))
 
         self.assertEqual(response.status_code, 302)
+
+class PublicLandingPageTests(TestCase):
+    def test_root_url_displays_public_landing_page(self):
+        response = self.client.get(reverse("transport:landing"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Your campus journey.")
+        self.assertContains(response, "For students")
+        self.assertContains(response, "For administrators")
+
+    def test_student_dashboard_has_its_own_url(self):
+        response = self.client.get(reverse("transport:dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "transport/dashboard.html")
