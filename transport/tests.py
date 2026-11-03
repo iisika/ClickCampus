@@ -252,6 +252,26 @@ class TransportWorkflowTests(TestCase):
         self.assertContains(response, "Recent transport requests")
         self.assertContains(response, "Vehicle availability")
 
+    def test_demand_report_returns_staff_to_admin_dashboard(self):
+        self.client.force_login(self.staff)
+
+        response = self.client.get(reverse("transport:demand_report"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            f'href="{reverse("transport:admin_dashboard")}"',
+        )
+
+    def test_admin_dashboard_charts_do_not_depend_on_external_cdn(self):
+        self.client.force_login(self.staff)
+
+        response = self.client.get(reverse("transport:admin_dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "donut-chart")
+        self.assertNotContains(response, "cdn.jsdelivr.net/npm/chart.js")
+
     def test_student_cannot_access_demand_report(self):
         self.client.force_login(self.student)
 
