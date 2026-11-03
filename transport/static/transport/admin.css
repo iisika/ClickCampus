@@ -64,3 +64,10 @@
 @media(max-width:760px){.admin-dashboard-page .sidebar{width:100%;padding:15px}.admin-dashboard-page .sidebar nav{margin-top:14px}.admin-dashboard-page .main-content{margin-left:0;padding:22px 14px 35px}.admin-dashboard-page .topbar h1{font-size:25px}.admin-dashboard-page .welcome{padding:24px 20px}.admin-dashboard-page .admin-hero-image{display:none}.admin-dashboard-page .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-dashboard-page .stat-card{padding:14px}.admin-dashboard-page .stat-card h3{font-size:24px}.admin-analytics-grid{grid-template-columns:1fr}.admin-dashboard-page .panel{padding:18px}.admin-dashboard-page .admin-action-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:460px){.admin-dashboard-page .stats-grid{grid-template-columns:1fr 1fr}.admin-dashboard-page .admin-action-grid{grid-template-columns:1fr}.admin-dashboard-page .section-heading h2{font-size:18px}.chart-wrap{height:185px}}
 @media(prefers-reduced-motion:reduce){.admin-dashboard-page *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* CSS-only donut charts: no external JavaScript or CDN required */
+.admin-dashboard-page .donut-chart{width:190px;height:190px;margin:7px auto 8px;border-radius:50%;display:grid;place-items:center;position:relative;box-shadow:0 5px 18px #17243a12}
+.admin-dashboard-page .donut-hole{width:116px;height:116px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px #edf0f4}
+.admin-dashboard-page .donut-hole strong{font-family:'Space Grotesk',sans-serif;font-size:28px;line-height:1.1;color:#101b31}
+.admin-dashboard-page .donut-hole span{margin-top:5px;font-size:8px;font-weight:800;letter-spacing:1.2px;color:#8993a5}
+@media(max-width:460px){.admin-dashboard-page .donut-chart{width:170px;height:170px}.admin-dashboard-page .donut-hole{width:104px;height:104px}}
