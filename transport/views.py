@@ -255,6 +255,29 @@ def admin_dashboard(request):
         status=Bus.Status.MAINTENANCE
     ).count()
 
+    def donut_background(values, colors):
+        total = sum(values)
+        if total == 0:
+            return "#e8edf3"
+        stops = []
+        current = 0.0
+        for value, color in zip(values, colors):
+            next_stop = current + (value / total * 100)
+            stops.append(f"{color} {current:.2f}% {next_stop:.2f}%")
+            current = next_stop
+        return f"conic-gradient({', '.join(stops)})"
+
+    booking_values = [
+        pending_requests,
+        confirmed_requests,
+        cancelled_requests,
+    ]
+    fleet_values = [
+        available_buses,
+        in_service_buses,
+        maintenance_buses,
+    ]
+
     context = {
         "pending_requests": pending_requests,
         "confirmed_requests": confirmed_requests,
@@ -279,6 +302,8 @@ def admin_dashboard(request):
             .select_related("student", "route", "bus")
             .order_by("-requested_at")[:6]
         ),
+        "booking_chart_background": donut_background(booking_values, ["#f2bd28", "#31b981", "#e36d70"]),
+        "fleet_chart_background": donut_background(fleet_values, ["#31b981", "#4778c7", "#e36d70"]),
         "booking_chart_data": json.dumps({
             "labels": ["Pending", "Confirmed", "Cancelled"],
             "values": [
