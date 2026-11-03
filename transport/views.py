@@ -386,8 +386,9 @@ def demand_report(request):
                 capacity_note = "No vehicles required."
             else:
                 capacity_note = (
-                    "Capacity estimate includes a five-seat reserve "
-                    "per vehicle. Review recommendations before assigning."
+                    "Planning demand includes a five-student buffer "
+                    "for this departure group, not a reserve per vehicle. "
+                    "Review recommendations before assigning."
                 )
 
         report_rows.append({
