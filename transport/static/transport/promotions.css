@@ -20,3 +20,26 @@
 @media(max-width:760px){.promotion-admin-page .main-content{padding:22px 14px 35px}.promotion-admin-intro{padding:24px 20px}.promotion-admin-mark{width:70px;height:70px;font-size:35px}.promotion-review-card{padding:17px}.public-promotions-page .page{padding:20px 15px 35px}}
 @media(max-width:560px){.promotion-admin-mark{display:none}.promotion-review-actions{flex-wrap:wrap}.promotion-review-actions form,.promotion-review-actions button{width:100%}.promotion-form-page .page{margin:20px auto}.promotion-form-page .hero,.promotion-form-page .card{padding:21px}}
 @media(prefers-reduced-motion:reduce){.promotion-admin-page *,.public-promotions-page *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+
+/* Business promotion moderation — campaign-inspired visual hierarchy */
+.promotion-admin-intro{background:linear-gradient(95deg,rgba(10,19,36,.96) 0%,rgba(10,19,36,.86) 60%,rgba(10,19,36,.57) 100%),url('/static/transport/image/pexels-vinixhc-20186777.jpg') center 46%/cover no-repeat;background-color:#101b31;box-shadow:0 16px 38px #101b311c}
+.promotion-admin-intro:after{border-color:#ffffff26;box-shadow:0 0 0 35px #ffffff0b,0 0 0 70px #ffffff07}
+.promotion-admin-mark{background:#101b3170;backdrop-filter:blur(5px)}
+.promotion-admin-page .lower-panel{padding:24px}
+.promotion-admin-page .lower-panel>.section-heading{padding-bottom:15px;border-bottom:1px solid #edf0f4}
+.promotion-review-card{position:relative;overflow:hidden;border-color:#e3e8f0;box-shadow:0 7px 22px #17243a08;transition:transform .22s,border-color .22s,box-shadow .22s}
+.promotion-review-card:hover{transform:translateY(-2px);border-color:#e4c34d;box-shadow:0 13px 30px #17243a0d}
+.promotion-review-card:before{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:#e3bd2c}
+.promotion-review-heading h3{font-size:20px}
+.promotion-review-heading .muted{margin:5px 0 0}
+.promotion-review-image{width:min(100%,560px);aspect-ratio:16/8;max-height:300px;object-fit:cover;border:1px solid #e8ebf1}
+.promotion-review-card>p{max-width:850px}
+.promotion-review-actions{padding-top:13px;border-top:1px solid #edf0f4}
+.promotion-review-actions .approve-button,.promotion-review-actions .reject-button{min-height:38px;transition:filter .2s,transform .2s}
+.promotion-review-actions button:hover{filter:brightness(.97);transform:translateY(-1px)}
+.promotion-review-status{letter-spacing:.3px;text-transform:uppercase}
+.promotion-admin-page .form-message.success{background:#e8f7ef;color:#176b48;border:1px solid #c5ead6}
+.promotion-admin-page .form-message.error{background:#fff0f0;color:#a52b2b;border:1px solid #f1caca}
+@media(max-width:760px){.promotion-admin-intro{background-position:65% center}.promotion-admin-page .lower-panel{padding:17px}}
+@media(prefers-reduced-motion:reduce){.promotion-review-card,.promotion-review-actions button{transition:none}}
