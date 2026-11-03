@@ -55,8 +55,14 @@ class TravelRequestAdminForm(forms.ModelForm):
                 "This bus is under maintenance and cannot be assigned.",
             )
 
-        # A bus cannot serve two journeys whose estimated time windows overlap.
-        if travel_date and direction and departure_time:
+        # Only confirmed assignments reserve a bus. Students sharing the
+        # same route departure may legitimately use the same vehicle.
+        if (
+            status == TravelRequest.Status.CONFIRMED
+            and travel_date
+            and direction
+            and departure_time
+        ):
             duration = (
                 timedelta(minutes=90)
                 if direction == TravelRequest.Direction.TO_SCHOOL
@@ -77,6 +83,14 @@ class TravelRequestAdminForm(forms.ModelForm):
                 )
 
             for assignment in existing_assignments:
+                # A bus can carry several students on the same departure.
+                if (
+                    assignment.route_id == route.id
+                    and assignment.direction == direction
+                    and assignment.departure_time == departure_time
+                ):
+                    continue
+
                 existing_duration = (
                     timedelta(minutes=90)
                     if assignment.direction == TravelRequest.Direction.TO_SCHOOL
