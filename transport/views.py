@@ -656,6 +656,7 @@ def manage_bookings(request):
 
     context = {
         "page_title": "Manage Bookings",
+        "item_type": "bookings",
         "booking_form": booking_form,
         "editing_booking": editing_booking,
         "page_eyebrow": "STUDENT TRANSPORT",
