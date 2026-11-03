@@ -331,22 +331,19 @@ def demand_report(request):
         .select_related("bus")
     )
 
+    confirmed_by_bus = defaultdict(list)
     for assigned_booking in confirmed_assignments:
         assigned_bus = assigned_booking.bus
-        if assigned_booking.direction == TravelRequest.Direction.TO_SCHOOL:
-            assigned_duration = timedelta(minutes=90)
-        else:
-            assigned_duration = timedelta(minutes=150)
-
+        assigned_duration = (
+            timedelta(minutes=90)
+            if assigned_booking.direction == TravelRequest.Direction.TO_SCHOOL
+            else timedelta(minutes=150)
+        )
         assigned_departure = datetime.combine(
             selected_date,
             assigned_booking.departure_time,
         )
         assigned_return = assigned_departure + assigned_duration
-        next_available_at[assigned_bus.pk] = max(
-            next_available_at.get(assigned_bus.pk, datetime.min),
-            assigned_return,
-        )
 
         assignment_key = (
             assigned_booking.route_id,
@@ -354,6 +351,32 @@ def demand_report(request):
             assigned_booking.departure_time,
         )
         assigned_by_group[assignment_key][assigned_bus.pk] = assigned_bus
+        confirmed_by_bus[assigned_bus.pk].append({
+            "start": assigned_departure,
+            "end": assigned_return,
+            "group_key": assignment_key,
+            "route_name": assigned_booking.route.name,
+            "departure_time": assigned_booking.departure_time,
+        })
+
+    # Flag both sides of any overlapping confirmed assignments.
+    conflicting_groups = defaultdict(set)
+    for bus_id, assignments in confirmed_by_bus.items():
+        assignments.sort(key=lambda item: item["start"])
+        for index, first in enumerate(assignments):
+            for second in assignments[index + 1:]:
+                if second["start"] >= first["end"]:
+                    break
+                if first["start"] < second["end"] and second["start"] < first["end"]:
+                    conflicting_groups[first["group_key"]].add(bus_id)
+                    conflicting_groups[second["group_key"]].add(bus_id)
+
+    # Use the latest known return only as a conservative availability
+    # boundary for additional recommendations.
+    for bus_id, assignments in confirmed_by_bus.items():
+        next_available_at[bus_id] = max(
+            item["end"] for item in assignments
+        )
 
     report_rows = []
 
@@ -371,9 +394,15 @@ def demand_report(request):
         planning_demand = total_students + 5
 
         group_key = (route_id, direction, departure_time)
-        preassigned_buses = list(
+        conflicting_bus_ids = conflicting_groups.get(group_key, set())
+        all_preassigned_buses = list(
             assigned_by_group.get(group_key, {}).values()
         )
+        preassigned_buses = [
+            bus for bus in all_preassigned_buses
+            if bus.pk not in conflicting_bus_ids
+        ]
+        has_assignment_conflict = bool(conflicting_bus_ids)
         preassigned_capacity = sum(
             bus.capacity for bus in preassigned_buses
         )
@@ -436,7 +465,20 @@ def demand_report(request):
                     departure_at + journey_duration
                 )
 
-            if remaining_students > 0:
+            if has_assignment_conflict:
+                capacity_shortfall = True
+                conflict_names = ", ".join(
+                    bus.registration_number
+                    for bus in all_preassigned_buses
+                    if bus.pk in conflicting_bus_ids
+                )
+                capacity_note = (
+                    f"Scheduling conflict: {conflict_names} is assigned "
+                    "to overlapping confirmed journeys. Conflicting "
+                    "assignments are excluded from usable capacity. "
+                    "An administrator must resolve them."
+                )
+            elif remaining_students > 0:
                 capacity_shortfall = True
                 capacity_note = (
                     f"Insufficient vehicles available at this time. "
@@ -448,8 +490,8 @@ def demand_report(request):
             else:
                 capacity_note = (
                     "Planning demand includes a five-student buffer "
-                    "for this departure group, not a reserve per vehicle. "
-                    "Review recommendations before assigning."
+                    "for this departure group. Review recommendations "
+                    "before assigning."
                 )
 
         report_rows.append({
@@ -464,6 +506,7 @@ def demand_report(request):
             "buses_needed": buses_needed,
             "recommended_vehicles": recommended_vehicles,
             "capacity_shortfall": capacity_shortfall,
+            "has_assignment_conflict": has_assignment_conflict,
             "capacity_note": capacity_note,
         })
 
