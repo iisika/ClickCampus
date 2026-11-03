@@ -286,11 +286,18 @@ def demand_report(request):
         .order_by("direction", "departure_time", "route__name")
     )
 
-    # Group all routes sharing the same direction and departure.
+    # Keep demand separate for each route, direction, and departure.
+    # The vehicle pool remains shared: administrators may assign any
+    # available bus to any route, subject to capacity and schedule.
     groups = defaultdict(list)
 
     for booking in travel_requests:
-        key = (booking.direction, booking.departure_time)
+        key = (
+            booking.route_id,
+            booking.route.name,
+            booking.direction,
+            booking.departure_time,
+        )
         groups[key].append(booking)
 
     # Route restrictions are deliberately not applied here.
@@ -313,18 +320,15 @@ def demand_report(request):
     sorted_groups = sorted(
         groups.items(),
         key=lambda item: (
-        item[0][1] or time.max,
-        item[0][0]
-    )
+            item[0][3] or time.max,
+            item[0][2],
+            item[0][1],
+        ),
     )
 
-    for (direction, departure_time), bookings in sorted_groups:
+    for (route_id, route_name, direction, departure_time), bookings in sorted_groups:
         total_students = len(bookings)
         planning_demand = total_students + 5
-
-        route_counts = defaultdict(int)
-        for booking in bookings:
-            route_counts[booking.route.name] += 1
 
         buses_needed = 0
         remaining_students = planning_demand
@@ -393,6 +397,7 @@ def demand_report(request):
 
         report_rows.append({
             "planning_demand": planning_demand,
+            "route_name": route_name,
             "direction": direction,
             "direction_label": dict(
                 TravelRequest.Direction.choices
