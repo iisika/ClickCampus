@@ -64,7 +64,7 @@ class TravelRequestAdminForm(forms.ModelForm):
             and direction
             and departure_time
         ):
-            duration = 
+            duration = (
                 timedelta(minutes=90)
                 if direction == TravelRequest.Direction.TO_SCHOOL
                 else timedelta(minutes=150)
