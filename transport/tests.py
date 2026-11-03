@@ -272,6 +272,25 @@ class TransportWorkflowTests(TestCase):
         self.assertContains(response, "donut-chart")
         self.assertNotContains(response, "cdn.jsdelivr.net/npm/chart.js")
 
+    def test_admin_dashboard_has_no_stray_script_text(self):
+        self.client.force_login(self.staff)
+
+        response = self.client.get(reverse("transport:admin_dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "/script>")
+
+    def test_demand_report_renders_planning_overview(self):
+        self.client.force_login(self.staff)
+
+        response = self.client.get(reverse("transport:demand_report"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Demand &amp; Fleet Planning")
+        self.assertIn("total_planning_demand", response.context)
+        self.assertIn("shortfall_groups", response.context)
+        self.assertIn("conflict_groups", response.context)
+
     def test_student_cannot_access_demand_report(self):
         self.client.force_login(self.student)
 
