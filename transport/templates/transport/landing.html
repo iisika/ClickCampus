@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101b31">
+    <meta name="description" content="ClickCampus makes campus transport easier to plan, request and manage.">
+    <title>ClickCampus | Move smarter</title>
+    <link rel="stylesheet" href="{% static 'transport/landing.css' %}">
+</head>
+<body class="landing-page">
+    <header class="site-header">
+        <a class="site-brand" href="{% url 'transport:landing' %}" aria-label="ClickCampus home">
+            <img src="{% static 'transport/image/clickcampus-logo.png' %}" alt="" class="site-logo">
+            <span>ClickCampus</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+        <nav class="site-nav" id="site-nav">
+            <a href="#how-it-works">How it works</a>
+            <a href="#features">Features</a>
+            <a href="#portals">Portals</a>
+            <a class="nav-login" href="{% url 'transport:login' %}">Log in <span aria-hidden="true">↗</span></a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-grid"></div>
+            <div class="hero-copy">
+                <p class="eyebrow"><span class="live-dot"></span> CAMPUS MOBILITY, CONNECTED</p>
+                <h1>Your campus journey.<br><span>On your terms.</span></h1>
+                <p class="hero-description">
+                    Less transport guesswork. More time for what matters.
+                    Plan your campus trips, request a seat and keep your journey organised with ClickCampus.
+                </p>
+                <div class="hero-actions">
+                    <a class="button button-yellow" href="{% url 'transport:register' %}">Get started <span aria-hidden="true">→</span></a>
+                    <a class="button button-ghost" href="#how-it-works">See how it works</a>
+                </div>
+                <div class="hero-proof">
+                    <span class="proof-icon">↗</span>
+                    <span>One connected place for campus transport</span>
+                </div>
+            </div>
+            <div class="hero-visual" aria-label="ClickCampus bus transport illustration">
+                <div class="route-label route-label-top"><span class="route-pulse"></span> YOUR ROUTE, YOUR RIDE</div>
+                <div class="road-orbit orbit-one"></div>
+                <div class="road-orbit orbit-two"></div>
+                <div class="traffic-light" aria-hidden="true">
+                    <i class="light-red"></i><i class="light-amber"></i><i class="light-green"></i>
+                </div>
+                <div class="hero-bus-wrap">
+                    <img src="{% static 'transport/image/admin-bus-banner.jpg.jpg' %}" alt="A bus ready for a campus journey" class="hero-bus">
+                    <span class="bus-glow"></span>
+                </div>
+                <div class="route-label route-label-bottom"><span class="route-line"></span> CAMPUS ↔ CITY</div>
+                <span class="floating-chip chip-one">01 <small>REQUEST</small></span>
+                <span class="floating-chip chip-two">02 <small>CONFIRM</small></span>
+            </div>
+            <div class="hero-bottom"><span>BUILT FOR THE WAY WE MOVE</span><span>NAIROBI · KENYA</span></div>
+        </section>
+
+        <section class="intro-section" id="how-it-works">
+            <div class="section-kicker">THE RIDE, SIMPLIFIED</div>
+            <div class="intro-heading">
+                <h2>Getting there should<br>be the <span>easy part.</span></h2>
+                <p>ClickCampus brings the key parts of campus transport into one simple experience, from requesting your trip to checking its status.</p>
+            </div>
+            <div class="steps-grid">
+                <article class="step-card">
+                    <span class="step-number">01 / PLAN</span>
+                    <div class="step-icon">⌖</div>
+                    <h3>Choose your route</h3>
+                    <p>Find an available route and pickup point that works for your journey.</p>
+                </article>
+                <article class="step-card step-card-featured">
+                    <span class="step-number">02 / REQUEST</span>
+                    <div class="step-icon">＋</div>
+                    <h3>Request your ride</h3>
+                    <p>Choose your travel date, direction and preferred departure time.</p>
+                </article>
+                <article class="step-card">
+                    <span class="step-number">03 / GO</span>
+                    <div class="step-icon">↗</div>
+                    <h3>Stay in the loop</h3>
+                    <p>Check your request status and view your bus assignment when confirmed.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="feature-section" id="features">
+            <div class="feature-visual">
+                <div class="map-card">
+                    <div class="map-topline"><span>ROUTE OVERVIEW</span><span class="map-status">● CONNECTED</span></div>
+                    <div class="map-art" aria-hidden="true">
+                        <svg viewBox="0 0 520 310" role="img">
+                            <path class="map-road" d="M-20 245 C90 220 95 80 205 110 S335 245 540 55"/>
+                            <path class="map-route" d="M-20 245 C90 220 95 80 205 110 S335 245 540 55"/>
+                            <circle cx="82" cy="211" r="8" class="map-stop"/>
+                            <circle cx="205" cy="110" r="8" class="map-stop"/>
+                            <circle cx="365" cy="198" r="8" class="map-stop"/>
+                            <circle cx="470" cy="91" r="8" class="map-stop"/>
+                            <circle cx="82" cy="211" r="18" class="map-ring"/>
+                            <circle cx="365" cy="198" r="18" class="map-ring"/>
+                        </svg>
+                        <span class="map-pin pin-a">PICKUP</span><span class="map-pin pin-b">CAMPUS</span>
+                        <span class="map-city city-a">NAIROBI</span><span class="map-city city-b">YOUR ROUTE</span>
+                    </div>
+                    <div class="map-footer"><span><i class="legend-dot"></i> Planned route</span><span>Made for campus journeys</span></div>
+                </div>
+            </div>
+            <div class="feature-copy">
+                <div class="section-kicker">MORE CLARITY. LESS CHAOS.</div>
+                <h2>Move through your day with <span>one less thing</span> to figure out.</h2>
+                <p>Whether you're heading to campus or making your way home, ClickCampus helps keep transport requests and journey information organised.</p>
+                <ul class="feature-list">
+                    <li><span>✓</span><div><strong>Simple trip requests</strong><small>Choose your route, pickup point and departure.</small></div></li>
+                    <li><span>✓</span><div><strong>Your trips in one place</strong><small>Review upcoming and previous transport requests.</small></div></li>
+                    <li><span>✓</span><div><strong>Clear booking updates</strong><small>See when a request is pending, confirmed or cancelled.</small></div></li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="portal-section" id="portals">
+            <div class="portal-heading">
+                <div><div class="section-kicker">PICK YOUR SPACE</div><h2>One platform.<br><span>Different journeys.</span></h2></div>
+                <p>Choose the space that matches what you need to do.</p>
+            </div>
+            <div class="portal-grid">
+                <article class="portal-card student-portal">
+                    <div class="portal-card-top"><span>01 / STUDENT SPACE</span><span class="portal-symbol">↗</span></div>
+                    <div class="portal-art student-art"><span class="art-route"></span><span class="art-bus">▰</span><span class="art-spark">✳</span></div>
+                    <h3>For students</h3>
+                    <p>Request transport, check your trips and keep your campus travel details close.</p>
+                    <div class="portal-links"><a href="{% url 'transport:login' %}">Student login <span>→</span></a><a href="{% url 'transport:register' %}">Create account <span>＋</span></a></div>
+                </article>
+                <article class="portal-card admin-portal">
+                    <div class="portal-card-top"><span>02 / ADMIN SPACE</span><span class="portal-symbol">↗</span></div>
+                    <div class="portal-art admin-art"><span class="admin-bars"><i></i><i></i><i></i><i></i></span><span class="admin-wheel">◎</span></div>
+                    <h3>For administrators</h3>
+                    <p>Manage transport requests, routes, vehicles, schedules and campus promotions.</p>
+                    <div class="portal-links"><a href="{% url 'transport:login' %}">Administrator login <span>→</span></a></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="closing-cta">
+            <div class="cta-decoration">CC<span>.</span></div>
+            <div class="section-kicker">READY WHEN YOU ARE</div>
+            <h2>Make your next campus trip<br><span>a little simpler.</span></h2>
+            <a class="button button-yellow" href="{% url 'transport:register' %}">Join ClickCampus <span>→</span></a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="site-brand" href="{% url 'transport:landing' %}"><img src="{% static 'transport/image/clickcampus-logo.png' %}" alt="" class="site-logo"><span>ClickCampus</span></a>
+        <p>Campus transport, made easier.</p>
+        <span>© {% now "Y" %} ClickCampus · Nairobi, Kenya</span>
+    </footer>
+    <script>
+        const menuButton = document.querySelector(".menu-toggle");
+        const siteNav = document.querySelector(".site-nav");
+        menuButton.addEventListener("click", () => {
+            const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+            menuButton.setAttribute("aria-expanded", String(!isOpen));
+            siteNav.classList.toggle("is-open", !isOpen);
+        });
+        siteNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+            menuButton.setAttribute("aria-expanded", "false");
+            siteNav.classList.remove("is-open");
+        }));
+    </script>
+</body>
+</html>
