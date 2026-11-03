@@ -57,7 +57,7 @@ class TransportWorkflowTests(TestCase):
             "pickup_point": str(self.pickup.pk),
             "travel_date": self.travel_date.isoformat(),
             "direction": TravelRequest.Direction.TO_SCHOOL,
-            "departure_time": "06:00",
+            "departure_time": "06:00:00",
         }
         payload.update(overrides)
         return payload
@@ -164,7 +164,7 @@ class TransportWorkflowTests(TestCase):
             "bus": str(self.bus.pk),
             "travel_date": self.travel_date.isoformat(),
             "direction": TravelRequest.Direction.TO_SCHOOL,
-            "departure_time": "06:00",
+            "departure_time": "06:00:00",
             "status": TravelRequest.Status.CONFIRMED,
         }
         payload.update(overrides)
@@ -191,7 +191,7 @@ class TransportWorkflowTests(TestCase):
             data=self.admin_form_payload(
                 route=str(self.other_route.pk),
                 pickup_point=str(self.other_pickup.pk),
-                departure_time="09:30",
+                departure_time="09:30:00",
             )
         )
 
@@ -213,7 +213,7 @@ class TransportWorkflowTests(TestCase):
             data=self.admin_form_payload(
                 route=str(self.other_route.pk),
                 pickup_point=str(self.other_pickup.pk),
-                departure_time="07:00",
+                departure_time="07:00:00",
             )
         )
 
