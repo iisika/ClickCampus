@@ -13,7 +13,7 @@
         <a class="nav-link {% if request.resolver_match.url_name == 'manage_routes' %}active{% endif %}" href="{% url 'transport:manage_routes' %}">Manage Routes</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'manage_pickup_points' %}active{% endif %}" href="{% url 'transport:manage_pickup_points' %}">Pickup Points</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'admin_promotions' %}active{% endif %}" href="{% url 'transport:admin_promotions' %}">Manage Promotions</a>
-        <a class="nav-link" href="/admin/">Django Administration · Backup</a>
+        <a class="nav-link" href="/admin/" target="_blank" rel="noopener noreferrer">Django Administration · Backup ↗</a>
         <a class="nav-link" href="{% url 'transport:dashboard' %}">Student Portal</a>
     </nav>
     <div class="sidebar-account">
