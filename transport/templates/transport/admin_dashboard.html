@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClickCampus | Admin Dashboard</title>
     <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+    <link rel="stylesheet" href="{% static 'transport/admin.css' %}">
 </head>
-<body>
+<body class="admin-dashboard-page">
 
     
 <aside class="sidebar">
@@ -94,6 +95,7 @@
                 <p class="eyebrow">CAMPUS TRANSPORT SYSTEM</p>
                 <h1>Admin Dashboard</h1>
                 <p class="muted">Your overview of campus transport operations.</p>
+                <span class="admin-date-chip">OPERATIONS OVERVIEW · LIVE DATABASE COUNTS</span>
             </div>
 
             <div class="profile">
@@ -167,6 +169,61 @@
                 <h3>{{ total_pickup_points }}</h3>
                 <p class="stat-note">Configured pickup locations</p>
             </article>
+        </section>
+
+
+        <section class="admin-analytics-grid" aria-label="Transport analytics">
+            <article class="panel analytics-panel">
+                <div class="section-heading">
+                    <div><p class="eyebrow">BOOKING STATUS</p><h2>Request breakdown</h2></div>
+                    <span class="chart-caption">All requests</span>
+                </div>
+                <div class="chart-wrap"><canvas id="bookingChart" role="img" aria-label="Doughnut chart showing pending, confirmed and cancelled requests"></canvas></div>
+                <div class="chart-legend">
+                    <span><i class="legend-pending"></i> Pending <strong>{{ pending_requests }}</strong></span>
+                    <span><i class="legend-confirmed"></i> Confirmed <strong>{{ confirmed_requests }}</strong></span>
+                    <span><i class="legend-cancelled"></i> Cancelled <strong>{{ cancelled_requests }}</strong></span>
+                </div>
+            </article>
+            <article class="panel analytics-panel">
+                <div class="section-heading">
+                    <div><p class="eyebrow">FLEET STATUS</p><h2>Vehicle availability</h2></div>
+                    <span class="chart-caption">{{ total_buses }} vehicles</span>
+                </div>
+                <div class="chart-wrap"><canvas id="fleetChart" role="img" aria-label="Doughnut chart showing available, in-service and maintenance vehicles"></canvas></div>
+                <div class="chart-legend">
+                    <span><i class="legend-available"></i> Available <strong>{{ available_buses }}</strong></span>
+                    <span><i class="legend-service"></i> In service <strong>{{ in_service_buses }}</strong></span>
+                    <span><i class="legend-maintenance"></i> Maintenance <strong>{{ maintenance_buses }}</strong></span>
+                </div>
+            </article>
+        </section>
+
+        <section class="panel recent-requests-panel">
+            <div class="section-heading">
+                <div><p class="eyebrow">LATEST ACTIVITY</p><h2>Recent transport requests</h2></div>
+                <a class="admin-view-all" href="/admin/transport/travelrequest/">View all requests →</a>
+            </div>
+            {% if recent_requests %}
+            <div class="admin-table-wrap">
+                <table class="admin-recent-table">
+                    <thead><tr><th>Student</th><th>Route</th><th>Travel date</th><th>Direction</th><th>Status</th></tr></thead>
+                    <tbody>
+                    {% for booking in recent_requests %}
+                        <tr>
+                            <td>{{ booking.student.get_username }}</td>
+                            <td>{{ booking.route.name }}</td>
+                            <td>{{ booking.travel_date|date:"d M Y" }}</td>
+                            <td>{{ booking.get_direction_display }}</td>
+                            <td><span class="request-status status-{{ booking.status }}">{{ booking.get_status_display }}</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="admin-empty-state">No transport requests have been submitted yet.</p>
+            {% endif %}
         </section>
 
         <section class="panel admin-management-panel">
@@ -275,6 +332,27 @@
 
 
         <footer>ClickCampus · Transport Management </footer>
+        {{ booking_chart_data|json_script:"booking-chart-data" }}
+        {{ fleet_chart_data|json_script:"fleet-chart-data" }}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+        (() => {
+            const booking = JSON.parse(document.getElementById("booking-chart-data").textContent);
+            const fleet = JSON.parse(document.getElementById("fleet-chart-data").textContent);
+            const palette = ["#f2bd28", "#31b981", "#e36d70"];
+            const createDonut = (id, data, colors) => {
+                const canvas = document.getElementById(id);
+                if (!canvas || !window.Chart) return;
+                new Chart(canvas, {
+                    type: "doughnut",
+                    data: { labels: data.labels, datasets: [{ data: data.values, backgroundColor: colors, borderWidth: 0, hoverOffset: 5 }] },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: "72%", plugins: { legend: { display: false }, tooltip: { padding: 11, backgroundColor: "#101b31", titleFont: { family: "DM Sans" }, bodyFont: { family: "DM Sans" } } } }
+                });
+            };
+            createDonut("bookingChart", booking, palette);
+            createDonut("fleetChart", fleet, ["#31b981", "#4778c7", "#e36d70"]);
+        })();
+        </script>
     </main>
 </body>
 </html>
