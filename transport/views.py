@@ -25,6 +25,11 @@ from .models import (
 )
 
 
+def landing_page(request):
+    """Public homepage for visitors who have not entered a portal."""
+    return render(request, "transport/landing.html")
+
+
 def dashboard(request):
     routes = Route.objects.filter(is_active=True)
 
