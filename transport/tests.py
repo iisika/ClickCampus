@@ -90,12 +90,12 @@ class TransportWorkflowTests(TestCase):
 
         self.assertEqual(TravelRequest.objects.count(), 1)
 
-    def test_pickup_point_from_another_route_is_rejected_by_validating_route(self):
+    def test_invalid_pickup_point_is_rejected(self):
         self.client.force_login(self.student)
 
         response = self.client.post(
             reverse("transport:create_travel_request"),
-            self.booking_payload(pickup_point=str(self.other_pickup.pk)),
+            self.booking_payload(pickup_point="999999"),
         )
 
         self.assertRedirects(
@@ -183,6 +183,17 @@ class TransportWorkflowTests(TestCase):
         )
 
         form = TravelRequestAdminForm(data=self.admin_form_payload())
+
+        self.assertTrue(form.is_valid(), form.errors)
+
+    def test_bus_can_be_assigned_to_a_different_route(self):
+        form = TravelRequestAdminForm(
+            data=self.admin_form_payload(
+                route=str(self.other_route.pk),
+                pickup_point=str(self.other_pickup.pk),
+                departure_time="09:30",
+            )
+        )
 
         self.assertTrue(form.is_valid(), form.errors)
 
