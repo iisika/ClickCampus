@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title }} | ClickCampus</title>
+    <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+    <link rel="stylesheet" href="{% static 'transport/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'transport/management.css' %}">
+</head>
+<body class="admin-dashboard-page management-page">
+{% include "transport/admin_sidebar.html" %}
+<main class="main-content">
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">{{ page_eyebrow }}</p>
+            <h1>{{ page_title }}</h1>
+            <p class="muted">{{ page_description }}</p>
+        </div>
+        <div class="profile"><span class="avatar">{{ request.user.get_username|first|upper }}</span><span>{{ request.user.get_username }}</span></div>
+    </header>
+
+    <section class="management-hero">
+        <div><span class="management-kicker">CLICKCAMPUS OPERATIONS</span><h2>{{ page_title }}<br><span>Workspace</span></h2><p>{{ page_description }}</p></div>
+        <span class="management-hero-icon" aria-hidden="true">{% if item_type == "vehicles" %}▰{% elif item_type == "routes" %}⌖{% elif item_type == "pickup_points" %}⌖{% else %}▤{% endif %}</span>
+    </section>
+
+    {% if messages %}<div class="management-messages">{% for message in messages %}<p class="{{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
+
+    {% if item_type == "bookings" %}
+    <section class="management-kpis">
+        <article><span>TOTAL MATCHING</span><strong>{{ total_count }}</strong></article>
+        <article><span>PENDING</span><strong>{{ pending_count }}</strong></article>
+        <article><span>CONFIRMED</span><strong>{{ confirmed_count }}</strong></article>
+    </section>
+    {% if editing_booking %}
+    <section class="panel management-form-panel">
+        <div class="section-heading"><div><p class="eyebrow">UPDATE REQUEST</p><h2>Edit booking</h2></div><a class="management-cancel-link" href="{% url 'transport:manage_bookings' %}">Cancel edit</a></div>
+        <form method="post" class="management-form">{% csrf_token %}
+            <input type="hidden" name="booking_id" value="{{ editing_booking.pk }}"><input type="hidden" name="action" value="save">
+            {{ booking_form.as_p }}
+            <button class="primary-button" type="submit">Save booking changes →</button>
+        </form>
+    </section>
+    {% endif %}
+    <section class="panel management-list-panel">
+        <div class="section-heading"><div><p class="eyebrow">REQUEST REGISTER</p><h2>Student transport bookings</h2><p class="muted">Search requests and update assignments with capacity and scheduling validation.</p></div></div>
+        <form method="get" class="management-filters"><input type="search" name="q" value="{{ search_query }}" placeholder="Search student, route or vehicle"><select name="status"><option value="">All statuses</option>{% for value,label in status_choices %}<option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><button type="submit">Filter</button></form>
+        <div class="management-table-wrap"><table class="management-table"><thead><tr><th>STUDENT</th><th>ROUTE / PICKUP</th><th>DATE & TIME</th><th>DIRECTION</th><th>VEHICLE</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody>
+        {% for booking in bookings %}<tr>
+            <td><strong>{{ booking.student.get_username }}</strong><small>{{ booking.student.email }}</small></td>
+            <td><strong>{{ booking.route.name }}</strong><small>{{ booking.pickup_point.name }}</small></td>
+            <td>{{ booking.travel_date|date:"d M Y" }}<small>{% if booking.departure_time %}{{ booking.departure_time|time:"g:i A" }}{% else %}Time pending{% endif %}</small></td>
+            <td>{{ booking.get_direction_display }}</td><td>{% if booking.bus %}{{ booking.bus.registration_number }}{% else %}<span class="muted">Unassigned</span>{% endif %}</td>
+            <td><span class="management-status status-{{ booking.status }}">{{ booking.get_status_display }}</span></td>
+            <td class="management-actions"><a href="?edit={{ booking.pk }}">Edit</a>{% if booking.status != "cancelled" %}<form method="post" onsubmit="return confirm('Cancel this booking?');">{% csrf_token %}<input type="hidden" name="booking_id" value="{{ booking.pk }}"><input type="hidden" name="action" value="cancel"><button type="submit" class="text-danger">Cancel</button></form>{% endif %}</td>
+        </tr>{% empty %}<tr><td colspan="7" class="management-empty">No bookings match these filters.</td></tr>{% endfor %}
+        </tbody></table></div>
+    </section>
+    {% else %}
+    <div class="management-columns">
+        <section class="panel management-form-panel">
+            <div class="section-heading"><div><p class="eyebrow">{% if editing %}UPDATE RECORD{% else %}NEW RECORD{% endif %}</p><h2>{% if editing %}Edit {{ item_type|cut:"_"|title }}{% else %}Add {% if item_type == "vehicles" %}a vehicle{% elif item_type == "routes" %}a route{% else %}a pickup point{% endif %}{% endif %}</h2></div></div>
+            <form method="post" class="management-form">{% csrf_token %}{{ form.as_p }}<button class="primary-button" type="submit">Save changes →</button>{% if editing %}<a class="management-cancel-link" href="{% if item_type == 'vehicles' %}{% url 'transport:manage_vehicles' %}{% elif item_type == 'routes' %}{% url 'transport:manage_routes' %}{% else %}{% url 'transport:manage_pickup_points' %}{% endif %}">Cancel</a>{% endif %}</form>
+        </section>
+        <section class="panel management-list-panel">
+            <div class="section-heading"><div><p class="eyebrow">CURRENT RECORDS</p><h2>{% if item_type == "vehicles" %}Registered vehicles{% elif item_type == "routes" %}Configured routes{% else %}Pickup locations{% endif %}</h2></div><span class="management-count">{{ items|length }} records</span></div>
+            <div class="management-record-list">
+            {% for item in items %}
+                <article class="management-record">
+                    <div class="management-record-main">
+                    {% if item_type == "vehicles" %}
+                        <strong>{{ item.registration_number }}</strong><p>{{ item.route.name }} · {{ item.capacity }} seats</p><span class="management-status status-{{ item.status }}">{{ item.get_status_display }}</span>
+                        <a href="?edit={{ item.pk }}">Edit vehicle →</a>
+                    {% elif item_type == "routes" %}
+                        <strong>{{ item.name }}</strong><p>{{ item.start_location }} → {{ item.end_location }}</p><span class="management-status {% if item.is_active %}status-confirmed{% else %}status-cancelled{% endif %}">{% if item.is_active %}Active{% else %}Inactive{% endif %}</span>
+                        <a href="?edit={{ item.pk }}">Edit route →</a>
+                    {% else %}
+                        <strong>{{ item.name }}</strong><p>{{ item.route.name }} · Stop {{ item.sequence }}</p><small>{{ item.description|default:"No additional description" }}</small>
+                        <a href="?edit={{ item.pk }}">Edit pickup point →</a>
+                    {% endif %}
+                    </div>
+                </article>
+            {% empty %}<p class="management-empty">No records have been added yet.</p>{% endfor %}
+            </div>
+        </section>
+    </div>
+    {% endif %}
+    <footer>ClickCampus · Transport Management</footer>
+</main>
+</body>
+</html>
