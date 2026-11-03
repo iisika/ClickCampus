@@ -8,10 +8,10 @@
     <nav class="sidebar-nav" aria-label="Administrator navigation">
         <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'transport:admin_dashboard' %}">Home</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'demand_report' %}active{% endif %}" href="{% url 'transport:demand_report' %}">Demand Report</a>
-        <a class="nav-link" href="/admin/transport/travelrequest/">Manage Bookings</a>
-        <a class="nav-link" href="/admin/transport/bus/">Manage Vehicles</a>
-        <a class="nav-link" href="/admin/transport/route/">Manage Routes</a>
-        <a class="nav-link" href="/admin/transport/pickuppoint/">Pickup Points</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_bookings' %}active{% endif %}" href="{% url 'transport:manage_bookings' %}">Manage Bookings</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_vehicles' %}active{% endif %}" href="{% url 'transport:manage_vehicles' %}">Manage Vehicles</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_routes' %}active{% endif %}" href="{% url 'transport:manage_routes' %}">Manage Routes</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_pickup_points' %}active{% endif %}" href="{% url 'transport:manage_pickup_points' %}">Pickup Points</a>
         <a class="nav-link {% if request.resolver_match.url_name == 'admin_promotions' %}active{% endif %}" href="{% url 'transport:admin_promotions' %}">Manage Promotions</a>
         <a class="nav-link" href="/admin/">Django Administration</a>
         <a class="nav-link" href="{% url 'transport:dashboard' %}">Student Portal</a>
