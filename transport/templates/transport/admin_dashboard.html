@@ -178,7 +178,7 @@
                     <div><p class="eyebrow">BOOKING STATUS</p><h2>Request breakdown</h2></div>
                     <span class="chart-caption">All requests</span>
                 </div>
-                <div class="chart-wrap"><canvas id="bookingChart" role="img" aria-label="Doughnut chart showing pending, confirmed and cancelled requests"></canvas></div>
+                <div class="chart-wrap"><div class="donut-chart" role="img" aria-label="Booking status chart" style="background: {{ booking_chart_background }};"><div class="donut-hole"><strong>{{ total_requests }}</strong><span>REQUESTS</span></div></div></div>
                 <div class="chart-legend">
                     <span><i class="legend-pending"></i> Pending <strong>{{ pending_requests }}</strong></span>
                     <span><i class="legend-confirmed"></i> Confirmed <strong>{{ confirmed_requests }}</strong></span>
@@ -190,7 +190,7 @@
                     <div><p class="eyebrow">FLEET STATUS</p><h2>Vehicle availability</h2></div>
                     <span class="chart-caption">{{ total_buses }} vehicles</span>
                 </div>
-                <div class="chart-wrap"><canvas id="fleetChart" role="img" aria-label="Doughnut chart showing available, in-service and maintenance vehicles"></canvas></div>
+                <div class="chart-wrap"><div class="donut-chart" role="img" aria-label="Fleet status chart" style="background: {{ fleet_chart_background }};"><div class="donut-hole"><strong>{{ total_buses }}</strong><span>VEHICLES</span></div></div></div>
                 <div class="chart-legend">
                     <span><i class="legend-available"></i> Available <strong>{{ available_buses }}</strong></span>
                     <span><i class="legend-service"></i> In service <strong>{{ in_service_buses }}</strong></span>
@@ -332,27 +332,7 @@
 
 
         <footer>ClickCampus · Transport Management </footer>
-        {{ booking_chart_data|json_script:"booking-chart-data" }}
-        {{ fleet_chart_data|json_script:"fleet-chart-data" }}
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-        (() => {
-            const booking = JSON.parse(document.getElementById("booking-chart-data").textContent);
-            const fleet = JSON.parse(document.getElementById("fleet-chart-data").textContent);
-            const palette = ["#f2bd28", "#31b981", "#e36d70"];
-            const createDonut = (id, data, colors) => {
-                const canvas = document.getElementById(id);
-                if (!canvas || !window.Chart) return;
-                new Chart(canvas, {
-                    type: "doughnut",
-                    data: { labels: data.labels, datasets: [{ data: data.values, backgroundColor: colors, borderWidth: 0, hoverOffset: 5 }] },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: "72%", plugins: { legend: { display: false }, tooltip: { padding: 11, backgroundColor: "#101b31", titleFont: { family: "DM Sans" }, bodyFont: { family: "DM Sans" } } } }
-                });
-            };
-            createDonut("bookingChart", booking, palette);
-            createDonut("fleetChart", fleet, ["#31b981", "#4778c7", "#e36d70"]);
-        })();
-        </script>
+/script>
     </main>
 </body>
 </html>
