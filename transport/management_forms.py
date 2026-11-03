@@ -2,6 +2,7 @@ from django import forms
 from .models import Bus, Route, PickupPoint
 
 class BusManagementForm(forms.ModelForm):
+    capacity = forms.IntegerField(min_value=1, help_text="Enter at least one seat.")
     class Meta:
         model = Bus
         fields = ("registration_number", "capacity", "route", "status")
