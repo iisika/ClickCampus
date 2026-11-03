@@ -77,3 +77,7 @@
 .student-dashboard .admin-return-link{display:inline-flex;align-items:center;gap:7px;padding:10px 13px;border:1px solid #e5d58f;border-radius:8px;background:#fff9e4;color:#725700;font-size:11px;font-weight:800;transition:background .2s,transform .2s}
 .student-dashboard .admin-return-link:hover{background:#fff0b5;transform:translateY(-1px)}
 @media(max-width:760px){.student-dashboard .student-header-actions{align-items:flex-end;flex-direction:column;gap:9px}.student-dashboard .admin-return-link{font-size:10px;padding:8px 10px}}
+
+/* More visible administrator return control */
+.student-dashboard .admin-return-link{background:#ffd43b;border:1px solid #e3b900;color:#101b31;box-shadow:0 5px 14px #101b3120;font-size:12px;padding:12px 16px}
+.student-dashboard .admin-return-link:hover{background:#ffe16d;color:#101b31;box-shadow:0 8px 18px #101b3128}
