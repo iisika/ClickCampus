@@ -1,0 +1,62 @@
+.management-page .management-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:28px 32px;margin:8px 0 20px;border-radius:16px;background:linear-gradient(115deg,#101b31,#1d3455);color:#fff;overflow:hidden}
+.management-page .management-kicker{color:#ffd43b;font-size:9px;font-weight:800;letter-spacing:1.6px}
+.management-page .management-hero h2{margin:10px 0;font:700 clamp(24px,3vw,34px)/1.12 'Space Grotesk',sans-serif;letter-spacing:-1px}
+.management-page .management-hero h2 span{color:#ffd43b}
+.management-page .management-hero p{max-width:560px;color:#c5cede;font-size:12px;line-height:1.7}
+.management-page .management-hero-icon{font-size:64px;color:#ffd43b;opacity:.8;padding:12px 30px}
+.management-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:16px 0}
+.management-kpis article{display:grid;gap:7px;padding:17px 20px;border:1px solid #e5e9f0;border-radius:11px;background:#fff}
+.management-kpis span{font-size:9px;font-weight:800;letter-spacing:1px;color:#8490a2}
+.management-kpis strong{font:700 26px 'Space Grotesk',sans-serif;color:#101b31}
+.management-columns{display:grid;grid-template-columns:minmax(270px,.8fr) minmax(0,1.5fr);gap:17px;align-items:start}
+.management-page .management-form-panel,.management-page .management-list-panel{min-width:0;padding:22px}
+.management-form p{display:grid;gap:6px;margin:0 0 14px}
+.management-form label{font-size:11px;font-weight:700;color:#344158}
+.management-form input,.management-form select,.management-form textarea,.management-filters input,.management-filters select{width:100%;min-height:42px;padding:9px 11px;border:1px solid #dce2eb;border-radius:8px;background:#fbfcfe;color:#17243a;font:12px 'DM Sans',sans-serif}
+.management-form textarea{min-height:85px}
+.management-form input:focus,.management-form select:focus,.management-form textarea:focus,.management-filters input:focus,.management-filters select:focus{outline:0;border-color:#d5a900;box-shadow:0 0 0 3px #ffd43b30}
+.management-form .helptext{font-size:10px;color:#8792a3}
+.management-form .errorlist{margin:0;padding:8px 10px;border-radius:6px;background:#fff0f0;color:#a52b2b;font-size:10px;list-style:none}
+.management-cancel-link{display:inline-block;margin-left:10px;color:#69758a;font-size:11px;font-weight:700}
+.management-count{padding:6px 9px;border-radius:20px;background:#fff3bd;color:#795c00;font-size:9px;font-weight:800}
+.management-record-list{display:grid;gap:9px;max-height:680px;overflow:auto}
+.management-record{padding:14px;border:1px solid #edf0f4;border-radius:10px;background:#fbfcfe}
+.management-record-main{display:grid;justify-items:start;gap:5px}
+.management-record strong{font:700 14px 'Space Grotesk',sans-serif;color:#17243a}
+.management-record p,.management-record small{margin:0;color:#788397;font-size:10px;line-height:1.6}
+.management-record a,.management-actions>a{margin-top:5px;color:#8b6a00;font-size:10px;font-weight:800;text-decoration:none}
+.management-status{display:inline-block;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.management-status.status-pending{background:#fff4ce;color:#8a6500}
+.management-status.status-confirmed,.management-status.status-available{background:#e1f7ed;color:#14734b}
+.management-status.status-cancelled,.management-status.status-maintenance{background:#fde8e8;color:#a13a3a}
+.management-status.status-in_service{background:#e8efff;color:#315a9a}
+.management-filters{display:grid;grid-template-columns:minmax(160px,1fr) 180px auto;gap:9px;margin:16px 0}
+.management-filters button{padding:9px 16px;border:0;border-radius:8px;background:#101b31;color:#fff;font-size:11px;font-weight:800}
+.management-table-wrap{width:100%;overflow-x:auto}
+.management-table{width:100%;min-width:850px;border-collapse:collapse}
+.management-table th{padding:12px 10px;background:#f6f7f9;color:#7b8799;text-align:left;font-size:9px;letter-spacing:.7px}
+.management-table td{padding:13px 10px;border-bottom:1px solid #edf0f4;color:#344158;font-size:10px;vertical-align:middle}
+.management-table td strong,.management-table td small{display:block}
+.management-table td small{margin-top:4px;color:#8993a5;font-size:9px}
+.management-actions{white-space:nowrap}
+.management-actions form{display:inline}
+.management-actions button{margin-left:8px;border:0;background:transparent;font-size:10px;font-weight:800;cursor:pointer}
+.management-actions .text-danger{color:#b43a3a}
+.management-empty{padding:28px!important;text-align:center;color:#8993a5!important}
+.management-messages{margin:12px 0}
+.management-messages p{padding:11px 14px;border-radius:8px;background:#e8f7ef;color:#176b48;font-size:11px}
+.management-messages p.error{background:#fff0f0;color:#a52b2b}
+@media(max-width:1000px){.management-columns{grid-template-columns:1fr}.management-record-list{max-height:none}}
+@media(max-width:650px){.management-page .management-hero{padding:22px;}.management-hero-icon{display:none}.management-kpis{grid-template-columns:1fr}.management-filters{grid-template-columns:1fr}.management-page .main-content{padding-left:14px;padding-right:14px}}
+
+
+/* Consistent city-led visual treatment for fleet and route workspaces */
+.management-page .management-hero{position:relative;isolation:isolate;background:linear-gradient(90deg,rgba(10,19,36,.96) 0%,rgba(10,19,36,.86) 58%,rgba(10,19,36,.58) 100%),url('/static/transport/image/pexels-joy-kahashi-1725918396-27965508.jpg') center 48%/cover no-repeat;box-shadow:0 15px 38px #101b311c}
+.management-page .management-hero:after{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 82% 45%,rgba(255,212,59,.15),transparent 32%)}
+.management-page .management-hero-icon{position:relative;z-index:1;display:grid;place-items:center;width:104px;height:104px;border:1px solid #ffffff35;border-radius:25px;background:#ffffff12;color:#ffd43b;backdrop-filter:blur(4px)}
+.management-page .management-kpis article,.management-page .management-form-panel,.management-page .management-list-panel{box-shadow:0 7px 22px #17243a08}
+.management-page .management-record{transition:transform .2s,border-color .2s,box-shadow .2s}
+.management-page .management-record:hover{transform:translateY(-2px);border-color:#e6c54e;box-shadow:0 9px 22px #17243a0b}
+.management-page .management-filters button{background:#101b31;transition:background .2s,transform .2s}
+.management-page .management-filters button:hover{background:#263956;transform:translateY(-1px)}
+@media(max-width:760px){.management-page .management-hero{background-position:65% center}}

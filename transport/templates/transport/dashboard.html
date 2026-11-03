@@ -9,9 +9,10 @@
     <title>ClickCampus | Dashboard</title>
 
     <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+    <link rel="stylesheet" href="{% static 'transport/student.css' %}">
 </head>
 
-<body>
+<body class="student-dashboard">
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="brand">
@@ -84,8 +85,12 @@
                 </p>
             </div>
 
-            <div class="profile">
-                <span class="avatar">
+            <div class="student-header-actions">
+                {% if user.is_authenticated and user.is_staff %}
+                    <a class="admin-return-link" href="{% url 'transport:admin_dashboard' %}">← Return to Admin Dashboard</a>
+                {% endif %}
+                <div class="profile">
+                    <span class="avatar">
                     {% if user.is_authenticated %}
                         {{ user.first_name|default:user.username|first|upper }}
                     {% else %}
@@ -99,7 +104,8 @@
                     {% else %}
                         Guest
                     {% endif %}
-                </span>
+                    </span>
+                </div>
             </div>
         </header>
 

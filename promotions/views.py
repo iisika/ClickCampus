@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
+from PIL import Image, UnidentifiedImageError
 
 from .models import Promotion
 
@@ -70,11 +71,18 @@ def create_promotion(request):
         messages.error(request, "The image must be 5 MB or smaller.")
         return redirect("transport:create_promotion")
 
-    allowed_types = {"image/jpeg", "image/png", "image/webp"}
-    if image.content_type not in allowed_types:
+    # Do not trust the browser-supplied content type alone.
+    # Verify that the uploaded file is a readable image of an allowed format.
+    try:
+        uploaded_image = Image.open(image)
+        if uploaded_image.format not in {"JPEG", "PNG", "WEBP"}:
+            raise ValueError("Unsupported image format.")
+        uploaded_image.verify()
+        image.seek(0)
+    except (UnidentifiedImageError, OSError, ValueError):
         messages.error(
             request,
-            "Please upload a JPG, PNG, or WebP image.",
+            "Please upload a valid JPG, PNG, or WebP image.",
         )
         return redirect("transport:create_promotion")
 

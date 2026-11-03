@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 import os
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 load_dotenv(BASE_DIR / ".env")
 
@@ -25,7 +26,11 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n5uo*q7z=zmxuyepq+05fl&p12x=v^$^^^b=j0ur&b=d1yrcx1'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    raise ImproperlyConfigured(
+        "DJANGO_SECRET_KEY must be set in your environment or .env file."
+    )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

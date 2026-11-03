@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClickCampus | Promotions</title>
     <link rel="stylesheet" href="{% static 'transport/style.css' %}">
+    <link rel="stylesheet" href="{% static 'transport/promotions.css' %}">
 
     <style>
         :root {
@@ -270,18 +271,18 @@
     </style>
 </head>
 
-<body>
+<body class="public-promotions-page">
 <main class="page">
 
     <header class="topbar">
-        <a href="{% url 'transport:dashboard' %}" class="brand">
+        <a href="{% url 'transport:landing' %}" class="brand">
             Click<span>Campus</span>
         </a>
 
         <nav class="top-links" aria-label="Account navigation">
             <a class="link-button outline-button"
-               href="{% url 'transport:dashboard' %}">
-                ← Dashboard
+               href="{% url 'transport:landing' %}">
+                ← Home
             </a>
             <a class="link-button outline-button"
                href="{% url 'transport:login' %}">

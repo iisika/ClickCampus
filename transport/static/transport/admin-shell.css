@@ -1,0 +1,45 @@
+/* ClickCampus shared navigation shell for Django's native admin */
+:root { --cc-navy:#101b31; --cc-yellow:#ffd43b; }
+body { background:#f4f6fa; }
+#header { margin-left:245px; background:var(--cc-navy); color:#fff; }
+#header a:link, #header a:visited { color:#fff; }
+#branding h1, #branding h1 a { color:#fff; font-weight:800; }
+#user-tools { color:#d7deeb; }
+#nav-sidebar {
+    display:block !important; position:fixed; inset:0 auto 0 0; z-index:1001;
+    width:245px; height:100vh; padding:0; margin:0; overflow:visible;
+    border:0; background:transparent; box-shadow:none;
+}
+#nav-sidebar .sidebar {
+    position:fixed; inset:0 auto 0 0; width:245px; height:100vh;
+    overflow-y:auto; padding:28px 18px; background:var(--cc-navy);
+}
+#nav-sidebar .brand-logo { width:37px; height:37px; object-fit:contain; }
+#nav-sidebar .sidebar nav { display:grid; gap:7px; }
+#nav-sidebar .nav-link { display:block; padding:12px 13px; border-radius:9px; color:#aeb8cc; font-size:13px; text-decoration:none; }
+#nav-sidebar .nav-link:hover, #nav-sidebar .nav-link.active { background:#2b3855; color:#fff; }
+#nav-sidebar .menu-label { margin:34px 10px 12px; color:#aeb8cc; font-size:10px; font-weight:700; letter-spacing:1.5px; }
+#nav-sidebar .sidebar-account { margin-top:auto; padding:15px 10px; border-top:1px solid #34405a; color:#fff; }
+#nav-sidebar .account-info { display:grid; gap:4px; min-width:0; }
+#nav-sidebar .account-label { color:#aeb8cc; font-size:9px; letter-spacing:1px; }
+#nav-sidebar .account-info strong { overflow-wrap:anywhere; font-size:12px; }
+#nav-sidebar .logout-form { margin-top:10px; }
+#nav-sidebar .logout-button { padding:8px 12px; border:1px solid #52617b; border-radius:7px; background:transparent; color:#fff; font-size:11px; }
+#nav-sidebar .sidebar-bottom { margin-top:auto; padding:14px 10px 0; border-top:1px solid #34405a; color:#aeb8cc; font-size:11px; }
+#nav-sidebar .sidebar-bottom p { margin:0 0 5px; }
+#container { margin-left:245px; }
+#content { padding:25px 30px; }
+#content-main .module, .module { border:1px solid #e5e9f0; border-radius:10px; overflow:hidden; box-shadow:0 5px 18px #17243a08; }
+.module h2, .module caption, .inline-group h2 { background:#172944; }
+.button, input[type=submit], input[type=button], .submit-row input, a.button { border-radius:7px; }
+.button.default, input[type=submit].default, .submit-row input.default { background:#ffd43b; color:#101b31; }
+a:focus, a:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid #d5a900; outline-offset:2px; }
+@media(max-width:760px) {
+    #nav-sidebar { position:relative; width:100%; height:auto; }
+    #nav-sidebar .sidebar { position:relative; width:100%; height:auto; max-height:none; }
+    #nav-sidebar .sidebar nav { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    #nav-sidebar .sidebar-account, #nav-sidebar .sidebar-bottom { display:none; }
+    #header, #container { margin-left:0; }
+    #content { padding:18px 14px; }
+}
+@media(prefers-reduced-motion:reduce) { *, *::before, *::after { transition-duration:.01ms !important; animation-duration:.01ms !important; } }

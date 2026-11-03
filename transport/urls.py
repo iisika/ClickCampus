@@ -7,7 +7,8 @@ from promotions import views as promotion_views
 app_name = "transport"
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
+    path("", views.landing_page, name="landing"),
+    path("student/", views.dashboard, name="dashboard"),
 
     path(
         "demand-report/",
@@ -36,6 +37,12 @@ urlpatterns = [
         views.admin_dashboard,
         name="admin_dashboard",
     ),
+
+    # Staff management workspaces (Django admin remains the backup tool).
+    path("admin-dashboard/bookings/", views.manage_bookings, name="manage_bookings"),
+    path("admin-dashboard/vehicles/", views.manage_vehicles, name="manage_vehicles"),
+    path("admin-dashboard/routes/", views.manage_routes, name="manage_routes"),
+    path("admin-dashboard/pickup-points/", views.manage_pickup_points, name="manage_pickup_points"),
 
     # Promotions
     path(

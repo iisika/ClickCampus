@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+.promotion-admin-page .main-content{max-width:1750px}
+.promotion-admin-intro{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;min-height:195px;padding:30px 36px;margin:16px 0 20px;border-radius:15px;background:linear-gradient(105deg,#101b31,#203a5a);color:#fff}
+.promotion-admin-intro:after{content:'';position:absolute;right:7%;top:-150px;width:300px;height:300px;border:1px solid #ffffff18;border-radius:50%;box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff05}
+.promotion-admin-intro .eyebrow.light{color:#ffd43b}.promotion-admin-intro h2{margin:8px 0;font:700 clamp(25px,3vw,34px)/1.1 'Space Grotesk',sans-serif;letter-spacing:-1px}
+.promotion-admin-intro p:not(.eyebrow){max-width:530px;color:#c5cede;font-size:12px;line-height:1.7}
+.promotion-admin-mark{z-index:1;display:grid;place-items:center;width:100px;height:100px;border:1px solid #ffffff2a;border-radius:25px;background:#ffffff0b;color:#ffd43b;font-size:48px}
+.promotion-admin-page .lower-panel{margin-top:0}.promotion-review-card{padding:22px;margin:0 0 15px;border:1px solid #e6eaf0;border-radius:13px;background:#fff;box-shadow:0 5px 18px #17243a06}
+.promotion-review-heading{align-items:center;margin-bottom:13px}.promotion-review-heading .eyebrow{margin:0 0 5px;font-size:8px;letter-spacing:1px}.promotion-review-heading h3{font:700 19px 'Space Grotesk',sans-serif;color:#101b31}
+.promotion-review-status{display:inline-block;padding:7px 10px;border-radius:20px;font-size:9px;font-weight:800}.promotion-review-status.status-pending{background:#fff2c9;color:#856100}.promotion-review-status.status-approved{background:#def5e9;color:#14734b}.promotion-review-status.status-rejected{background:#fde8e8;color:#a13a3a}
+.promotion-review-image{display:block;width:100%;max-width:520px;max-height:280px;object-fit:cover;border-radius:10px;margin:12px 0 16px;background:#f2f4f7}.promotion-review-card>p{font-size:11px;line-height:1.7;color:#657188}.promotion-review-card>p strong{color:#263650}
+.promotion-review-actions{display:flex;gap:9px;margin-top:15px}.promotion-review-actions form{margin:0}.promotion-review-actions button{min-width:105px;padding:10px 15px;border:0;border-radius:7px;font-size:10px;font-weight:800;cursor:pointer}.promotion-review-actions .approve-button{background:#dff5e9;color:#14734b}.promotion-review-actions .reject-button{background:#fde8e8;color:#a13a3a}
+.promotion-admin-page .empty-state{padding:45px 20px;text-align:center}.promotion-admin-page .form-message{margin:12px 0;padding:12px 15px;border-radius:8px;font-size:11px}
+.public-promotions-page{--navy:#101b31;--background:#f4f6fa;--text:#263650;--muted:#778399;background:var(--background);color:var(--text);font-family:'DM Sans',sans-serif}
+.public-promotions-page .page{max-width:1240px;padding:28px 25px 55px}.public-promotions-page .brand{font:700 23px 'Space Grotesk',sans-serif;color:#101b31}.public-promotions-page .brand span{color:#b48a00}
+.public-promotions-page .link-button{border-radius:7px;font-size:11px;transition:transform .2s}.public-promotions-page .outline-button{color:#101b31;border-color:#dce2eb}.public-promotions-page .blue-button{background:#ffd43b;border-color:#ffd43b;color:#101b31}
+.public-promotions-page .hero{padding:clamp(28px,4vw,48px);border-radius:16px;background:linear-gradient(100deg,#101b31,#294464);box-shadow:0 15px 35px #101b3118}.public-promotions-page .hero .eyebrow{color:#ffd43b}.public-promotions-page .hero h1{font:700 clamp(30px,4vw,44px)/1.08 'Space Grotesk',sans-serif;letter-spacing:-1.5px}.public-promotions-page .hero p{font-size:13px;line-height:1.8;color:#c5cede}
+.public-promotions-page .section-heading h2{font:700 24px 'Space Grotesk',sans-serif;color:#101b31}.public-promotions-page .offer-grid{gap:17px}.public-promotions-page .offer-card{border-radius:13px;border-color:#e5e9f0;box-shadow:0 5px 18px #17243a07}.public-promotions-page .offer-card>img{display:block;width:100%;height:190px;object-fit:cover;background:#e9edf3}.public-promotions-page .offer-content{padding:19px}.public-promotions-page .offer-tag{background:#fff3bd;color:#775900}.public-promotions-page .offer-content h3{font:700 18px 'Space Grotesk',sans-serif;color:#101b31}.public-promotions-page .offer-content p{font-size:12px;line-height:1.7;min-height:0}.public-promotions-page .business-banner{border-radius:13px;border-color:#e5e9f0}.public-promotions-page .business-banner h2{font:700 21px 'Space Grotesk',sans-serif;color:#101b31}
+.promotion-form-page{background:#f4f6fa;color:#263650;font-family:'DM Sans',sans-serif}.promotion-form-page .page{max-width:790px;margin:35px auto}.promotion-form-page .top-link{color:#9a7900;font-size:11px}.promotion-form-page .hero{padding:30px;border-radius:14px;background:linear-gradient(110deg,#101b31,#263f5f)}.promotion-form-page .hero h1{font:700 clamp(25px,4vw,34px) 'Space Grotesk',sans-serif}.promotion-form-page .hero p{font-size:12px;color:#c5cede}.promotion-form-page .card{padding:28px;border:1px solid #e5e9f0;border-radius:13px;box-shadow:0 7px 22px #17243a08}.promotion-form-page .card h2{font:700 21px 'Space Grotesk',sans-serif;color:#101b31}.promotion-form-page label{font-size:11px;color:#263650}.promotion-form-page input,.promotion-form-page textarea{border-color:#dce2eb;border-radius:8px;font:12px 'DM Sans',sans-serif}.promotion-form-page input:focus,.promotion-form-page textarea:focus{outline:0;border-color:#d5a900;box-shadow:0 0 0 3px #ffd43b35}.promotion-form-page .submit-button{border-radius:8px;background:#101b31;font:700 12px 'DM Sans',sans-serif}.promotion-form-page .submit-button:hover{background:#263956}
+@media(max-width:760px){.promotion-admin-page .main-content{padding:22px 14px 35px}.promotion-admin-intro{padding:24px 20px}.promotion-admin-mark{width:70px;height:70px;font-size:35px}.promotion-review-card{padding:17px}.public-promotions-page .page{padding:20px 15px 35px}}
+@media(max-width:560px){.promotion-admin-mark{display:none}.promotion-review-actions{flex-wrap:wrap}.promotion-review-actions form,.promotion-review-actions button{width:100%}.promotion-form-page .page{margin:20px auto}.promotion-form-page .hero,.promotion-form-page .card{padding:21px}}
+@media(prefers-reduced-motion:reduce){.promotion-admin-page *,.public-promotions-page *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+
+/* Business promotion moderation — campaign-inspired visual hierarchy */
+.promotion-admin-intro{background:linear-gradient(95deg,rgba(10,19,36,.96) 0%,rgba(10,19,36,.86) 60%,rgba(10,19,36,.57) 100%),url('/static/transport/image/pexels-vinixhc-20186777.jpg') center 46%/cover no-repeat;background-color:#101b31;box-shadow:0 16px 38px #101b311c}
+.promotion-admin-intro:after{border-color:#ffffff26;box-shadow:0 0 0 35px #ffffff0b,0 0 0 70px #ffffff07}
+.promotion-admin-mark{background:#101b3170;backdrop-filter:blur(5px)}
+.promotion-admin-page .lower-panel{padding:24px}
+.promotion-admin-page .lower-panel>.section-heading{padding-bottom:15px;border-bottom:1px solid #edf0f4}
+.promotion-review-card{position:relative;overflow:hidden;border-color:#e3e8f0;box-shadow:0 7px 22px #17243a08;transition:transform .22s,border-color .22s,box-shadow .22s}
+.promotion-review-card:hover{transform:translateY(-2px);border-color:#e4c34d;box-shadow:0 13px 30px #17243a0d}
+.promotion-review-card:before{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:#e3bd2c}
+.promotion-review-heading h3{font-size:20px}
+.promotion-review-heading .muted{margin:5px 0 0}
+.promotion-review-image{width:min(100%,560px);aspect-ratio:16/8;max-height:300px;object-fit:cover;border:1px solid #e8ebf1}
+.promotion-review-card>p{max-width:850px}
+.promotion-review-actions{padding-top:13px;border-top:1px solid #edf0f4}
+.promotion-review-actions .approve-button,.promotion-review-actions .reject-button{min-height:38px;transition:filter .2s,transform .2s}
+.promotion-review-actions button:hover{filter:brightness(.97);transform:translateY(-1px)}
+.promotion-review-status{letter-spacing:.3px;text-transform:uppercase}
+.promotion-admin-page .form-message.success{background:#e8f7ef;color:#176b48;border:1px solid #c5ead6}
+.promotion-admin-page .form-message.error{background:#fff0f0;color:#a52b2b;border:1px solid #f1caca}
+@media(max-width:760px){.promotion-admin-intro{background-position:65% center}.promotion-admin-page .lower-panel{padding:17px}}
+@media(prefers-reduced-motion:reduce){.promotion-review-card,.promotion-review-actions button{transition:none}}

@@ -1,0 +1,98 @@
+/* ClickCampus student portal — isolated overrides */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+.student-dashboard{--primary:#d5a900;--primary-dark:#b88e00;--background:#f4f6fa;--text:#142039;--muted:#69758a;--border:#e5e9f0;--sidebar:#101b31;font-family:'DM Sans',sans-serif;background:var(--background);color:var(--text)}
+.student-dashboard .sidebar{width:250px;padding:27px 19px;background:#101b31;box-shadow:8px 0 30px #101b310b}
+.student-dashboard .brand{font-family:'Space Grotesk',sans-serif;font-size:19px;letter-spacing:-.6px}
+.student-dashboard .brand-logo{width:40px;height:40px;object-fit:contain}
+.student-dashboard .menu-label{margin-top:48px;color:#8491a8}
+.student-dashboard .sidebar .nav-link{padding:12px 14px;border-radius:9px;color:#aeb9cc;font-size:13px;transition:background .2s,color .2s,transform .2s}
+.student-dashboard .sidebar .nav-link:hover{background:#1d2c47;color:#fff;transform:translateX(2px)}
+.student-dashboard .sidebar .nav-link.active{background:#ffd43b;color:#101b31;font-weight:800}
+.student-dashboard .sidebar-account{border-color:#2c3a54}
+.student-dashboard .sidebar .account-label{color:#8795ad}
+.student-dashboard .sidebar .account-info strong{color:#fff}
+.student-dashboard .sidebar .logout-button{color:#c1cad8}
+.student-dashboard .sidebar .logout-button:hover{background:#263650;color:#fff}
+.student-dashboard .sidebar-bottom{border-color:#2c3a54;color:#8c9ab1}
+.student-dashboard .main-content{margin-left:250px;padding:34px clamp(22px,3.3vw,52px) 45px;max-width:1700px}
+.student-dashboard .topbar{margin-bottom:25px}
+.student-dashboard .topbar .eyebrow{color:#9a7900}
+.student-dashboard .topbar h1{font-family:'Space Grotesk',sans-serif;font-size:31px;letter-spacing:-1.1px;color:#101b31}
+.student-dashboard .topbar .muted{font-size:13px}
+.student-dashboard .profile{font-size:12px;color:#293750}
+.student-dashboard .avatar{background:#fff1b8;color:#6c5200}
+.student-dashboard .welcome{position:relative;isolation:isolate;min-height:235px;padding:34px 38px;border-radius:17px;background:linear-gradient(90deg,rgba(10,19,36,.96) 0%,rgba(10,19,36,.86) 48%,rgba(10,19,36,.42) 100%),url('/static/transport/image/pexels-mwauraken-29069329.jpg') center 48%/cover no-repeat;box-shadow:0 16px 40px #101b311c}
+.student-dashboard .welcome:after{content:'';position:absolute;z-index:-1;inset:0;background:radial-gradient(circle at 78% 40%,rgba(255,212,59,.16),transparent 34%)}
+.student-dashboard .welcome h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(25px,2.5vw,34px);letter-spacing:-1.2px}
+.student-dashboard .welcome p:not(.eyebrow){max-width:470px;color:#c5cede;font-size:13px;line-height:1.8}
+.student-dashboard .welcome .eyebrow.light{color:#ffd43b}
+.student-dashboard .welcome .primary-button{background:#ffd43b;color:#101b31;border-radius:7px;padding:12px 18px}
+.student-dashboard .welcome .primary-button:hover{background:#ffe16d;color:#101b31}
+.student-dashboard .welcome-symbol{width:100px;height:100px;border-radius:25px;background:#ffffff12;border-color:#ffffff25}
+.student-dashboard .stats-grid{gap:15px;margin-bottom:22px}
+.student-dashboard .stat-card{position:relative;padding:21px 22px;border:1px solid #e5e9f0;border-radius:13px;box-shadow:0 5px 18px #17243a07;transition:transform .2s,box-shadow .2s}
+.student-dashboard .stat-card:hover{transform:translateY(-3px);box-shadow:0 12px 25px #17243a0d}
+.student-dashboard .stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px}
+.student-dashboard .stat-card h3{font-family:'Space Grotesk',sans-serif;font-size:31px;color:#101b31}
+.student-dashboard .stat-note{font-size:11px;line-height:1.5}
+.student-dashboard .content-grid{gap:19px}
+.student-dashboard .panel{padding:25px;border:1px solid #e5e9f0;border-radius:14px;box-shadow:0 6px 20px #17243a06}
+.student-dashboard .section-heading h2{font-family:'Space Grotesk',sans-serif;font-size:21px;letter-spacing:-.6px;color:#101b31}
+.student-dashboard .eyebrow{color:#9a7900}
+.student-dashboard .section-icon{background:#fff3bd;color:#8b6a00}
+.student-dashboard .muted{font-size:12px;line-height:1.75}
+.student-dashboard #booking-form label{color:#283750;font-size:12px}
+.student-dashboard #booking-form select,.student-dashboard #booking-form input[type="date"]{min-height:47px;border-color:#dce2eb;border-radius:8px;background:#fbfcfe;font-size:12px}
+.student-dashboard #booking-form select:focus,.student-dashboard #booking-form input[type="date"]:focus{border-color:#d5a900;box-shadow:0 0 0 3px #ffd43b30}
+.student-dashboard .primary-button{background:#101b31;color:#fff;border-radius:8px}
+.student-dashboard .primary-button:hover{background:#263956;color:#fff}
+.student-dashboard .booking-deadline-notice{background:#fff9e3;border:1px solid #f1df9a;border-left:4px solid #e1b51a;color:#715700;border-radius:9px;font-size:11px;line-height:1.65}
+.student-dashboard .booking-deadline-notice p{font-size:11px}
+.student-dashboard .trip-card{padding:17px;border-radius:11px;background:#fbfcfe}
+.student-dashboard .trip-card h3{font-family:'Space Grotesk',sans-serif;font-size:16px;color:#101b31}
+.student-dashboard .trip-card p{font-size:11px;line-height:1.7}
+.student-dashboard .status-badge{font-size:10px}
+.student-dashboard .booking-notice{font-size:11px;box-shadow:none}
+.student-dashboard .booking-notice strong{font-size:12px}
+.student-dashboard .booking-notice p{font-size:11px}
+.student-dashboard .cancel-button{padding:9px 13px;border:1px solid #e8b5b5;border-radius:7px;background:#fff7f7;color:#a52b2b;font-size:11px;font-weight:700}
+.student-dashboard .cancel-button:hover{background:#ffeaea}
+.student-dashboard .empty-state{background:#fbfcfe;border-color:#dce2ec}
+.student-dashboard .empty-icon{background:#fff3bd}
+.student-dashboard .lower-panel{margin-top:21px}
+.student-dashboard .promotion-grid{gap:15px}
+.student-dashboard .promotion-card{padding:17px;border-radius:12px;background:#fbfcfe}
+.student-dashboard .promotion-card img{display:block;max-width:100%;margin-bottom:13px}
+.student-dashboard .promotion-tag{background:#fff2b7;color:#725700}
+.student-dashboard .promotion-card .promotion-business{color:#9a7900}
+.student-dashboard .promotion-meta{border-color:#e8ebf1}
+.student-dashboard footer{padding-top:30px;color:#8993a5;font-size:10px}
+.student-dashboard a:focus-visible,.student-dashboard button:focus-visible,.student-dashboard input:focus-visible,.student-dashboard select:focus-visible{outline:3px solid #e6bd24;outline-offset:2px}
+@media(max-width:1100px){.student-dashboard .sidebar{width:215px}.student-dashboard .main-content{margin-left:215px;padding:27px 23px}.student-dashboard .content-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.student-dashboard .sidebar{width:100%;padding:15px}.student-dashboard .sidebar nav{margin-top:14px}.student-dashboard .sidebar .nav-link{font-size:11px}.student-dashboard .main-content{margin-left:0;padding:22px 14px 35px}.student-dashboard .topbar h1{font-size:25px}.student-dashboard .welcome{padding:25px 21px;min-height:210px;background-position:62% center}.student-dashboard .welcome h2{font-size:25px}.student-dashboard .welcome p:not(.eyebrow){font-size:12px}.student-dashboard .stats-grid{grid-template-columns:1fr;gap:10px}.student-dashboard .stat-card{padding:15px 17px}.student-dashboard .stat-card h3{font-size:25px}.student-dashboard .panel{padding:18px}.student-dashboard .section-heading{align-items:flex-start}.student-dashboard .section-heading h2{font-size:19px}.student-dashboard .promotion-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.student-dashboard *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* Staff-only shortcut back to the management workspace */
+.student-dashboard .student-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:16px;flex-wrap:wrap}
+.student-dashboard .admin-return-link{display:inline-flex;align-items:center;gap:7px;padding:10px 13px;border:1px solid #e5d58f;border-radius:8px;background:#fff9e4;color:#725700;font-size:11px;font-weight:800;transition:background .2s,transform .2s}
+.student-dashboard .admin-return-link:hover{background:#fff0b5;transform:translateY(-1px)}
+@media(max-width:760px){.student-dashboard .student-header-actions{align-items:flex-end;flex-direction:column;gap:9px}.student-dashboard .admin-return-link{font-size:10px;padding:8px 10px}}
+
+/* More visible administrator return control */
+.student-dashboard .admin-return-link{background:#ffd43b;border:1px solid #e3b900;color:#101b31;box-shadow:0 5px 14px #101b3120;font-size:12px;padding:12px 16px}
+.student-dashboard .admin-return-link:hover{background:#ffe16d;color:#101b31;box-shadow:0 8px 18px #101b3128}
+
+
+/* Final student workspace polish to match the public ClickCampus identity */
+.student-dashboard .welcome{border:1px solid #ffffff20;box-shadow:0 18px 42px #101b3126}
+.student-dashboard .welcome:before{content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(90deg,rgba(10,19,36,.14),transparent 75%);pointer-events:none}
+.student-dashboard .welcome-symbol{border:1px solid #ffffff35;background:#ffffff14;backdrop-filter:blur(5px);box-shadow:0 12px 30px #050b1733}
+.student-dashboard .stat-card{overflow:hidden}
+.student-dashboard .stat-card:after{content:'';position:absolute;right:-23px;top:-27px;width:82px;height:82px;border:1px solid #d9b32b35;border-radius:50%;box-shadow:0 0 0 12px #d9b32b0b}
+.student-dashboard .panel{box-shadow:0 8px 24px #17243a08}
+.student-dashboard .trip-card,.student-dashboard .promotion-card{border:1px solid #e8ecf2;transition:transform .2s,border-color .2s,box-shadow .2s}
+.student-dashboard .trip-card:hover,.student-dashboard .promotion-card:hover{transform:translateY(-2px);border-color:#e6c54e;box-shadow:0 10px 24px #17243a0b}
+.student-dashboard .primary-button{transition:background .2s,transform .2s}
+.student-dashboard .primary-button:hover{transform:translateY(-1px)}
+@media(max-width:700px){.student-dashboard .welcome-symbol{display:none}.student-dashboard .welcome{background-position:65% center}}
+@media(prefers-reduced-motion:reduce){.student-dashboard .trip-card,.student-dashboard .promotion-card,.student-dashboard .primary-button{transition:none}}

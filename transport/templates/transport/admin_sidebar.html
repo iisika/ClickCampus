@@ -1,0 +1,24 @@
+{% load static %}
+<aside class="sidebar">
+    <div class="brand">
+        <img src="{% static 'transport/image/clickcampus-logo.png' %}" alt="ClickCampus logo" class="brand-logo">
+        <span>ClickCampus</span>
+    </div>
+    <p class="menu-label">ADMIN WORKSPACE</p>
+    <nav class="sidebar-nav" aria-label="Administrator navigation">
+        <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'transport:admin_dashboard' %}">Home</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'demand_report' %}active{% endif %}" href="{% url 'transport:demand_report' %}">Demand Report</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_bookings' %}active{% endif %}" href="{% url 'transport:manage_bookings' %}">Manage Bookings</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_vehicles' %}active{% endif %}" href="{% url 'transport:manage_vehicles' %}">Manage Vehicles</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_routes' %}active{% endif %}" href="{% url 'transport:manage_routes' %}">Manage Routes</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'manage_pickup_points' %}active{% endif %}" href="{% url 'transport:manage_pickup_points' %}">Pickup Points</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'admin_promotions' %}active{% endif %}" href="{% url 'transport:admin_promotions' %}">Manage Promotions</a>
+        <a class="nav-link" href="/admin/" target="_blank" rel="noopener noreferrer">Django Administration · Backup ↗</a>
+        <a class="nav-link" href="{% url 'transport:dashboard' %}">Student Portal</a>
+    </nav>
+    <div class="sidebar-account">
+        <div class="account-info"><span class="account-label">SIGNED IN AS</span><strong>{{ request.user.get_username }}</strong></div>
+        <form method="post" action="{% url 'transport:logout' %}" class="logout-form">{% csrf_token %}<button type="submit" class="logout-button">Log Out</button></form>
+    </div>
+    <div class="sidebar-bottom"><p>Campus transport, made easier.</p><span>©ClickCampus 2026</span></div>
+</aside>
