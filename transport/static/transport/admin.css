@@ -114,3 +114,10 @@
 @media(max-width:1100px){.demand-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.demand-filter-panel{align-items:flex-start;flex-direction:column}}
 @media(max-width:760px){.demand-page .main-content{padding:22px 14px 35px}.demand-hero{padding:25px 21px;min-height:205px}.demand-hero-mark{width:75px;height:75px;font-size:42px;border-radius:18px}.demand-exceptions{grid-template-columns:1fr}.demand-results-panel{padding:17px}.demand-kpi{min-height:115px;padding:14px}.demand-kpi>strong{font-size:25px}.demand-kpi-symbol{right:11px;top:13px;font-size:18px}}
 @media(max-width:430px){.demand-kpi-grid{grid-template-columns:1fr 1fr}.demand-hero-mark{display:none}.demand-filter-form{width:100%}.demand-filter-form>div{flex:1}.demand-filter-form input{width:100%}}
+
+
+/* Nairobi imagery carried into operational workspaces */
+.demand-hero{background:linear-gradient(90deg,rgba(10,19,36,.96) 0%,rgba(10,19,36,.84) 58%,rgba(10,19,36,.57) 100%),url('/static/transport/image/pexels-youngafrikanna-36964425.jpg') center 48%/cover no-repeat;background-color:#101b31;box-shadow:0 16px 40px #101b311a}
+.demand-hero:after{border-color:#ffffff24;box-shadow:0 0 0 32px #ffffff0b,0 0 0 68px #ffffff08}
+.demand-hero-mark{background:#101b3170;backdrop-filter:blur(5px)}
+@media(max-width:760px){.demand-hero{background-position:62% center}}
