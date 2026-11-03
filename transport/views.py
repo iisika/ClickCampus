@@ -574,9 +574,21 @@ def demand_report(request):
             "capacity_note": capacity_note,
         })
 
+    total_planning_demand = sum(
+        row["planning_demand"] for row in report_rows
+    )
+    shortfall_groups = sum(
+        1 for row in report_rows if row["capacity_shortfall"]
+    )
+    conflict_groups = sum(
+        1 for row in report_rows if row["has_assignment_conflict"]
+    )
     context = {
         "selected_date": selected_date,
         "report_rows": report_rows,
+        "total_planning_demand": total_planning_demand,
+        "shortfall_groups": shortfall_groups,
+        "conflict_groups": conflict_groups,
         "available_bus_count": len(available_buses),
         "total_requests": sum(
             row["total_students"] for row in report_rows
