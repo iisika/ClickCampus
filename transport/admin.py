@@ -1,4 +1,6 @@
 
+from datetime import datetime, timedelta
+
 from django import forms
 from django.contrib import admin
 
@@ -52,6 +54,50 @@ class TravelRequestAdminForm(forms.ModelForm):
                 "bus",
                 "This bus is under maintenance and cannot be assigned.",
             )
+
+        # A bus cannot serve two journeys whose estimated time windows overlap.
+        if travel_date and direction and departure_time:
+            duration = (
+                timedelta(minutes=90)
+                if direction == TravelRequest.Direction.TO_SCHOOL
+                else timedelta(minutes=150)
+            )
+            proposed_start = datetime.combine(travel_date, departure_time)
+            proposed_end = proposed_start + duration
+
+            existing_assignments = TravelRequest.objects.filter(
+                bus=bus,
+                travel_date=travel_date,
+                status=TravelRequest.Status.CONFIRMED,
+                departure_time__isnull=False,
+            )
+            if self.instance.pk:
+                existing_assignments = existing_assignments.exclude(
+                    pk=self.instance.pk
+                )
+
+            for assignment in existing_assignments:
+                existing_duration = (
+                    timedelta(minutes=90)
+                    if assignment.direction == TravelRequest.Direction.TO_SCHOOL
+                    else timedelta(minutes=150)
+                )
+                existing_start = datetime.combine(
+                    assignment.travel_date,
+                    assignment.departure_time,
+                )
+                existing_end = existing_start + existing_duration
+
+                if proposed_start < existing_end and existing_start < proposed_end:
+                    self.add_error(
+                        "bus",
+                        (
+                            f"This bus is already assigned to an overlapping "
+                            f"journey on route '{assignment.route.name}' "
+                            f"at {assignment.departure_time.strftime('%I:%M %p')}."
+                        ),
+                    )
+                    break
 
         # Count confirmed bookings for this exact departure.
         if (
