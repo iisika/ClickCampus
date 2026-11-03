@@ -1,3 +1,4 @@
+import json
 from datetime import date, time, timedelta
 
 from django.contrib.auth.models import User
@@ -226,6 +227,30 @@ class TransportWorkflowTests(TestCase):
         response = self.client.get(reverse("transport:demand_report"))
 
         self.assertEqual(response.status_code, 200)
+
+
+    def test_admin_dashboard_displays_live_kpis_and_chart_data(self):
+        TravelRequest.objects.create(
+            student=self.student,
+            route=self.route,
+            pickup_point=self.pickup,
+            travel_date=self.travel_date,
+            direction=TravelRequest.Direction.TO_SCHOOL,
+            departure_time=time(6, 0),
+            status=TravelRequest.Status.PENDING,
+        )
+        self.client.force_login(self.staff)
+
+        response = self.client.get(reverse("transport:admin_dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["pending_requests"], 1)
+        self.assertEqual(response.context["total_requests"], 1)
+        booking_chart = json.loads(response.context["booking_chart_data"])
+        self.assertEqual(booking_chart["labels"], ["Pending", "Confirmed", "Cancelled"])
+        self.assertEqual(booking_chart["values"], [1, 0, 0])
+        self.assertContains(response, "Recent transport requests")
+        self.assertContains(response, "Vehicle availability")
 
     def test_student_cannot_access_demand_report(self):
         self.client.force_login(self.student)
